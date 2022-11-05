@@ -1,3 +1,5 @@
+<img src="./doc/imgs/mytodoboard_icon_x64.png" alt="MyToDoBoard Icon" align="left">
+
 # MyToDoBoard™
 This is a _local_, _offline_ Desktop App for a personal, _non-shared_ ToDo Board.
 
@@ -22,6 +24,7 @@ TODO: Screenshot
   - Description
   - Checklist
   - List of Links
+  - List of other Cards this one depends on
   - Comments
 - ToDo Card creation with configurable templates
 - All data of a board and all it's cards is stored in a single text file
