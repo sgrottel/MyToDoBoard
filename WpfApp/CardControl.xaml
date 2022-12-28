@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:MyToDoBoard"
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="200">
-    <Border Background="AntiqueWhite" CornerRadius="4" >
+    <Border Background="WhiteSmoke" CornerRadius="4" >
         <Label Content="{Binding Title}" />
     </Border>
 </UserControl>

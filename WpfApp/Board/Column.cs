@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace MyToDoBoard.Board
 {
@@ -25,6 +26,20 @@ namespace MyToDoBoard.Board
 				{
 					title = value;
 					PropertyChanged?.Invoke(this, new(nameof(Title)));
+				}
+			}
+		}
+
+		private Brush background = Brushes.WhiteSmoke;
+		public Brush Background
+		{
+			get => background;
+			set
+			{
+				if (background != value)
+				{
+					background = value;
+					PropertyChanged?.Invoke(this, new(nameof(Background)));
 				}
 			}
 		}

@@ -27,7 +27,7 @@ namespace MyToDoBoard
 
 			var co = new ObservableCollection<Board.Column>();
 			DataContext = co;
-			var c = new Board.Column() { Title = "Todo" };
+			var c = new Board.Column() { Title = "Todo", Background = new SolidColorBrush(Color.FromArgb(128,200,200,200)) };
 			c.Cards.Add(new Board.Card() { Title = "A1" });
 			c.Cards.Add(new Board.Card() { Title = "A2" });
 			c.Cards.Add(new Board.Card() { Title = "A3" });
@@ -37,15 +37,15 @@ namespace MyToDoBoard
 			c.Cards.Add(new Board.Card() { Title = "A7" });
 			c.Cards.Add(new Board.Card() { Title = "A8" });
 			co.Add(c);
-			c = new Board.Column() { Title = "Ready" };
+			c = new Board.Column() { Title = "Ready", Background = new SolidColorBrush(Color.FromArgb(128, 150, 255, 150)) };
 			c.Cards.Add(new Board.Card() { Title = "B1" });
 			c.Cards.Add(new Board.Card() { Title = "B2" });
 			c.Cards.Add(new Board.Card() { Title = "B3" });
 			c.Cards.Add(new Board.Card() { Title = "B4" });
 			co.Add(c);
-			c = new Board.Column() { Title = "Doing" };
+			c = new Board.Column() { Title = "Doing", Background = new SolidColorBrush(Color.FromArgb(128, 150, 150, 255)) };
 			co.Add(c);
-			c = new Board.Column() { Title = "Done" };
+			c = new Board.Column() { Title = "Done", Background = new SolidColorBrush(Color.FromArgb(128, 150, 150, 150)) };
 			c.Cards.Add(new Board.Card() { Title = "C1" });
 			c.Cards.Add(new Board.Card() { Title = "C2" });
 			c.Cards.Add(new Board.Card() { Title = "C3" });
