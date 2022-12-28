@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MyToDoBoard.Board
 {
@@ -38,6 +39,23 @@ namespace MyToDoBoard.Board
 				}
 			}
 		}
+
+		/// <summary>
+		/// Visibility of this card changes to hidden when being dragged.
+		/// This is not a Model attribute. It is a ViewModel attribute.
+		/// </summary>
+		public Visibility DraggingVisibility {
+			get => draggingVisibility;
+			set
+			{
+				if (draggingVisibility != value)
+				{
+					draggingVisibility = value;
+					PropertyChanged?.Invoke(this, new(nameof(DraggingVisibility)));
+				}
+			}
+		}
+		private Visibility draggingVisibility = Visibility.Visible;
 
 	}
 

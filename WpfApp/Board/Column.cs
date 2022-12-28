@@ -29,8 +29,8 @@ namespace MyToDoBoard.Board
 			}
 		}
 
-		private Card[] cards = Array.Empty<Card>();
-		public Card[] Cards
+		private ObservableCollection<Card> cards = new();
+		public ObservableCollection<Card> Cards
 		{
 			get => cards;
 			set
