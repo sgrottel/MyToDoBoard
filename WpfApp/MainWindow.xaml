@@ -54,7 +54,7 @@
             </x:Array>
         </Grid.DataContext>
 
-        <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+        <ScrollViewer x:Name="BoardControl" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding .}">
 
                 <ItemsControl.ItemsPanel>
@@ -67,33 +67,49 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
 
-                        <DockPanel Margin="4" Background="AliceBlue" VerticalAlignment="Top" Width="150">
+                        <Border Margin="4" Background="AliceBlue" VerticalAlignment="Top" Width="150" CornerRadius="4">
+                            <DockPanel >
 
-                            <Label DockPanel.Dock="Top" Content="{Binding Title}" Margin="0"/>
+                                <Label DockPanel.Dock="Top" Content="{Binding Title}" Margin="0"/>
 
-                            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" FlowDirection="RightToLeft" Margin="4,0,4,4">
-                                <Button Content="+ Add Card" Padding="8,1" HorizontalContentAlignment="Right" />
-                            </StackPanel>
+                                <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" FlowDirection="RightToLeft" Margin="4,0,4,4">
+                                    <Button Content="+ Add Card" Padding="8,1" HorizontalContentAlignment="Right" />
+                                </StackPanel>
 
-                            <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="4">
-                                <ItemsControl ItemsSource="{Binding Cards}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="4">
+                                    <ItemsControl ItemsSource="{Binding Cards}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
 
-                                            <Border Background="AntiqueWhite" Margin="0,0,0,4">
-                                                <Label Content="{Binding Title}" />
-                                            </Border>
+                                                <local:CardControl
+                                                    Margin="0,0,0,4"
+                                                    PreviewMouseDown="CardControl_PreviewMouseDown"
+                                                    MouseMove="CardControl_MouseMove"
+                                                    MouseUp="CardControl_MouseUp"
+                                                    />
 
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </ScrollViewer>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
 
-                        </DockPanel>
+                            </DockPanel>
+                        </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
+
+        <Canvas DataContext="{x:Null}">
+            <Grid x:Name="draggingCardControl" MouseMove="CardControl_MouseMove" MouseUp="CardControl_MouseUp">
+                <Border Background="#66000000" Margin="-1" CornerRadius="4">
+                    <Border.Effect>
+                        <BlurEffect Radius="4" />
+                    </Border.Effect>
+                </Border>
+                <local:CardControl />
+            </Grid>
+        </Canvas>
 
     </Grid>
 </Window>

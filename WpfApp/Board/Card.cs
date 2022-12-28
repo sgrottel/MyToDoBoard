@@ -16,14 +16,14 @@ namespace MyToDoBoard.Board
 		private string title = string.Empty;
 
 		/*
-		  - Title & Icon
-		  - Labels
-		  - Due Date (for displaying purpose only)
-		  - Description
-		  - Checklist
-		  - List of Links
-		  - List of other Cards this one depends on
-		  - Comments
+			- Title & Icon
+			- Labels
+			- Due Date (for displaying purpose only)
+			- Description
+			- Checklist
+			- List of Links
+			- List of other Cards this one depends on
+			- Comments
 		 */
 
 		public string Title
