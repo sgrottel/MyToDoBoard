@@ -1,1 +1,4 @@
 ﻿desktop.ini
+.vs
+WpfApp/obj
+WpfApp/bin

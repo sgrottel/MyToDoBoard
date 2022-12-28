@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>MyToDoBoard</AssemblyName>
+    <RootNamespace>MyToDoBoard</RootNamespace>
+    <ApplicationIcon>MyToDoBoard.ico</ApplicationIcon>
+    <Title>My personal ToDo Board</Title>
+    <Version>0.1.0</Version>
+    <Authors>SGrottel</Authors>
+    <Description>A personal ToDo Board, local, offline, non-shared.</Description>
+    <Copyright>Copyright 2022, by SGrottel</Copyright>
+    <PackageProjectUrl>https://go.grottel.net/MyToDoBoard</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/sgrottel/MyToDoBoard.git</RepositoryUrl>
+    <PackageTags>todolist;offline;kanban</PackageTags>
+    <NeutralLanguage>en</NeutralLanguage>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="MyToDoBoard.ico" />
+  </ItemGroup>
+
+</Project>
