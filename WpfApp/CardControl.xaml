@@ -7,9 +7,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="200">
     <Border Background="WhiteSmoke" CornerRadius="4" >
-        <StackPanel>
-            <Label Content="{Binding Title}" />
-            <Button Click="Button_Click">Won't work, because of the Preview intercept.</Button>
-        </StackPanel>
+        <TextBlock Text="{Binding Title}" TextWrapping="WrapWithOverflow" Margin="4"/>
     </Border>
 </UserControl>

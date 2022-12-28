@@ -31,7 +31,9 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Thumb}">
-                        <Border CornerRadius="2" Background="{TemplateBinding Foreground}" BorderThickness="0" Width="10" />
+                        <Border Background="{TemplateBinding Background}">
+                            <Border CornerRadius="2" Background="{TemplateBinding Foreground}" BorderThickness="0" Width="10" Margin="1" />
+                        </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -46,7 +48,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Thumb}">
                         <Border Background="{TemplateBinding Background}">
-                            <Border CornerRadius="2" Background="{TemplateBinding Foreground}" BorderThickness="0" Height="10" />
+                            <Border CornerRadius="2" Background="{TemplateBinding Foreground}" BorderThickness="0" Height="10" Margin="1" />
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
@@ -98,7 +100,7 @@
                     <Setter Property="Height" Value="Auto" />
                     <Setter Property="Margin" Value="4,0,0,0" />
                     <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
-                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Background" Value="#3F404040"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
