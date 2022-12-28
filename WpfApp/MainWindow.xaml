@@ -4,9 +4,96 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyToDoBoard"
+        xmlns:board="clr-namespace:MyToDoBoard.Board"
         mc:Ignorable="d"
-        Title="MyToDoBoard™" Width="1270" Height="780">
-    <Grid>
+        Title="MyToDoBoard™" Width="600" Height="300">
+    <Grid Background="#FFFEE3FF">
+
+        <!-- This data is just for design development -->
+        <Grid.DataContext>
+            <x:Array Type="board:Column">
+                <board:Column Title="Todo">
+                    <board:Column.Cards>
+                        <x:Array Type="board:Card">
+                            <board:Card Title="A1" />
+                            <board:Card Title="A2" />
+                            <board:Card Title="A3" />
+                            <board:Card Title="A4" />
+                            <board:Card Title="A5" />
+                            <board:Card Title="A6" />
+                            <board:Card Title="A7" />
+                            <board:Card Title="A8" />
+                        </x:Array>
+                    </board:Column.Cards>
+                </board:Column>
+                <board:Column Title="Ready">
+                    <board:Column.Cards>
+                        <x:Array Type="board:Card">
+                            <board:Card Title="B1" />
+                            <board:Card Title="B2" />
+                            <board:Card Title="B3" />
+                            <board:Card Title="B4" />
+                        </x:Array>
+                    </board:Column.Cards>
+                </board:Column>
+                <board:Column Title="Doing"></board:Column>
+                <board:Column Title="Done">
+                    <board:Column.Cards>
+                        <x:Array Type="board:Card">
+                            <board:Card Title="C1" />
+                            <board:Card Title="C2" />
+                            <board:Card Title="C3" />
+                            <board:Card Title="C4" />
+                            <board:Card Title="C5" />
+                            <board:Card Title="C6" />
+                            <board:Card Title="C7" />
+                            <board:Card Title="C8" />
+                        </x:Array>
+                    </board:Column.Cards>
+                </board:Column>
+            </x:Array>
+        </Grid.DataContext>
+
+        <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding .}">
+
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal">
+                        </StackPanel>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+
+                        <DockPanel Margin="4" Background="AliceBlue" VerticalAlignment="Top" Width="150">
+
+                            <Label DockPanel.Dock="Top" Content="{Binding Title}" Margin="0"/>
+
+                            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" FlowDirection="RightToLeft" Margin="4,0,4,4">
+                                <Button Content="+ Add Card" Padding="8,1" HorizontalContentAlignment="Right" />
+                            </StackPanel>
+
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="4">
+                                <ItemsControl ItemsSource="{Binding Cards}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+
+                                            <Border Background="AntiqueWhite" Margin="0,0,0,4">
+                                                <Label Content="{Binding Title}" />
+                                            </Border>
+
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+
+                        </DockPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
 
     </Grid>
 </Window>
