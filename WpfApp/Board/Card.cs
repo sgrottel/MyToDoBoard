@@ -15,6 +15,7 @@ namespace MyToDoBoard.Board
 		public event PropertyChangedEventHandler? PropertyChanged;
 
 		private string title = string.Empty;
+		private Label[]? labels = null;
 
 		/*
 			- Title & Icon
@@ -40,6 +41,20 @@ namespace MyToDoBoard.Board
 			}
 		}
 
+		public Label[]? Labels
+		{
+			get => labels;
+			set
+			{
+				if (labels != value)
+				{
+					labels = value;
+					PropertyChanged?.Invoke(this, new(nameof(Labels)));
+					PropertyChanged?.Invoke(this, new(nameof(Margin)));
+				}
+			}
+		}
+
 		/// <summary>
 		/// Visibility of this card changes to hidden when being dragged.
 		/// This is not a Model attribute. It is a ViewModel attribute.
@@ -56,6 +71,16 @@ namespace MyToDoBoard.Board
 			}
 		}
 		private Visibility draggingVisibility = Visibility.Visible;
+
+		public Thickness Margin
+		{
+			get
+			{
+				if (labels == null || labels.Length <= 0)
+					return new Thickness(4);
+				return new Thickness(4, 8, 4, 4);
+			}
+		}
 
 	}
 

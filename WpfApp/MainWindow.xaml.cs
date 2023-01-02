@@ -27,8 +27,16 @@ namespace MyToDoBoard
 
 			var co = new ObservableCollection<Board.Column>();
 			DataContext = co;
-			var c = new Board.Column() { Title = "Todo", Background = new SolidColorBrush(Color.FromArgb(128,200,200,200)) };
-			c.Cards.Add(new Board.Card() { Title = "A1 Card with a long Title to Test Text Wrapping" });
+			var c = new Board.Column() { Title = "Todo", Background = new SolidColorBrush(Color.FromArgb(128, 200, 200, 200)) };
+			c.Cards.Add(new Board.Card()
+			{
+				Title = "A1 Card with a long Title to Test Text Wrapping",
+				Labels = new Board.Label[]
+				{
+					new Board.Label() { Name = "1", Color = Colors.PowderBlue },
+					new Board.Label() { Name = "2", Color = Colors.Lime }
+				}
+			});
 			c.Cards.Add(new Board.Card() { Title = "A2" });
 			c.Cards.Add(new Board.Card() { Title = "A3" });
 			c.Cards.Add(new Board.Card() { Title = "A4" });
