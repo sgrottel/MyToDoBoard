@@ -1,4 +1,4 @@
-﻿using MyToDoBoard.Board;
+﻿using MyToDoBoard.DataModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,34 +24,18 @@ namespace MyToDoBoard
 	public partial class BoardControl : UserControl
 	{
 
-		public ObservableCollection<Board.Column> Columns
-		{
-			get {
-				ObservableCollection<Board.Column>? c = DataContext as ObservableCollection<Board.Column>;
-				if (c == null)
-				{
-					DataContext = c = new ObservableCollection<Board.Column>();
-				}
-				return c;
-			}
-			set {
-				if (DataContext != value)
-				{
-					DataContext = value ?? new ObservableCollection<Board.Column>();
-				}
-			}
-		}
+		internal ViewModel.BoardView BoardView { get; } = new ViewModel.BoardView();
 
 		public BoardControl()
 		{
 			InitializeComponent();
-			DataContext = new ObservableCollection<Board.Column>();
+			DataContext = BoardView;
 
 			draggingCardControl.Visibility = Visibility.Collapsed;
 			draggingCardControl.RenderTransform = new TranslateTransform();
 		}
 
-		Board.Card? draggingCard = null;
+		DataModel.Card? draggingCard = null;
 		Point draggingCardStart;
 
 		private void CardControl_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -60,7 +44,7 @@ namespace MyToDoBoard
 			{
 				FrameworkElement? uiCard = sender as FrameworkElement;
 				if (uiCard == null) return;
-				Board.Card? card = uiCard.DataContext as Board.Card;
+				DataModel.Card? card = uiCard.DataContext as DataModel.Card;
 				if (card == null) return;
 
 				if (draggingCard == null)
@@ -103,8 +87,8 @@ namespace MyToDoBoard
 				Point p = Mouse.GetPosition(mainView);
 
 				FrameworkElement? fe = mainView.InputHitTest(p) as FrameworkElement;
-				while (fe != null && ((fe.DataContext as Board.Card) == null)) fe = fe.Parent as FrameworkElement;
-				Board.Card? overCard = fe?.DataContext as Board.Card;
+				while (fe != null && ((fe.DataContext as DataModel.Card) == null)) fe = fe.Parent as FrameworkElement;
+				DataModel.Card? overCard = fe?.DataContext as DataModel.Card;
 				if (overCard == draggingCard)
 				{
 					overCard = null;
@@ -118,8 +102,8 @@ namespace MyToDoBoard
 				{
 					// check if we are dragging into a different column (potentionally an empty one, without cards)
 					fe = mainView.InputHitTest(p) as FrameworkElement;
-					while (fe != null && ((fe.DataContext as Board.Column) == null)) fe = fe.Parent as FrameworkElement;
-					Board.Column? overColumn = fe?.DataContext as Board.Column;
+					while (fe != null && ((fe.DataContext as DataModel.Column) == null)) fe = fe.Parent as FrameworkElement;
+					DataModel.Column? overColumn = fe?.DataContext as DataModel.Column;
 
 					if (overColumn != null && !overColumn.Cards.Contains(draggingCard))
 					{
@@ -152,33 +136,30 @@ namespace MyToDoBoard
 		{
 			Column? sc = null;
 			Column? dc = null;
-			foreach (Column c in Columns)
+			if (BoardView != null && BoardView.Columns != null)
 			{
-				if (c.Cards.Contains(card)) sc = c;
-				if (c.Cards.Contains(dest)) dc = c;
+				foreach (Column c in BoardView.Columns)
+				{
+					if (c.Cards.Contains(card)) sc = c;
+					if (c.Cards.Contains(dest)) dc = c;
+				}
 			}
 			if (sc == null || dc == null) return;
 
-			int si = sc.Cards.IndexOf(card);
 			int di = dc.Cards.IndexOf(dest);
-
-			if (sc == dc)
-			{
-				sc.Cards.Move(si, di);
-			}
-			else
-			{
-				dc.Cards.Insert(di, card);
-				sc.Cards.Remove(card);
-			}
+			sc.Cards.Remove(card);
+			dc.Cards.Insert(di, card);
 		}
 
 		private void moveCardTo(Card card, Column dest)
 		{
 			Column? sc = null;
-			foreach (Column c in Columns)
+			if (BoardView != null && BoardView.Columns != null)
 			{
-				if (c.Cards.Contains(card)) sc = c;
+				foreach (Column c in BoardView.Columns)
+				{
+					if (c.Cards.Contains(card)) sc = c;
+				}
 			}
 			if (sc == null) return;
 

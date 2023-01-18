@@ -21,50 +21,57 @@ namespace MyToDoBoard
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+
+		private DataModel.Board board = new DataModel.Board();
+
 		public MainWindow()
 		{
 			InitializeComponent();
 
-			var co = new ObservableCollection<Board.Column>();
-			DataContext = co;
-			var c = new Board.Column() { Title = "Todo", Background = new SolidColorBrush(Color.FromArgb(128, 200, 200, 200)) };
-			c.Cards.Add(new Board.Card()
+			DataContext = board.Columns;
+
+			var c = new DataModel.Column() { Title = "Todo", Background = new SolidColorBrush(Color.FromArgb(128, 200, 200, 200)) };
+			c.Cards.Add(new DataModel.Card()
 			{
 				Title = "A1 Card with a long Title to Test Text Wrapping",
-				Labels = new Board.Label[]
+				Labels = new DataModel.Label[]
 				{
-					new Board.Label() { Name = "1", Color = Colors.PowderBlue },
-					new Board.Label() { Name = "2", Color = Colors.Lime }
+					new DataModel.Label() { Name = "1", Color = Colors.PowderBlue },
+					new DataModel.Label() { Name = "2", Color = Colors.Lime }
 				}
 			});
-			c.Cards.Add(new Board.Card() { Title = "A2" });
-			c.Cards.Add(new Board.Card() { Title = "A3" });
-			c.Cards.Add(new Board.Card() { Title = "A4" });
-			c.Cards.Add(new Board.Card() { Title = "A5" });
-			c.Cards.Add(new Board.Card() { Title = "A6" });
-			c.Cards.Add(new Board.Card() { Title = "A7" });
-			c.Cards.Add(new Board.Card() { Title = "A8" });
-			co.Add(c);
-			c = new Board.Column() { Title = "Ready", Background = new SolidColorBrush(Color.FromArgb(128, 150, 255, 150)) };
-			c.Cards.Add(new Board.Card() { Title = "B1" });
-			c.Cards.Add(new Board.Card() { Title = "B2" });
-			c.Cards.Add(new Board.Card() { Title = "B3" });
-			c.Cards.Add(new Board.Card() { Title = "B4" });
-			co.Add(c);
-			c = new Board.Column() { Title = "Doing", Background = new SolidColorBrush(Color.FromArgb(128, 150, 150, 255)) };
-			co.Add(c);
-			c = new Board.Column() { Title = "Done", Background = new SolidColorBrush(Color.FromArgb(128, 150, 150, 150)) };
-			c.Cards.Add(new Board.Card() { Title = "C1" });
-			c.Cards.Add(new Board.Card() { Title = "C2" });
-			c.Cards.Add(new Board.Card() { Title = "C3" });
-			c.Cards.Add(new Board.Card() { Title = "C4" });
-			c.Cards.Add(new Board.Card() { Title = "C5" });
-			c.Cards.Add(new Board.Card() { Title = "C6" });
-			c.Cards.Add(new Board.Card() { Title = "C7" });
-			c.Cards.Add(new Board.Card() { Title = "C8" });
-			co.Add(c);
+			c.Cards.Add(new DataModel.Card() { Title = "A2" });
+			c.Cards.Add(new DataModel.Card() { Title = "A3" });
+			c.Cards.Add(new DataModel.Card() { Title = "A4" });
+			c.Cards.Add(new DataModel.Card() { Title = "A5" });
+			c.Cards.Add(new DataModel.Card() { Title = "A6" });
+			c.Cards.Add(new DataModel.Card() { Title = "A7" });
+			c.Cards.Add(new DataModel.Card() { Title = "A8" });
+			board.Columns.Add(c);
 
-			board.Columns = co;
+			c = new DataModel.Column() { Title = "Ready", Background = new SolidColorBrush(Color.FromArgb(128, 150, 255, 150)) };
+			c.Cards.Add(new DataModel.Card() { Title = "B1" });
+			c.Cards.Add(new DataModel.Card() { Title = "B2" });
+			c.Cards.Add(new DataModel.Card() { Title = "B3" });
+			c.Cards.Add(new DataModel.Card() { Title = "B4" });
+			board.Columns.Add(c);
+
+			c = new DataModel.Column() { Title = "Doing", Background = new SolidColorBrush(Color.FromArgb(128, 150, 150, 255)) };
+			board.Columns.Add(c);
+
+			c = new DataModel.Column() { Title = "Done", Background = new SolidColorBrush(Color.FromArgb(128, 150, 150, 150)) };
+			c.Cards.Add(new DataModel.Card() { Title = "C1" });
+			c.Cards.Add(new DataModel.Card() { Title = "C2" });
+			c.Cards.Add(new DataModel.Card() { Title = "C3" });
+			c.Cards.Add(new DataModel.Card() { Title = "C4" });
+			c.Cards.Add(new DataModel.Card() { Title = "C5" });
+			c.Cards.Add(new DataModel.Card() { Title = "C6" });
+			c.Cards.Add(new DataModel.Card() { Title = "C7" });
+			c.Cards.Add(new DataModel.Card() { Title = "C8" });
+			board.Columns.Add(c);
+
+			boardView.BoardView.Data = board;
+
 		}
 	}
 }
