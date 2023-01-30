@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows.Media;
 
 namespace MyToDoBoard.DataModel
 {
-
 	public class Column : INotifyPropertyChanged
 	{
-
 		public event PropertyChangedEventHandler? PropertyChanged;
 
 		private string title = string.Empty;
+		private Card[]? cards = null;
+		private Color? backgroundColor = null;
+		private Color? defaultCardColor = null;
 
 		public string Title
 		{
@@ -30,21 +25,54 @@ namespace MyToDoBoard.DataModel
 			}
 		}
 
-		private Brush background = Brushes.WhiteSmoke;
-		public Brush Background
+		public Card[]? Cards
 		{
-			get => background;
+			get => cards;
 			set
 			{
-				if (background != value)
+				if (cards != value)
 				{
-					background = value;
+					cards = value;
+					PropertyChanged?.Invoke(this, new(nameof(Cards)));
+				}
+			}
+		}
+
+		public Color? BackgroundColor
+		{
+			get => backgroundColor;
+			set
+			{
+				if (backgroundColor != value)
+				{
+					backgroundColor = value;
+					PropertyChanged?.Invoke(this, new(nameof(BackgroundColor)));
 					PropertyChanged?.Invoke(this, new(nameof(Background)));
 				}
 			}
 		}
 
-		public CardCollection Cards { get; } = new CardCollection();
+		public Color? DefaultCardColor
+		{
+			get => defaultCardColor;
+			set
+			{
+				if (defaultCardColor != value)
+				{
+					defaultCardColor = value;
+					PropertyChanged?.Invoke(this, new(nameof(DefaultCardColor)));
+				}
+			}
+		}
+
+		#region TODO Move to ViewModel
+
+		public Brush Background
+		{
+			get => (backgroundColor != null) ? new SolidColorBrush(backgroundColor.Value) : Brushes.Transparent;
+		}
+
+		#endregion
 
 	}
 

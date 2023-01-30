@@ -105,7 +105,7 @@ namespace MyToDoBoard
 					while (fe != null && ((fe.DataContext as DataModel.Column) == null)) fe = fe.Parent as FrameworkElement;
 					DataModel.Column? overColumn = fe?.DataContext as DataModel.Column;
 
-					if (overColumn != null && !overColumn.Cards.Contains(draggingCard))
+					if (overColumn != null && overColumn.Cards != null && !overColumn.Cards.Contains(draggingCard))
 					{
 						moveCardTo(draggingCard, overColumn);
 					}
@@ -140,15 +140,16 @@ namespace MyToDoBoard
 			{
 				foreach (Column c in BoardView.Columns)
 				{
+					if (c.Cards == null) continue;
 					if (c.Cards.Contains(card)) sc = c;
 					if (c.Cards.Contains(dest)) dc = c;
 				}
 			}
 			if (sc == null || dc == null) return;
 
-			int di = dc.Cards.IndexOf(dest);
-			sc.Cards.Remove(card);
-			dc.Cards.Insert(di, card);
+			//int di = dc.Cards.IndexOf(dest);
+			//sc.Cards.Remove(card);
+			//dc.Cards.Insert(di, card);
 		}
 
 		private void moveCardTo(Card card, Column dest)
@@ -158,13 +159,14 @@ namespace MyToDoBoard
 			{
 				foreach (Column c in BoardView.Columns)
 				{
+					if (c.Cards == null) continue;
 					if (c.Cards.Contains(card)) sc = c;
 				}
 			}
 			if (sc == null) return;
 
-			dest.Cards.Insert(0, card);
-			sc.Cards.Remove(card);
+			//dest.Cards.Insert(0, card);
+			//sc.Cards.Remove(card);
 		}
 
 	}

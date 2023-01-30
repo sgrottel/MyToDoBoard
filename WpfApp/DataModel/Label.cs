@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows.Media;
 
 namespace MyToDoBoard.DataModel
@@ -42,9 +37,14 @@ namespace MyToDoBoard.DataModel
 			}
 		}
 
+		#region TODO Move to ViewModel
+
 		public Brush ColorBrush
 		{
 			get { return new SolidColorBrush(color); }
 		}
+
+		#endregion
+
 	}
 }

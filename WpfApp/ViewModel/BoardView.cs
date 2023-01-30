@@ -28,9 +28,9 @@ namespace MyToDoBoard.ViewModel
 			}
 		}
 
-		public ColumnCollection? Columns { get => data?.Columns; }
+		public Column[]? Columns { get => data?.Columns; }
 
-		public LabelCollection? Labels { get => data?.Labels; }
+		public Label[]? Labels { get => data?.Labels; }
 
 	}
 }
