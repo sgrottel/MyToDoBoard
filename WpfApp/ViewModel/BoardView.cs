@@ -32,7 +32,7 @@ namespace MyToDoBoard.ViewModel
 						data.PropertyChanged += Data_PropertyChanged;
 					}
 					PropertyChanged?.Invoke(this, new(nameof(Data)));
-					PropertyChanged?.Invoke(this, new(nameof(Columns)));
+					UpdateColumns();
 					PropertyChanged?.Invoke(this, new(nameof(Labels)));
 					UpdateBackgroundBrush();
 				}
@@ -45,7 +45,7 @@ namespace MyToDoBoard.ViewModel
 			switch (e.PropertyName)
 			{
 				case nameof(Board.Columns):
-					PropertyChanged?.Invoke(this, new(nameof(Columns)));
+					UpdateColumns();
 					break;
 				case nameof(Board.Labels):
 					PropertyChanged?.Invoke(this, new(nameof(Labels)));
@@ -57,11 +57,53 @@ namespace MyToDoBoard.ViewModel
 			}
 		}
 
-		public Column[]? Columns { get => data?.Columns; }
+		public ColumnView[] Columns { get; private set; } = Array.Empty<ColumnView>();
+
+		private void UpdateColumns()
+		{
+			if (data == null || data.Columns == null || data.Columns.Length == 0)
+			{
+				if (Columns.Length != 0)
+				{
+					Columns = Array.Empty<ColumnView>();
+					PropertyChanged?.Invoke(this, new(nameof(Columns)));
+				}
+				return;
+			}
+
+			if (data.Columns.Length == Columns.Length)
+			{
+				bool match = true;
+				for (int idx = 0; idx < Columns.Length; ++idx)
+				{
+					if (Columns[idx] == null)
+					{
+						match = false;
+						break;
+					}
+					if (Columns[idx].Data != data.Columns[idx])
+					{
+						match = false;
+						break;
+					}
+				}
+				if (match)
+				{
+					return;
+				}
+			}
+
+			Columns = new ColumnView[data.Columns.Length];
+			for (int idx = 0; idx < Columns.Length; ++idx)
+			{
+				Columns[idx] = new ColumnView(this, data.Columns[idx]);
+			}
+			PropertyChanged?.Invoke(this, new(nameof(Columns)));
+		}
 
 		public Label[]? Labels { get => data?.Labels; }
 
-		public Brush BackgroundBrush { get; set; } = Brushes.Transparent;
+		public Brush BackgroundBrush { get; private set; } = Brushes.Transparent;
 
 		private void SetTransparentBackgroundBrush()
 		{

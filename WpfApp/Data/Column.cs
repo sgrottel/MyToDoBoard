@@ -47,7 +47,6 @@ namespace MyToDoBoard.Data
 				{
 					backgroundColor = value;
 					PropertyChanged?.Invoke(this, new(nameof(BackgroundColor)));
-					PropertyChanged?.Invoke(this, new(nameof(Background)));
 				}
 			}
 		}
@@ -64,15 +63,6 @@ namespace MyToDoBoard.Data
 				}
 			}
 		}
-
-		#region TODO Move to ViewModel
-
-		public Brush Background
-		{
-			get => (backgroundColor != null) ? new SolidColorBrush(backgroundColor.Value) : Brushes.Transparent;
-		}
-
-		#endregion
 
 	}
 

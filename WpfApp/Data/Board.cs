@@ -12,6 +12,7 @@ namespace MyToDoBoard.Data
 		private Color? backgroundColor = null;
 		private string? backgroundImage = null;
 		private Color? defaultColumnColor = null;
+		private Color? defaultCardColor = null;
 		/// <summary>
 		/// Mirrows all `columns` on demand, for archived cards
 		/// </summary>
@@ -78,6 +79,19 @@ namespace MyToDoBoard.Data
 				{
 					defaultColumnColor = value;
 					PropertyChanged?.Invoke(this, new(nameof(DefaultColumnColor)));
+				}
+			}
+		}
+
+		public Color? DefaultCardColor
+		{
+			get => defaultCardColor;
+			set
+			{
+				if (defaultCardColor != value)
+				{
+					defaultCardColor = value;
+					PropertyChanged?.Invoke(this, new(nameof(DefaultCardColor)));
 				}
 			}
 		}

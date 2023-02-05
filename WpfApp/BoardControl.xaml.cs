@@ -134,11 +134,11 @@ namespace MyToDoBoard
 
 		private void moveCardTo(Card card, Card dest)
 		{
-			Column? sc = null;
-			Column? dc = null;
+			ViewModel.ColumnView? sc = null;
+			ViewModel.ColumnView? dc = null;
 			if (BoardView != null && BoardView.Columns != null)
 			{
-				foreach (Column c in BoardView.Columns)
+				foreach (ViewModel.ColumnView c in BoardView.Columns)
 				{
 					if (c.Cards == null) continue;
 					if (c.Cards.Contains(card)) sc = c;
@@ -154,10 +154,10 @@ namespace MyToDoBoard
 
 		private void moveCardTo(Card card, Column dest)
 		{
-			Column? sc = null;
+			ViewModel.ColumnView? sc = null;
 			if (BoardView != null && BoardView.Columns != null)
 			{
-				foreach (Column c in BoardView.Columns)
+				foreach (ViewModel.ColumnView c in BoardView.Columns)
 				{
 					if (c.Cards == null) continue;
 					if (c.Cards.Contains(card)) sc = c;
