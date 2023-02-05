@@ -11,6 +11,9 @@ namespace MyToDoBoard.Data
 		private Card[]? cards = null;
 		private Color? backgroundColor = null;
 		private Color? defaultCardColor = null;
+		private double width = 0.0;
+
+		public const double DefaultWidth = 450.0;
 
 		public string Title
 		{
@@ -60,6 +63,19 @@ namespace MyToDoBoard.Data
 				{
 					defaultCardColor = value;
 					PropertyChanged?.Invoke(this, new(nameof(DefaultCardColor)));
+				}
+			}
+		}
+
+		public double Width
+		{
+			get => width;
+			set
+			{
+				if (System.Math.Abs(width - value) > 0.01)
+				{
+					width = value;
+					PropertyChanged?.Invoke(this, new(nameof(Width)));
 				}
 			}
 		}

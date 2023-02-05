@@ -89,6 +89,7 @@ namespace MyToDoBoard
 				}
 			};
 			board.BackgroundColor = Colors.SteelBlue;
+			board.DefaultColumnWidth = 150;
 
 			boardView.BoardView.Data = board;
 

@@ -156,7 +156,7 @@
                     <DataTemplate>
 
                         <!-- Column -->
-                        <Border Margin="4" Background="{Binding BackgroundBrush}" VerticalAlignment="Top" Width="150" CornerRadius="4">
+                        <Border Margin="4" Background="{Binding BackgroundBrush}" VerticalAlignment="Top" Width="{Binding Width}" CornerRadius="4">
                             <DockPanel >
 
                                 <Label DockPanel.Dock="Top" Content="{Binding Title}"/>

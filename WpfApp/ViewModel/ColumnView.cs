@@ -46,6 +46,9 @@ namespace MyToDoBoard.ViewModel
 				case nameof(Column.BackgroundColor):
 					UpdateBackgroundBrush();
 					break;
+				case nameof(Column.Width):
+					PropertyChanged?.Invoke(this, new(nameof(Width)));
+					break;
 			}
 		}
 
@@ -64,6 +67,8 @@ namespace MyToDoBoard.ViewModel
 					{
 						board.PropertyChanged += Board_PropertyChanged;
 					}
+					UpdateBackgroundBrush();
+					PropertyChanged?.Invoke(this, new(nameof(Width)));
 					break;
 			}
 		}
@@ -75,6 +80,9 @@ namespace MyToDoBoard.ViewModel
 			{
 				case nameof(Board.DefaultColumnColor):
 					UpdateBackgroundBrush();
+					break;
+				case nameof(Board.DefaultColumnWidth):
+					PropertyChanged?.Invoke(this, new(nameof(Width)));
 					break;
 			}
 		}
@@ -113,6 +121,15 @@ namespace MyToDoBoard.ViewModel
 
 			BackgroundBrush = Brushes.Transparent;
 			PropertyChanged?.Invoke(this, new(nameof(BackgroundBrush)));
+		}
+
+		public double Width
+		{
+			get
+			{
+				if (data.Width > 0.1) return data.Width;
+				return board?.DefaultColumnWidth ?? Column.DefaultWidth;
+			}
 		}
 
 	}

@@ -13,6 +13,7 @@ namespace MyToDoBoard.Data
 		private string? backgroundImage = null;
 		private Color? defaultColumnColor = null;
 		private Color? defaultCardColor = null;
+		private double defaultColumnWidth = Column.DefaultWidth;
 		/// <summary>
 		/// Mirrows all `columns` on demand, for archived cards
 		/// </summary>
@@ -92,6 +93,19 @@ namespace MyToDoBoard.Data
 				{
 					defaultCardColor = value;
 					PropertyChanged?.Invoke(this, new(nameof(DefaultCardColor)));
+				}
+			}
+		}
+
+		public double DefaultColumnWidth
+		{
+			get => defaultColumnWidth;
+			set
+			{
+				if (System.Math.Abs(defaultColumnWidth - value) > 0.01)
+				{
+					defaultColumnWidth = value;
+					PropertyChanged?.Invoke(this, new(nameof(DefaultColumnWidth)));
 				}
 			}
 		}
