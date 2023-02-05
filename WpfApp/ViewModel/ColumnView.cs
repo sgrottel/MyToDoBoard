@@ -29,6 +29,7 @@ namespace MyToDoBoard.ViewModel
 			{
 				board.PropertyChanged += Board_PropertyChanged;
 			}
+			UpdateCards();
 			UpdateBackgroundBrush();
 		}
 
@@ -41,7 +42,7 @@ namespace MyToDoBoard.ViewModel
 					PropertyChanged?.Invoke(this, new(nameof(Title)));
 					break;
 				case nameof(Column.Cards):
-					PropertyChanged?.Invoke(this, new(nameof(Cards)));
+					UpdateCards();
 					break;
 				case nameof(Column.BackgroundColor):
 					UpdateBackgroundBrush();
@@ -89,7 +90,50 @@ namespace MyToDoBoard.ViewModel
 
 		public Column Data { get => data; }
 		public string Title { get => data.Title; }
-		public Card[]? Cards { get => data.Cards; }
+		public CardView[] Cards { get; private set; } = Array.Empty<CardView>();
+
+		private void UpdateCards()
+		{
+			if (data == null || data.Cards == null || data.Cards.Length == 0)
+			{
+				if (Cards.Length != 0)
+				{
+					Cards = Array.Empty<CardView>();
+					PropertyChanged?.Invoke(this, new(nameof(Cards)));
+				}
+				return;
+			}
+
+			if (data.Cards.Length == Cards.Length)
+			{
+				bool match = true;
+				for (int idx = 0; idx < Cards.Length; ++idx)
+				{
+					if (Cards[idx] == null)
+					{
+						match = false;
+						break;
+					}
+					if (Cards[idx].Data != data.Cards[idx])
+					{
+						match = false;
+						break;
+					}
+				}
+				if (match)
+				{
+					return;
+				}
+			}
+
+			Cards = new CardView[data.Cards.Length];
+			for (int idx = 0; idx < Cards.Length; ++idx)
+			{
+				Cards[idx] = new CardView(data.Cards[idx], this, boardView);
+			}
+			PropertyChanged?.Invoke(this, new(nameof(Cards)));
+		}
+
 		public Brush BackgroundBrush { get; private set; } = Brushes.Transparent;
 
 		private void UpdateBackgroundBrush(Color color)

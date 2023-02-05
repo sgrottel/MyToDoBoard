@@ -34,6 +34,7 @@ namespace MyToDoBoard
 				{
 					Title = "Todo",
 					BackgroundColor = Color.FromArgb(128, 200, 200, 200),
+					DefaultCardColor = Colors.MistyRose,
 					Cards = new[]
 					{
 						new Data.Card()
@@ -90,6 +91,7 @@ namespace MyToDoBoard
 			};
 			board.BackgroundColor = Colors.SteelBlue;
 			board.DefaultColumnWidth = 150;
+			board.DefaultCardColor = Colors.WhiteSmoke;
 
 			boardView.BoardView.Data = board;
 

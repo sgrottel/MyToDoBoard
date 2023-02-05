@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Media;
 
 namespace MyToDoBoard.Data
 {
@@ -19,6 +20,7 @@ namespace MyToDoBoard.Data
 		private Link[]? links = null;
 		private Card[]? relatedCards = null;
 		private Comment[]? comments = null;
+		private Color? color = null;
 
 		public string Id
 		{
@@ -68,7 +70,6 @@ namespace MyToDoBoard.Data
 				{
 					labels = value;
 					PropertyChanged?.Invoke(this, new(nameof(Labels)));
-					PropertyChanged?.Invoke(this, new(nameof(Margin)));
 				}
 			}
 		}
@@ -151,36 +152,18 @@ namespace MyToDoBoard.Data
 			}
 		}
 
-		#region TODO Move to ViewModel
-
-		/// <summary>
-		/// Visibility of this card changes to hidden when being dragged.
-		/// This is not a Model attribute. It is a ViewModel attribute.
-		/// </summary>
-		public Visibility DraggingVisibility {
-			get => draggingVisibility;
+		public Color? Color
+		{
+			get => color;
 			set
 			{
-				if (draggingVisibility != value)
+				if (color != value)
 				{
-					draggingVisibility = value;
-					PropertyChanged?.Invoke(this, new(nameof(DraggingVisibility)));
+					color = value;
+					PropertyChanged?.Invoke(this, new(nameof(Color)));
 				}
 			}
 		}
-		private Visibility draggingVisibility = Visibility.Visible;
-
-		public Thickness Margin
-		{
-			get
-			{
-				if (labels == null || labels.Length <= 0)
-					return new Thickness(4);
-				return new Thickness(4, 8, 4, 4);
-			}
-		}
-
-		#endregion
 
 	}
 

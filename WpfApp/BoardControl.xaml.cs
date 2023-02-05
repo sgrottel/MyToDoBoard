@@ -55,7 +55,7 @@ namespace MyToDoBoard
 					if (draggingCardControl.CaptureMouse())
 					{
 						draggingCard = card;
-						draggingCard.DraggingVisibility = Visibility.Hidden; // not collapsed, to keep the layout space where the card will drop
+						//draggingCard.DraggingVisibility = Visibility.Hidden; // not collapsed, to keep the layout space where the card will drop
 
 						draggingCardControl.Width = uiCard.ActualWidth;
 						draggingCardControl.Height = uiCard.ActualHeight;
@@ -127,25 +127,25 @@ namespace MyToDoBoard
 				draggingCardControl.DataContext = null;
 				draggingCardControl.Visibility = Visibility.Collapsed;
 
-				draggingCard.DraggingVisibility = Visibility.Visible;
+				//draggingCard.DraggingVisibility = Visibility.Visible;
 				draggingCard = null;
 			}
 		}
 
 		private void moveCardTo(Card card, Card dest)
 		{
-			ViewModel.ColumnView? sc = null;
-			ViewModel.ColumnView? dc = null;
-			if (BoardView != null && BoardView.Columns != null)
-			{
-				foreach (ViewModel.ColumnView c in BoardView.Columns)
-				{
-					if (c.Cards == null) continue;
-					if (c.Cards.Contains(card)) sc = c;
-					if (c.Cards.Contains(dest)) dc = c;
-				}
-			}
-			if (sc == null || dc == null) return;
+			//ViewModel.ColumnView? sc = null;
+			//ViewModel.ColumnView? dc = null;
+			//if (BoardView != null && BoardView.Columns != null)
+			//{
+			//	foreach (ViewModel.ColumnView c in BoardView.Columns)
+			//	{
+			//		if (c.Cards == null) continue;
+			//		if (c.Cards.Contains(card)) sc = c;
+			//		if (c.Cards.Contains(dest)) dc = c;
+			//	}
+			//}
+			//if (sc == null || dc == null) return;
 
 			//int di = dc.Cards.IndexOf(dest);
 			//sc.Cards.Remove(card);
@@ -154,16 +154,16 @@ namespace MyToDoBoard
 
 		private void moveCardTo(Card card, Column dest)
 		{
-			ViewModel.ColumnView? sc = null;
-			if (BoardView != null && BoardView.Columns != null)
-			{
-				foreach (ViewModel.ColumnView c in BoardView.Columns)
-				{
-					if (c.Cards == null) continue;
-					if (c.Cards.Contains(card)) sc = c;
-				}
-			}
-			if (sc == null) return;
+			//ViewModel.ColumnView? sc = null;
+			//if (BoardView != null && BoardView.Columns != null)
+			//{
+			//	foreach (ViewModel.ColumnView c in BoardView.Columns)
+			//	{
+			//		if (c.Cards == null) continue;
+			//		if (c.Cards.Contains(card)) sc = c;
+			//	}
+			//}
+			//if (sc == null) return;
 
 			//dest.Cards.Insert(0, card);
 			//sc.Cards.Remove(card);

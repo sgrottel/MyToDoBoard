@@ -8,7 +8,7 @@
              d:DesignHeight="100" d:DesignWidth="200">
     <Grid>
 
-        <Border Background="WhiteSmoke" CornerRadius="4" >
+        <Border Background="{Binding BackgroundBrush}" CornerRadius="4" >
             <Grid Margin="{Binding Margin}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
@@ -19,10 +19,23 @@
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Column="1" Text="{Binding Title}" TextWrapping="WrapWithOverflow"/>
+                <Rectangle Grid.Column="0" Grid.Row="0" Width="16" Height="16" Margin="0,0,4,0" Visibility="Visible" >
+                    <Rectangle.Fill>
+                        <ImageBrush Stretch="Uniform">
+                            <ImageBrush.ImageSource>
+                                <BitmapImage UriSource="https://www.google.com/favicon.ico"/>
+                            </ImageBrush.ImageSource>
+                        </ImageBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
 
-                <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1">
+                <TextBlock Grid.Column="1" Text="{Binding Title}" TextWrapping="WrapWithOverflow" VerticalAlignment="Center"/>
+
+                <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Orientation="Horizontal">
                     <!-- Icons -->
+                    <Rectangle Grid.Column="0" Grid.Row="0" Width="16" Height="16" Margin="0,4,4,0" Fill="Red" Visibility="Visible"/>
+                    <Rectangle Grid.Column="0" Grid.Row="0" Width="16" Height="16" Margin="0,4,4,0" Fill="Green" Visibility="Visible"/>
+                    <Rectangle Grid.Column="0" Grid.Row="0" Width="16" Height="16" Margin="0,4,4,0" Fill="Yellow" Visibility="Visible"/>
                 </StackPanel>
 
             </Grid>
