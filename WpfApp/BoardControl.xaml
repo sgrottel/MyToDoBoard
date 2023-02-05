@@ -140,7 +140,7 @@
 
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Background="{Binding BackgroundBrush}">
 
         <!-- Main view of all columns and cards -->
         <ScrollViewer x:Name="mainView" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">

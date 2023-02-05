@@ -7,7 +7,7 @@
         xmlns:board="clr-namespace:MyToDoBoard.Data"
         mc:Ignorable="d"
         Title="MyToDoBoard™" Width="600" Height="300">
-    <Grid Background="#FFFEE3FF">
+    <Grid>
         <local:BoardControl x:Name="boardView"></local:BoardControl>
     </Grid>
 </Window>
