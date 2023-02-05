@@ -22,7 +22,7 @@ namespace MyToDoBoard
 	public partial class MainWindow : Window
 	{
 
-		private DataModel.Board board = new DataModel.Board();
+		private Data.Board board = new Data.Board();
 
 		public MainWindow()
 		{
@@ -30,61 +30,61 @@ namespace MyToDoBoard
 
 			board.Columns = new[]
 			{
-				new DataModel.Column()
+				new Data.Column()
 				{
 					Title = "Todo",
 					BackgroundColor = Color.FromArgb(128, 200, 200, 200),
 					Cards = new[]
 					{
-						new DataModel.Card()
+						new Data.Card()
 						{
 							Title = "A1 Card with a long Title to Test Text Wrapping",
-							Labels = new DataModel.Label[]
+							Labels = new Data.Label[]
 							{
-								new DataModel.Label() { Name = "1", Color = Colors.PowderBlue },
-								new DataModel.Label() { Name = "2", Color = Colors.Lime }
+								new Data.Label() { Name = "1", Color = Colors.PowderBlue },
+								new Data.Label() { Name = "2", Color = Colors.Lime }
 							}
 						},
-						new DataModel.Card() { Title = "A2" },
-						new DataModel.Card() { Title = "A3" },
-						new DataModel.Card() { Title = "A4" },
-						new DataModel.Card() { Title = "A5" },
-						new DataModel.Card() { Title = "A6" },
-						new DataModel.Card() { Title = "A7" },
-						new DataModel.Card() { Title = "A8" },
+						new Data.Card() { Title = "A2" },
+						new Data.Card() { Title = "A3" },
+						new Data.Card() { Title = "A4" },
+						new Data.Card() { Title = "A5" },
+						new Data.Card() { Title = "A6" },
+						new Data.Card() { Title = "A7" },
+						new Data.Card() { Title = "A8" },
 					}
 				},
-				new DataModel.Column()
+				new Data.Column()
 				{
 					Title = "Ready",
 					BackgroundColor = Color.FromArgb(128, 150, 255, 150),
 					Cards = new[]
 					{
-						new DataModel.Card() { Title = "B1" },
-						new DataModel.Card() { Title = "B2" },
-						new DataModel.Card() { Title = "B3" },
-						new DataModel.Card() { Title = "B4" },
+						new Data.Card() { Title = "B1" },
+						new Data.Card() { Title = "B2" },
+						new Data.Card() { Title = "B3" },
+						new Data.Card() { Title = "B4" },
 					}
 				},
-				new DataModel.Column()
+				new Data.Column()
 				{
 					Title = "Doing",
 					BackgroundColor = Color.FromArgb(128, 150, 150, 255)
 				},
-				new DataModel.Column()
+				new Data.Column()
 				{
 					Title = "Done",
 					BackgroundColor = Color.FromArgb(128, 150, 150, 150),
 					Cards = new[]
 					{
-						new DataModel.Card() { Title = "C1" },
-						new DataModel.Card() { Title = "C2" },
-						new DataModel.Card() { Title = "C3" },
-						new DataModel.Card() { Title = "C4" },
-						new DataModel.Card() { Title = "C5" },
-						new DataModel.Card() { Title = "C6" },
-						new DataModel.Card() { Title = "C7" },
-						new DataModel.Card() { Title = "C8" },
+						new Data.Card() { Title = "C1" },
+						new Data.Card() { Title = "C2" },
+						new Data.Card() { Title = "C3" },
+						new Data.Card() { Title = "C4" },
+						new Data.Card() { Title = "C5" },
+						new Data.Card() { Title = "C6" },
+						new Data.Card() { Title = "C7" },
+						new Data.Card() { Title = "C8" },
 					}
 				}
 			};

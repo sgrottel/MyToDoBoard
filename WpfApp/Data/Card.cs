@@ -2,13 +2,14 @@
 using System.ComponentModel;
 using System.Windows;
 
-namespace MyToDoBoard.DataModel
+namespace MyToDoBoard.Data
 {
 	public class Card : INotifyPropertyChanged
 	{
 
 		public event PropertyChangedEventHandler? PropertyChanged;
 
+		private string id = string.Empty;
 		private string title = string.Empty;
 		private string? icon = null;
 		private Label[]? labels = null;
@@ -18,6 +19,19 @@ namespace MyToDoBoard.DataModel
 		private Link[]? links = null;
 		private Card[]? relatedCards = null;
 		private Comment[]? comments = null;
+
+		public string Id
+		{
+			get => id;
+			set
+			{
+				if (id != value)
+				{
+					id = value;
+					PropertyChanged?.Invoke(this, new(nameof(Id)));
+				}
+			}
+		}
 
 		public string Title
 		{

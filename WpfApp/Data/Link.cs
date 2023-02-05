@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel;
 
-namespace MyToDoBoard.DataModel
+namespace MyToDoBoard.Data
 {
-	public class ChecklistItem : INotifyPropertyChanged
+	public class Link : INotifyPropertyChanged
 	{
 		public event PropertyChangedEventHandler? PropertyChanged;
 
 		private string title = string.Empty;
-		private bool isChecked = false;
+		private string url = string.Empty;
 
 		public string Title
 		{
@@ -22,15 +22,15 @@ namespace MyToDoBoard.DataModel
 			}
 		}
 
-		public bool IsChecked
+		public string Url
 		{
-			get => isChecked;
+			get => url;
 			set
 			{
-				if (isChecked != value)
+				if (url != value)
 				{
-					isChecked = value;
-					PropertyChanged?.Invoke(this, new(nameof(IsChecked)));
+					url = value;
+					PropertyChanged?.Invoke(this, new(nameof(Url)));
 				}
 			}
 		}

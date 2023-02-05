@@ -1,14 +1,28 @@
 ﻿using System.ComponentModel;
 using System.Windows.Media;
 
-namespace MyToDoBoard.DataModel
+namespace MyToDoBoard.Data
 {
 	public class Label : INotifyPropertyChanged
 	{
 		public event PropertyChangedEventHandler? PropertyChanged;
 
+		private string id = string.Empty;
 		private string name = string.Empty;
 		private Color color = Colors.Red;
+
+		public string Id
+		{
+			get => id;
+			set
+			{
+				if (id != value)
+				{
+					id = value;
+					PropertyChanged?.Invoke(this, new(nameof(Id)));
+				}
+			}
+		}
 
 		public string Name
 		{

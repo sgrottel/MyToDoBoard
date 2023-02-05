@@ -1,4 +1,4 @@
-﻿using MyToDoBoard.DataModel;
+﻿using MyToDoBoard.Data;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -35,7 +35,7 @@ namespace MyToDoBoard
 			draggingCardControl.RenderTransform = new TranslateTransform();
 		}
 
-		DataModel.Card? draggingCard = null;
+		Data.Card? draggingCard = null;
 		Point draggingCardStart;
 
 		private void CardControl_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -44,7 +44,7 @@ namespace MyToDoBoard
 			{
 				FrameworkElement? uiCard = sender as FrameworkElement;
 				if (uiCard == null) return;
-				DataModel.Card? card = uiCard.DataContext as DataModel.Card;
+				Data.Card? card = uiCard.DataContext as Data.Card;
 				if (card == null) return;
 
 				if (draggingCard == null)
@@ -87,8 +87,8 @@ namespace MyToDoBoard
 				Point p = Mouse.GetPosition(mainView);
 
 				FrameworkElement? fe = mainView.InputHitTest(p) as FrameworkElement;
-				while (fe != null && ((fe.DataContext as DataModel.Card) == null)) fe = fe.Parent as FrameworkElement;
-				DataModel.Card? overCard = fe?.DataContext as DataModel.Card;
+				while (fe != null && ((fe.DataContext as Data.Card) == null)) fe = fe.Parent as FrameworkElement;
+				Data.Card? overCard = fe?.DataContext as Data.Card;
 				if (overCard == draggingCard)
 				{
 					overCard = null;
@@ -102,8 +102,8 @@ namespace MyToDoBoard
 				{
 					// check if we are dragging into a different column (potentionally an empty one, without cards)
 					fe = mainView.InputHitTest(p) as FrameworkElement;
-					while (fe != null && ((fe.DataContext as DataModel.Column) == null)) fe = fe.Parent as FrameworkElement;
-					DataModel.Column? overColumn = fe?.DataContext as DataModel.Column;
+					while (fe != null && ((fe.DataContext as Data.Column) == null)) fe = fe.Parent as FrameworkElement;
+					Data.Column? overColumn = fe?.DataContext as Data.Column;
 
 					if (overColumn != null && overColumn.Cards != null && !overColumn.Cards.Contains(draggingCard))
 					{

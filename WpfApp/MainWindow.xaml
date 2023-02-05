@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyToDoBoard"
-        xmlns:board="clr-namespace:MyToDoBoard.DataModel"
+        xmlns:board="clr-namespace:MyToDoBoard.Data"
         mc:Ignorable="d"
         Title="MyToDoBoard™" Width="600" Height="300">
     <Grid Background="#FFFEE3FF">

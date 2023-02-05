@@ -1,4 +1,4 @@
-﻿using MyToDoBoard.DataModel;
+﻿using MyToDoBoard.Data;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,8 +13,8 @@ namespace MyToDoBoard.ViewModel
 
 		public event PropertyChangedEventHandler? PropertyChanged;
 
-		private DataModel.Board? data = null;
-		public DataModel.Board? Data
+		private Data.Board? data = null;
+		public Data.Board? Data
 		{
 			get => data; set
 			{

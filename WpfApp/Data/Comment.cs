@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace MyToDoBoard.DataModel
+namespace MyToDoBoard.Data
 {
 	public class Comment : INotifyPropertyChanged
 	{

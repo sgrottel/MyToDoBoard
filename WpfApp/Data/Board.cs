@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows.Media;
 
-namespace MyToDoBoard.DataModel
+namespace MyToDoBoard.Data
 {
 	public class Board : INotifyPropertyChanged
 	{
