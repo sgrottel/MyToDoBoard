@@ -27,7 +27,8 @@ TODO: Screenshot
   - List of other Cards this one depends on
   - Comments
 - ToDo Card creation with configurable templates
-- All data of a board and all it's cards is stored in a single text file
+- All data of a board and all it's cards is stored in a single file.
+  - You can find more info in the [file format documentation: todo_yaml.md](doc/todo_yaml.md)
   - Easy to store, backup, synch, ...
   - No internet connection/communication required.
 
@@ -44,7 +45,7 @@ TODO: Building Instructions
 ## Contribution
 Contributions are welcome!
 
-This software is provided as open source (see [License below]()).
+This software is provided as open source (see [the attached Apache License v2](./LICENSE)).
 If you want to contribute to the project, feel free to fork and create a pull request.
 If you are not sure about something, and want to clarify your questions before starting to invest effort, feel free to contact me.
 
@@ -53,7 +54,7 @@ Please, stick to the existing code to make your contribution in the same style.
 In doubt, feel free to contact me and ask.
 
 ## License
-> Copyright 2022 SGrottel
+> Copyright 2022-2023 SGrottel
 > 
 > Licensed under the Apache License, Version 2.0 (the "License");
 > you may not use this file except in compliance with the License.
