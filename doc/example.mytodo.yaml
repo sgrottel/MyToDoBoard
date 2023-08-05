@@ -1,0 +1,21 @@
+# $schema: https://go.grottel.net/mytodoboard/schema.yaml
+
+columns:
+- title: ToDo
+  cards:
+  - title: Need to do something clever
+    desc: |
+      We should do something very nice and clever.
+      Not sure what, though, at the moment.
+    links:
+      - https://go.grottel.net/mytodoboard/schema.yaml
+  - title: "?"
+  - title: Profit
+
+- title: Doing
+  cards:
+  - title: Working on an awesome schema
+
+- title: Done
+  cards:
+  - title: Project kicked off

@@ -2,7 +2,6 @@
 MyToDoBoard™ stores all information in a single `yaml` file for easy sync.
 
 ```yaml
-$format: sgrottel.mytodoboard.yaml.1
 $schema: https://go.grottel.net/mytodoboard/schema.yaml
 
 columns:
@@ -33,22 +32,29 @@ _This is an example MyToDoBoard™ `yaml` file._
 
 For ease of identification and differentiation to other generic `yaml` files, it is recommended to use the multi-dot file extension: `.mytodo.yaml`
 
-This `yaml` file format is also ment to be stable for data interchange between different tools, apps, in the context of the MyToDoBoard™ project, and beyond.
+This `yaml` file format is also meant to be stable for data interchange between different tools, apps, in the context of the MyToDoBoard™ project, and beyond.
 
 This minimal example should stay valid for future versions of this tool, maybe limiting some functionality.
 
 ## Format Versioning
 ```yaml
-$format: sgrottel.mytodoboard.yaml.1
 $schema: https://go.grottel.net/mytodoboard/schema.yaml
 ```
-Both lines are optional.
-Loading the file should not fail if one of the lines is missing.
 
-The value of `$format` is a hint to the loading code, which file format to expect.
-
+The schema line is optional.
 The value of `$schema` is a live url to a schema file.
-This is meant for editors supporting schema files, e.g. for validation or editing support, like auto complete.
+This is primarily meant for editors supporting schema files, e.g. for validation or editing support, like auto complete.
+
+### Visual Studio Code
+You can work with in-development versions of the schema of this repository:
+
+* Install the YAML extension for Visual Studio Code `redhat.vscode-yaml`
+* Edit in the extension's settings the schema section:
+```json
+"yaml.schemas": {
+	"C:/path/to/your/checkout/MyToDoBoard/doc/schema.json": "*.mytodo.yaml"
+},
+```
 
 ## Columns
 The vertical columns are mainly lists of task cards.

@@ -1,0 +1,62 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://go.grottel.net/mytodoboard/schema.json",
+	"title": "MyToDoBoard™ Data File Schema",
+	"description": "Schema for the yaml data files of MyToDoBoard™",
+	"type": "object",
+	"properties": {
+		"columns": {
+			"description": "Columns of cards organizing the tasks to do, doing, done, etc.",
+			"type": "array",
+			"uniqueItems": true,
+			"items": { "$ref": "#/$defs/column" }
+		}
+	},
+	"required": [ "columns" ],
+
+	"$defs": {
+		"column": {
+			"description": "A column holding an ordered list of cards describing tasks",
+			"type": "object",
+			"properties": {
+				"title": {
+					"description": "Human-readable title of the column",
+					"type": "string",
+					"minLength": 1
+				},
+				"cards": {
+					"description": "The ordered list of cards describing tasks",
+					"type": "array",
+					"uniqueItems": true,
+					"items": { "$ref": "#/$defs/card" }
+				}
+			},
+			"required": [ "title" ]
+		},
+
+		"card": {
+			"description": "A card describing one task",
+			"type": "object",
+			"properties": {
+				"title": {
+					"description": "Human-readable title of the task",
+					"type": "string",
+					"minLength": 1
+				},
+				"desc": {
+					"description": "Human-readable detailed description of the task",
+					"type": "string"
+				},
+				"links": {
+					"description": "Links to resources with further information",
+					"type": "array",
+					"uniqueItems": true,
+					"items": {
+						"type": "string"
+					}
+				}
+			},
+			"required": [ "title" ]
+		}
+	}
+}
