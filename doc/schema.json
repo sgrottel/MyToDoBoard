@@ -54,9 +54,23 @@
 					"items": {
 						"type": "string"
 					}
+				},
+				"date": {
+					"description": "The creation date of the card",
+					"$ref": "#/$defs/datetime"
+				},
+				"modDate": {
+					"description": "The date the card was last modified",
+					"$ref": "#/$defs/datetime"
 				}
 			},
 			"required": [ "title" ]
+		},
+
+		"datetime": {
+			"type": "string",
+			"pattern": "\\d{2,}-\\d{1,2}(?:-\\d{1,2})?(?:(?:\\s|t)\\d{1,2}\\:\\d{2}(?:\\:\\d{2}(?:.\\d)?)?)?",
+			"comment": "ToDo: Regex with optional day/time/seconds/second-fractions should be extended by time zones and double checked with typical datetime format providers. Documentation should be updated."
 		}
 	}
 }
