@@ -69,8 +69,7 @@
 
 		"datetime": {
 			"type": "string",
-			"pattern": "\\d{2,}-\\d{1,2}(?:-\\d{1,2})?(?:(?:\\s|t)\\d{1,2}\\:\\d{2}(?:\\:\\d{2}(?:.\\d)?)?)?",
-			"comment": "ToDo: Regex with optional day/time/seconds/second-fractions should be extended by time zones and double checked with typical datetime format providers. Documentation should be updated."
+			"pattern": "\\d{2,}-\\d{1,2}(?:-\\d{1,2}(?:(?:\\s|t|T)\\d{1,2}\\:\\d{2}(?:\\:\\d{2}(?:\\.\\d*)?)?(?:Z|(?:\\+\\d{2}\\:?\\d{2}))?)?)?"
 		}
 	}
 }
