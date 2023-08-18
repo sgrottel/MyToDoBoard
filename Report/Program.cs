@@ -7,13 +7,9 @@ namespace MyToDo.Report
 	internal class Program
 	{
 
-		static void PrintGreenting()
-		{
-			Console.WriteLine("MyToDoBoard™ Report");
-		}
-
 		static void PrintError(string msg)
 		{
+			Console.WriteLine();
 			Console.BackgroundColor = ConsoleColor.Black;
 			Console.ForegroundColor = ConsoleColor.Red;
 			Console.Error.WriteLine(msg);
@@ -43,7 +39,8 @@ namespace MyToDo.Report
 			var rootCommand = new RootCommand("MyToDoBoard™ Report Application") { inputFileArg, outputFileOpt, forceWriteOpt, outputFormatTypeOpt };
 			rootCommand.SetHandler((inputFile, outputFile, forceWrite, outputFormatType) =>
 			{
-				PrintGreenting();
+				Console.Write("MyToDoBoard™ Report ... ");
+
 				try
 				{
 					if (!inputFile.Exists)
