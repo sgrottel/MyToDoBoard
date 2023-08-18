@@ -1,5 +1,6 @@
 # MyToDoBoard - Yaml
 MyToDoBoard™ stores all information in a single `yaml` file for easy sync.
+Recommended file name extension is `.mytodo.yaml`.
 
 ```yaml
 $schema: https://go.grottel.net/mytodoboard/schema.yaml
@@ -29,8 +30,6 @@ columns:
 
 ```
 _This is an example MyToDoBoard™ `yaml` file._
-
-For ease of identification and differentiation to other generic `yaml` files, it is recommended to use the multi-dot file extension: `.mytodo.yaml`
 
 This `yaml` file format is also meant to be stable for data interchange between different tools, apps, in the context of the MyToDoBoard™ project, and beyond.
 

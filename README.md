@@ -3,6 +3,8 @@
 # MyToDoBoard™
 This is a _local_, _offline_ Desktop App for a personal, _non-shared_ ToDo Board.
 
+![GitHub](https://img.shields.io/github/license/sgrottel/MyToDoBoard)
+
 ```
 TODO: Project Status
 TODO: Link to Downloads & Installation
@@ -28,7 +30,7 @@ TODO: Screenshot
   - Comments
 - ToDo Card creation with configurable templates
 - All data of a board and all it's cards is stored in a single file.
-  - You can find more info in the [file format documentation: todo_yaml.md](doc/todo_yaml.md)
+  - You can find more info in the [file format documentation: mytodo_yaml.md](doc/mytodo_yaml.md)
   - Easy to store, backup, synch, ...
   - No internet connection/communication required.
 
