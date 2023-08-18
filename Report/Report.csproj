@@ -15,6 +15,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="HtmlReportStyle.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="HtmlReportStyle.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="HtmlAgilityPack" Version="1.11.51" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
     <PackageReference Include="YamlDotNet" Version="13.2.0" />

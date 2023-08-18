@@ -80,6 +80,16 @@ namespace MyToDo.Report
 			return prop;
 		}
 
+		internal static object? TryGetYamlProperty(this YamlObject obj, string name)
+		{
+			object? prop;
+			if (!obj.TryGetValue(name, out prop))
+			{
+				return null;
+			}
+			return prop;
+		}
+
 		internal static object NotNull(this object? obj, string errorMessage)
 		{
 			if (obj == null)
