@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>MyToDo$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>MyToDo.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <Title>Report Utility of MyToDoBoard</Title>
+    <Version>0.1.0</Version>
+    <Authors>SGrottel</Authors>
+    <Product>MyToDoBoard</Product>
+    <Copyright>Copyright, SGrottel</Copyright>
+  </PropertyGroup>
+
+</Project>
