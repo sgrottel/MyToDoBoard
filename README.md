@@ -42,6 +42,9 @@ TODO: Building Instructions
 There are companion utilities for specific tasks.
 They all operate on the same central [`.mytodo.yaml` data file](doc/mytodo-yaml.md) and are therefore fully compatible with each other.
 
+### MyToDoReport
+[MyToDoReport](./doc/mytodo-report.md) is a command line utility to read the `.mytodo.yaml` data file and to produce a report of it's content.
+
 ## Alternatives
 If you look for a solution storing your data _online_, or _share_ between multiple people, or offer different views, or ..., or ..., or ..., then this might not be the app for you!
 There are plenty of cloud-hosted or self-hosted alternatives on the internet.
