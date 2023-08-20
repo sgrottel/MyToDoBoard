@@ -177,7 +177,7 @@ namespace MyToDo.Report
 						HtmlNode? cardDateNode = null;
 						if (cardDate != null)
 						{
-							cardDateNode = cardHeader.AppendHtml($"<div class=\"info\">📅 {cardDate}</div>");
+							cardDateNode = cardHeader.AppendHtml($"<div class=\"info\">📅 <span class=\"date\">{cardDate}</span></div>");
 						}
 
 						cardDate = card.TryGetYamlProperty("modDate");
@@ -186,11 +186,12 @@ namespace MyToDo.Report
 							if (cardDateNode != null)
 							{
 								cardDateNode.AppendHtml("<br>");
-								cardDateNode.AppendHtml($"✏️ {cardDate}");
+								cardDateNode.AppendHtml("✏️ ");
+								cardDateNode.AppendHtml($"<span class=\"date moddate\">{cardDate}</span>");
 							}
 							else
 							{
-								cardHeader.AppendHtml($"<div class=\"info\">✏️ {cardDate}</div>");
+								cardHeader.AppendHtml($"<div class=\"info\">✏️ <span class=\"date moddate\">{cardDate}</span></div>");
 							}
 						}
 
@@ -200,11 +201,12 @@ namespace MyToDo.Report
 							if (cardDateNode != null)
 							{
 								cardDateNode.AppendHtml("<br>");
-								cardDateNode.AppendHtml($"⏰ {cardDate}");
+								cardDateNode.AppendHtml("⏰ ");
+								cardDateNode.AppendHtml($"<span class=\"date duedate\">{cardDate}</span>");
 							}
 							else
 							{
-								cardHeader.AppendHtml($"<div class=\"info\">⏰ {cardDate}</div>");
+								cardHeader.AppendHtml($"<div class=\"info\">⏰ <span class=\"date duedate\">{cardDate}</span></div>");
 							}
 						}
 
