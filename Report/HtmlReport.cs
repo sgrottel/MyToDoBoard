@@ -143,6 +143,7 @@ namespace MyToDo.Report
 		{
 			var columnsNode = doc.DocumentNode.SelectSingleNode("/html/body/div[@id=\"columns\"]");
 			if (columnsNode == null) throw new Exception("columns node not found");
+			columnsNode.RemoveAllChildren();
 
 			YamlList columns = myToDoYaml.TryGetYamlProperty("columns")
 				.NotNull("Columns value is unexpectitly null")
