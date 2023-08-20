@@ -17,15 +17,34 @@ body {
 	background: linear-gradient(180deg, #f9f8ff 0%, rgba(249, 248, 255, 0.8) 30%, rgba(249, 248, 255, 0.6) 60%, rgba(249, 248, 255, 0) 100%);
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+body.withOverlay {
+	overflow: hidden;
+}
 
 #summary,
 #columns {
 	padding: 1em 1em 0em 1em;
-	display: flow-root
+	display: flow-root;
+}
+
+#overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgb(0, 0, 0, 0.75);
+	visibility: collapse;
+}
+
+.withOverlay #overlay {
+	visibility: visible;
+	z-index: 10;
+	overflow: auto;
 }
 
 #summary .header {
-	display: flow-root
+	display: flow-root;
 }
 
 #summary .title {
@@ -69,7 +88,7 @@ body {
 	background: linear-gradient(135deg, rgba(239, 237, 244, 0.8) 0%, rgba(226, 217, 238, 0.8) 100%);
 }
 
-.column .header {
+.column .header, #detailedCard .header {
 	display: flow-root;
 }
 
@@ -81,18 +100,18 @@ body {
 	border: 1px solid whitesmoke;
 }
 
-#columns .title {
+#columns .title, #detailedCard .title {
 	font-weight: 600;
 	float: left;
 }
 
-#columns .info {
+#columns .info, #detailedCard .info {
 	float: right;
 	font-size: small;
 	margin-left: 1em;
 }
 
-.card {
+.card, #detailedCard {
 	min-height: 2em;
 	border-radius: 0.5em;
 	margin: 0.5em -0.5em 0em -0.5em;
@@ -104,23 +123,52 @@ body {
 	border: 1px solid whitesmoke;
 }
 
+#detailedCard {
+	cursor: inherit !important;
+	margin: 2em auto !important;
+	width: 80%;
+}
+
+#detailedCard .closeButton {
+	float: right;
+	background: firebrick;
+	color: white;
+	margin: -0.31em -0.56em 0.25em 1em;
+	white-space: nowrap;
+	padding: 0.2em 0.75em 0.2em 0.75em;
+	border-top-right-radius: 0.5rem;
+	cursor: pointer;
+}
+
 .card:hover {
 	transform: scale(1.03) translateY(-0.25em);
 }
 
 .card .text {
-	margin: 0.25em;
+	margin: 0.25em 0;
 	font-size: small;
 	white-space: pre-wrap;
 	max-height: 7em;
 	overflow: clip;
 }
 
-.card .link {
-	margin: 0.25em;
+#detailedCard .text {
+	margin: 0.25em 0;
+	white-space: pre-wrap;
+}
+
+.card .link, #detailedCard .link {
+	margin: 0.25em 0;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: clip;
-	font-size: x-small;
 	color: #5E4C6F;
+}
+
+.card .link {
+	font-size: x-small;
+}
+
+#detailedCard .link {
+	font-size: small;
 }

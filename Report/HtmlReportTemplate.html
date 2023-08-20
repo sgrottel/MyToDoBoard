@@ -6,9 +6,91 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>mytodo.yaml Report</title>
 	<link rel="stylesheet" href="./HtmlReportStyle.css">
+	<script>
+function cardClick(event)
+{
+	const card = event.currentTarget;
+	const body = document.body;
+	body.classList.add("withOverlay");
+
+	const detailedCard = document.getElementById("detailedCard");
+	var toDelete = [];
+
+	for (const child of detailedCard.children) {
+ 		if (!child.classList.contains("header"))
+		{
+			toDelete.push(child);
+		}
+	}
+	for (const child of toDelete) {
+		child.remove();
+	}
+
+	for (const child of card.children) {
+ 		if (child.classList.contains("header"))
+		{
+			const titleNodes = child.getElementsByClassName("title");
+			if (titleNodes.length > 0)
+			{
+				detailedCard.getElementsByClassName("title")[0].innerHTML = titleNodes[0].innerHTML;
+			}
+			else
+			{
+				detailedCard.getElementsByClassName("title")[0].innerHTML = "No Title";
+			}
+			const infoNodes = child.getElementsByClassName("info");
+			if (infoNodes.length > 0)
+			{
+				detailedCard.getElementsByClassName("info")[0].innerHTML = infoNodes[0].innerHTML;
+			}
+			else
+			{
+				detailedCard.getElementsByClassName("info")[0].innerHTML = "No Title";
+			}
+		}
+		else if (child.classList.contains("link"))
+		{
+			const div = document.createElement("div");
+			div.classList.add("link");
+			detailedCard.append(div);
+			const a = document.createElement("a");
+			div.append(a);
+			a.setAttribute("href", child.innerHTML);
+			a.setAttribute("target", "about:blank");
+			a.append(child.innerHTML);
+		}
+		else
+		{
+			detailedCard.append(child.cloneNode(true));
+		}
+	}
+}
+function overlayClick()
+{
+	const body = document.body;
+	body.classList.remove("withOverlay");
+}
+function makeCardsExpandable()
+{
+	for (const card of document.getElementsByClassName("card"))
+	{
+		card.addEventListener("click", cardClick);
+	}
+}
+	</script>
 </head>
 
-<body>
+<body onload="makeCardsExpandable()">
+	<div id="overlay" onclick="overlayClick()">
+		<div id="detailedCard" onclick="event.stopPropagation();">
+			<div class="header">
+				<div class="closeButton" onclick="overlayClick()">Close ✖</div>
+				<div class="title">Title</div>				
+				<div class="info">Info</div>
+			</div>
+			<div>I will be deleted.</div>
+		</div>
+	</div>
 	<div id="summary"></div>
 	<div id="columns">
 		<div class="column">
@@ -16,7 +98,7 @@
 				<div class="title">Tests</div>
 				<div class="info">1 Card</div>
 			</div>
-			<div class="card">
+			<div class="card" onclick="cardClick(event)">
 				<div class="header">
 					<div class="title">Test Card</div>
 					<div class="info">

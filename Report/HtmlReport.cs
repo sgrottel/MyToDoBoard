@@ -222,8 +222,8 @@ namespace MyToDo.Report
 						{
 							foreach (object linkObj in cardLinks)
 							{
-								if (linkObj == null) continue;
-								string link = linkObj as string;
+								string? link = linkObj?.ToString();
+								if (string.IsNullOrWhiteSpace(link)) continue;
 								cardNode.AppendHtml($"<div class=\"link\">{HtmlEncode(link)}</div>");
 							}
 						}
