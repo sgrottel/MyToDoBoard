@@ -194,6 +194,20 @@ namespace MyToDo.Report
 							}
 						}
 
+						cardDate = card.TryGetYamlProperty("dueDate");
+						if (cardDate != null)
+						{
+							if (cardDateNode != null)
+							{
+								cardDateNode.AppendHtml("<br>");
+								cardDateNode.AppendHtml($"⏰ {cardDate}");
+							}
+							else
+							{
+								cardHeader.AppendHtml($"<div class=\"info\">⏰ {cardDate}</div>");
+							}
+						}
+
 						var cardDesc = card.TryGetYamlProperty("desc");
 						if (cardDesc != null)
 						{
