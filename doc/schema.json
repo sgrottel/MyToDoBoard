@@ -59,6 +59,10 @@
 					"description": "The creation date of the card",
 					"$ref": "#/$defs/datetime"
 				},
+				"dueDate": {
+					"description": "The date the task this card represents should be completed by",
+					"$ref": "#/$defs/datetime"
+				},
 				"modDate": {
 					"description": "The date the card was last modified",
 					"$ref": "#/$defs/datetime"
