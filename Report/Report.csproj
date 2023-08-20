@@ -16,10 +16,12 @@
 
   <ItemGroup>
     <None Remove="HtmlReportStyle.css" />
+    <None Remove="HtmlReportTemplate.html" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="HtmlReportStyle.css" />
+    <EmbeddedResource Include="HtmlReportTemplate.html" />
   </ItemGroup>
 
   <ItemGroup>
