@@ -52,7 +52,7 @@ namespace MyToDo.Report
 			}
 			catch (Exception ex)
 			{
-				var sumNode = doc.DocumentNode.SelectSingleNode("/html/body/div[@id=\"summary\"]");
+				var sumNode = doc.DocumentNode.SelectSingleNode("/html/body//div[@id=\"summary\"]");
 				if (sumNode != null)
 				{
 					sumNode.AppendHtml($"""<div class="exception">Failed: {HtmlEncode(ex)}</div>""");
@@ -130,7 +130,7 @@ namespace MyToDo.Report
 
 		private void AddInfoToSummary(HtmlDocument doc, YamlObject _)
 		{
-			var summaryNode = doc.DocumentNode.SelectSingleNode("/html/body/div[@id=\"summary\"]");
+			var summaryNode = doc.DocumentNode.SelectSingleNode("/html/body//div[@id=\"summary\"]");
 			if (summaryNode == null) throw new Exception("summary node not found");
 
 			var headerNode = summaryNode.AppendHtml("<div class=\"header\">");
@@ -141,7 +141,7 @@ namespace MyToDo.Report
 
 		private void BuildColumns(HtmlDocument doc, YamlObject myToDoYaml)
 		{
-			var columnsNode = doc.DocumentNode.SelectSingleNode("/html/body/div[@id=\"columns\"]");
+			var columnsNode = doc.DocumentNode.SelectSingleNode("/html/body//div[@id=\"columns\"]");
 			if (columnsNode == null) throw new Exception("columns node not found");
 			columnsNode.RemoveAllChildren();
 
@@ -160,8 +160,8 @@ namespace MyToDo.Report
 
 				var columnHeader = columnNode.AppendHtml("<div class=\"header\">");
 
-				columnHeader.AppendHtml($"<div class=\"title\">{HtmlEncode(title)}</div>");
 				columnHeader.AppendHtml($"<div class=\"info\">{cardsCount} Card{((cardsCount == 1) ? "" : "s")}</div>");
+				columnHeader.AppendHtml($"<div class=\"title\">{HtmlEncode(title)}</div>");
 
 				if (cards != null)
 				{
@@ -172,7 +172,6 @@ namespace MyToDo.Report
 
 						var cardNode = columnNode.AppendHtml("<div class=\"card\">");
 						var cardHeader = cardNode.AppendHtml("<div class=\"header\">");
-						cardHeader.AppendHtml($"<div class=\"title\">{HtmlEncode(title)}</div>");
 
 						var cardDate = card.TryGetYamlProperty("date");
 						HtmlNode? cardDateNode = null;
@@ -210,6 +209,8 @@ namespace MyToDo.Report
 								cardHeader.AppendHtml($"<div class=\"info\">⏰ <span class=\"date duedate\">{cardDate}</span></div>");
 							}
 						}
+
+						cardHeader.AppendHtml($"<div class=\"title\">{HtmlEncode(title)}</div>");
 
 						var cardDesc = card.TryGetYamlProperty("desc");
 						if (cardDesc != null)

@@ -16,8 +16,16 @@ body {
 	background: #f9f8ff;
 	background: linear-gradient(180deg, #f9f8ff 0%, rgba(249, 248, 255, 0.8) 30%, rgba(249, 248, 255, 0.6) 60%, rgba(249, 248, 255, 0) 100%);
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	overflow: hidden;
 }
-body.withOverlay {
+
+#content {
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}
+
+body.withOverlay #content {
 	overflow: hidden;
 }
 
@@ -103,13 +111,13 @@ body.withOverlay {
 
 #columns .title, #detailedCard .title {
 	font-weight: 600;
-	float: left;
 }
 
 #columns .info, #detailedCard .info {
 	float: right;
 	font-size: small;
 	margin-left: 1em;
+	white-space: nowrap;
 }
 
 .card, #detailedCard {
