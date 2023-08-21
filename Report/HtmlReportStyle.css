@@ -127,14 +127,16 @@ body.withOverlay {
 #detailedCard {
 	cursor: inherit !important;
 	margin: 2em auto !important;
-	width: 80%;
+	width: fit-content;
+	max-width: 80%;
+	padding: 0.5em 1.5em !important;
 }
 
 #detailedCard .closeButton {
 	float: right;
 	background: firebrick;
 	color: white;
-	margin: -0.31em -0.56em 0.25em 1em;
+	margin: -0.56em -1.57em 0.25em 1em;
 	white-space: nowrap;
 	padding: 0.2em 0.75em 0.2em 0.75em;
 	border-top-right-radius: 0.5rem;
