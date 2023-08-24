@@ -29,6 +29,11 @@
 					"type": "array",
 					"uniqueItems": true,
 					"items": { "$ref": "#/$defs/card" }
+				},
+				"view": {
+					"description": "Info on how the cards in this column should be viewed",
+					"type": "string",
+					"enum": [ "normal", "minimal", "hidden" ]
 				}
 			},
 			"required": [ "title" ]
