@@ -19,3 +19,23 @@ columns:
 - title: Done
   cards:
   - title: Project kicked off
+
+- title: ToDo
+  view: minimal
+  cards:
+  - title: This is a small card from a merged column
+    desc: |
+      Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+      invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
+      et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+      Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+      diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+      voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
+      gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+    links:
+    - https://www.microsoft.com
+
+- title: ToDo
+  view: hidden
+  cards:
+  - title: This is a hidden card from a merged column

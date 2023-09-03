@@ -4,3 +4,4 @@
 **/bin/
 **/Properties/launchSettings.json
 *.user
+doc/example.mytodo.html

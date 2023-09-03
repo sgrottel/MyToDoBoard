@@ -152,7 +152,17 @@ namespace MyToDo.Report
 			foreach (object columnObj in columns)
 			{
 				YamlObject column = columnObj.AsYamlObject("Column of unexpected type");
+				string? viewType = column.TryGetYamlProperty("view")?.ToString();
+				if (viewType != null)
+				{
+					viewType = "view-" + viewType.ToLower();
+				}
+
 				var columnNode = columnsNode.AppendHtml("<div class=\"column\">");
+				if (viewType != null)
+				{
+					columnNode.Attributes["class"].Value += " " + viewType;
+				}
 
 				string title = (column.GetYamlProperty("title") as string) ?? "Noname";
 				var cards = column.TryGetYamlProperty("cards").TryAsYamlList();
@@ -171,6 +181,11 @@ namespace MyToDo.Report
 						title = (card.GetYamlProperty("title") as string) ?? "Noname";
 
 						var cardNode = columnNode.AppendHtml("<div class=\"card\">");
+						if (viewType != null)
+						{
+							cardNode.Attributes["class"].Value += " " + viewType;
+						}
+
 						var cardHeader = cardNode.AppendHtml("<div class=\"header\">");
 
 						var cardDate = card.TryGetYamlProperty("date");

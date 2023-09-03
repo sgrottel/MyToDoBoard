@@ -180,6 +180,15 @@ body.withOverlay #content {
 	font-size: x-small;
 }
 
+.card.view-minimal .link, .card.view-minimal .text {
+	visibility: collapse;
+	display: none;
+}
+
 #detailedCard .link {
 	font-size: small;
+}
+
+.view-hidden {
+	visibility: collapse;
 }
