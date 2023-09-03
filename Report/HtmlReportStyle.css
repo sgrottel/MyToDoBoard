@@ -191,4 +191,5 @@ body.withOverlay #content {
 
 .view-hidden {
 	visibility: collapse;
+	display: none;
 }

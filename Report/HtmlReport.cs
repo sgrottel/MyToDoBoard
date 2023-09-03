@@ -139,6 +139,13 @@ namespace MyToDo.Report
 			headerNode.AppendHtml($"""<div class="generated">Generated <span class="date">{HtmlEncode(Timestamp.ToString("yyyy-MM-dd HH:mm:ss"))}</span></div>""");
 		}
 
+		private class ColumnInfo {
+			public int Count { get; set; } = 0;
+			public int CountHidden { get; set; } = 0;
+			public HtmlNode? ColumnNode { get; set; } = null;
+			public HtmlNode? InfoNode { get; set; } = null;
+		};
+
 		private void BuildColumns(HtmlDocument doc, YamlObject myToDoYaml)
 		{
 			var columnsNode = doc.DocumentNode.SelectSingleNode("/html/body//div[@id=\"columns\"]");
@@ -149,6 +156,8 @@ namespace MyToDo.Report
 				.NotNull("Columns value is unexpectitly null")
 				.AsYamlList("Columns property of unexpeced type");
 
+			Dictionary<string, ColumnInfo> columnsInfo = new();
+
 			foreach (object columnObj in columns)
 			{
 				YamlObject column = columnObj.AsYamlObject("Column of unexpected type");
@@ -157,30 +166,36 @@ namespace MyToDo.Report
 				{
 					viewType = "view-" + viewType.ToLower();
 				}
-
-				var columnNode = columnsNode.AppendHtml("<div class=\"column\">");
-				if (viewType != null)
-				{
-					columnNode.Attributes["class"].Value += " " + viewType;
-				}
-
-				string title = (column.GetYamlProperty("title") as string) ?? "Noname";
+				string columnTitle = (column.GetYamlProperty("title") as string) ?? "Noname";
 				var cards = column.TryGetYamlProperty("cards").TryAsYamlList();
 				int cardsCount = cards?.Count ?? 0;
 
-				var columnHeader = columnNode.AppendHtml("<div class=\"header\">");
-
-				columnHeader.AppendHtml($"<div class=\"info\">{cardsCount} Card{((cardsCount == 1) ? "" : "s")}</div>");
-				columnHeader.AppendHtml($"<div class=\"title\">{HtmlEncode(title)}</div>");
+				if (!columnsInfo.ContainsKey(columnTitle))
+				{
+					columnsInfo.Add(columnTitle, new() { ColumnNode = columnsNode.AppendHtml("<div class=\"column\">") });
+					var columnHeader = (columnsInfo[columnTitle].ColumnNode ?? throw new Exception()).AppendHtml("<div class=\"header\">");
+					columnsInfo[columnTitle].InfoNode = columnHeader.AppendHtml("<div class=\"info\" />");
+					columnHeader.AppendHtml($"<div class=\"title\">{HtmlEncode(columnTitle)}</div>");
+				}
 
 				if (cards != null)
 				{
 					foreach (object cardObj in cards)
 					{
-						YamlObject card = cardObj.AsYamlObject("Card of unexpected type");
-						title = (card.GetYamlProperty("title") as string) ?? "Noname";
+						ColumnInfo info = columnsInfo[columnTitle] ?? throw new Exception();
+						if (viewType == "view-hidden")
+						{
+							info.CountHidden++;
+						}
+						else
+						{
+							info.Count++;
+						}
 
-						var cardNode = columnNode.AppendHtml("<div class=\"card\">");
+						YamlObject card = cardObj.AsYamlObject("Card of unexpected type");
+						string title = (card.GetYamlProperty("title") as string) ?? "Noname";
+
+						var cardNode = (info.ColumnNode ?? throw new Exception()).AppendHtml("<div class=\"card\">");
 						if (viewType != null)
 						{
 							cardNode.Attributes["class"].Value += " " + viewType;
@@ -247,6 +262,16 @@ namespace MyToDo.Report
 				}
 			}
 
+			foreach (KeyValuePair<string, ColumnInfo> column in columnsInfo)
+			{
+				if (column.Value.Count == 0 && column.Value.CountHidden > 0)
+				{
+					HtmlAttribute attr = column.Value.ColumnNode?.Attributes["class"] ?? throw new Exception();
+					attr.Value += " view-hidden";
+				}
+				int cardsCount = column.Value.Count;
+				column.Value.InfoNode?.AppendHtml(HtmlEncode($"{cardsCount} Card{((cardsCount == 1) ? "" : "s")}"));
+			}
 		}
 
 	}
