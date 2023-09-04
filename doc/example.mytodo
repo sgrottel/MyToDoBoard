@@ -1,4 +1,4 @@
-# $schema: https://go.grottel.net/mytodoboard/schema.yaml
+# $schema: https://go.grottel.net/mytodoboard/schema.json
 
 columns:
 - title: ToDo
@@ -8,7 +8,7 @@ columns:
       We should do something very nice and clever.
       Not sure what, though, at the moment.
     links:
-      - https://go.grottel.net/mytodoboard/schema.yaml
+      - https://go.grottel.net/mytodoboard/schema.json
   - title: "?"
   - title: Profit
 
