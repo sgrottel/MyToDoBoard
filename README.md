@@ -30,7 +30,7 @@ TODO: Screenshot
   - Comments
 - ToDo Card creation with configurable templates
 - All data of a board and all it's cards is stored in a single file.
-  - You can find more info in the [file format documentation: mytodo_yaml.md](doc/mytodo-yaml.md)
+  - You can find more info in the [file format documentation: mytodo-yaml.md](doc/mytodo-yaml.md)
   - Easy to store, backup, synch, ...
   - No internet connection/communication required.
 
@@ -40,10 +40,10 @@ TODO: Building Instructions
 
 ## Companion Utilities
 There are companion utilities for specific tasks.
-They all operate on the same central [`.mytodo.yaml` data file](doc/mytodo-yaml.md) and are therefore fully compatible with each other.
+They all operate on the same central [`.mytodo` data file](doc/mytodo-yaml.md) and are therefore fully compatible with each other.
 
 ### MyToDoReport
-[MyToDoReport](./doc/mytodo-report.md) is a command line utility to read the `.mytodo.yaml` data file and to produce a report of it's content.
+[MyToDoReport](./doc/mytodo-report.md) is a command line utility to read the `.mytodo` data file and to produce a report of it's content.
 
 ## Alternatives
 If you look for a solution storing your data _online_, or _share_ between multiple people, or offer different views, or ..., or ..., or ..., then this might not be the app for you!

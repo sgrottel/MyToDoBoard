@@ -21,7 +21,7 @@ namespace MyToDo.Report
 			Console.OutputEncoding = System.Text.Encoding.UTF8;
 			Console.InputEncoding = System.Text.Encoding.UTF8;
 
-			var inputFileArg = new Argument<FileInfo>("Input YamlFile", description: "The input .mytodo.yaml file")
+			var inputFileArg = new Argument<FileInfo>("Input YamlFile", description: "The input .mytodo file")
 				.ExistingOnly();
 
 			var outputFileOpt = new Option<FileInfo?>("--output", description: "The output file to be written");
@@ -93,12 +93,12 @@ namespace MyToDo.Report
 
 					if (yaml == null)
 					{
-						PrintError("Loaded .mytodo.yaml seems empty");
+						PrintError("Loaded .mytodo seems empty");
 						return;
 					}
 					if (!(yaml.IsYamlObject()))
 					{
-						PrintError("Loaded .mytodo.yaml seems illegal. Root should be an object");
+						PrintError("Loaded .mytodo seems illegal. Root should be an object");
 						return;
 					}
 

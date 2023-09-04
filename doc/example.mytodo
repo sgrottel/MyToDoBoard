@@ -1,4 +1,4 @@
-# $schema: https://go.grottel.net/mytodoboard/schema.json
+$schema: https://go.grottel.net/mytodoboard/schema.json
 
 columns:
 - title: ToDo
