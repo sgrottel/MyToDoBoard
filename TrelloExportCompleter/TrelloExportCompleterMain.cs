@@ -1,8 +1,12 @@
-﻿using System.Text;
+﻿using System;
+using System.Net;
+using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using static TrelloExportCompleter.Program;
 
 namespace TrelloExportCompleter
 {
@@ -108,6 +112,7 @@ namespace TrelloExportCompleter
 			var json = File.ReadAllText(jsonFile);
 			Board board = JsonSerializer.Deserialize<Board>(json) ?? throw new JsonException();
 
+			if (board.id == null) throw new NullReferenceException("Board id not valid");
 			Console.WriteLine($"Board Id: {board.id}");
 
 			List<CardAction> actions = new();
@@ -118,25 +123,7 @@ namespace TrelloExportCompleter
 				Console.WriteLine("You came to the right place.");
 			}
 
-			actions.RemoveAt(0);
-
-			/*
-			Paginated download of actions from a board:
-			Set <boardId>, <ApiKey>, <ApiToken>
-			Optional:
-				<Limit> number of entries in answer 0-1000
-				<before> only include actions stored before (older) the action with the specified id
-			Since actions are sorted by date, newest to oldest, this way you get pagination.
-
-PS C:\Downloads> curl.exe --request GET --URL 'https://api.trello.com/1/boards/###/actions?key=###&token=###&limit=###'
-[...{"id":"0815",...}]
-PS C:\Downloads> curl.exe --request GET --URL 'https://api.trello.com/1/boards/###/actions?key=###&token=###&limit=###&before=0815'
-[{...}]
-			*/
-
-
-			// TODO
-
+			LoadActionsFromApi(board.id, apiKey, apiToken, actions);
 
 			board.actions = actions.ToArray();
 
@@ -146,6 +133,57 @@ PS C:\Downloads> curl.exe --request GET --URL 'https://api.trello.com/1/boards/#
 					Path.GetFileNameWithoutExtension(jsonFile)
 					+ "_out" + Path.GetExtension(jsonFile))
 				);
+		}
+
+		/// <summary>
+		/// Paginated download of actions from a board:
+		/// Set (boardId), (ApiKey), (ApiToken)
+		/// Optional:
+		///   (Limit) number of entries in answer 0-1000
+		///   (before) only include actions stored before(older) the action with the specified id
+		/// Since actions are sorted by date, newest to oldest, this way you get pagination.
+		/// 
+		/// PS C:\Downloads> curl.exe --request GET --URL 'https://api.trello.com/1/boards/###/actions?key=###&token=###&limit=###'
+		/// [...{ "id":"0815",...}]
+		/// PS C:\Downloads> curl.exe --request GET --URL 'https://api.trello.com/1/boards/###/actions?key=###&token=###&limit=###&before=0815'
+		/// [{...}]
+		/// </summary>
+		internal static void LoadActionsFromApi(string boardId, string apiKey, string apiToken, List<CardAction> actions)
+		{
+			int limit = 1000;
+			int received = limit;
+			while (received == limit)
+			{
+				var beforeLastId = actions[actions.Count - 2].id;
+				var lastId = actions[actions.Count - 1].id;
+
+				var more = GetActions(boardId, apiKey, apiToken, limit, beforeLastId!);
+				received = more.Length;
+				Console.WriteLine($"Receiving {received} actions from API (with 1 overlap)");
+
+				if (received == 0) return;
+				if (!string.Equals(more[0].id, lastId, StringComparison.OrdinalIgnoreCase))
+				{
+					Console.WriteLine("WARN: Action pages are requested with overlap, but no overlap found");
+				}
+
+				actions.AddRange(more[1..]);
+				Console.WriteLine($"\tTotal {actions.Count} actions");
+			}
+		}
+
+		private static HttpClient http = new();
+
+		internal static CardAction[] GetActions(string boardId, string apiKey, string apiToken, int limit, string beforeId)
+		{
+			var task = http.GetAsync(
+				$"https://api.trello.com/1/boards/{boardId}/actions?key={apiKey}&token={apiToken}&limit={limit}&before={beforeId}");
+			task.Wait();
+			var resp = task.Result;
+			if (!resp.IsSuccessStatusCode) throw new Exception("API query not successful");
+			var contTask = resp.Content.ReadAsStringAsync();
+			contTask.Wait();
+			return JsonSerializer.Deserialize<CardAction[]>(contTask.Result) ?? Array.Empty<CardAction>();
 		}
 
 		internal static void WriteJsonSlowlyNeedingMuchMemoryButAsItShouldBe(Board root, string filename)
