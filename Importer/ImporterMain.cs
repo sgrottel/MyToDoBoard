@@ -1,4 +1,6 @@
 ﻿using Importer.Trello;
+using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -47,16 +49,21 @@ namespace Importer
 				Board? board = JsonSerializer.Deserialize<Board>(json);
 				if (board == null) throw new InvalidDataException("Expected json of 'Board");
 
-				//DumpAsCSharpClass(board.labelNames, "LabelNames");
-				//DumpAsCSharpClass(board.labels, "Labels");
+				Console.WriteLine($"Importing board: Trello {board.name}");
+				Console.WriteLine($"  state from: {board.dateLastActivity}");
+				Console.WriteLine();
 
-				//JsonDocument doc = JsonDocument.Parse(json);
-				//JsonElement root = doc.RootElement;
-
-				//foreach (JsonProperty p in root.EnumerateObject())
+				//IEnumerable<object?> objects = Array.Empty<object?>();
+				//foreach (CheckList cl in board.checklists ?? Array.Empty<CheckList>())
 				//{
-				//	Console.WriteLine($"\t\tpublic {CSharpTypeOf(p.Value.ValueKind)} {p.Name} {{ get; set; }}");
+				//	if (cl.checkItems == null) continue;
+				//	objects = objects.Concat(cl.checkItems);
 				//}
+				//DumpAsCSharpClass(objects, "CheckItem");
+
+				/* TODO:
+		public object?[]? actions { get; set; }
+				*/
 
 			}
 			catch (Exception ex)
@@ -83,10 +90,10 @@ namespace Importer
 			Console.WriteLine("}");
 		}
 
-		private static void DumpAsCSharpClass(object?[]? a, string className)
+		private static void DumpAsCSharpClass(IEnumerable<object?>? a, string className)
 		{
 			if (a == null) throw new ArgumentNullException(nameof(a));
-			if (a.Length == 0) throw new ArgumentException("List must not be empty", nameof(a));
+			if (!a.Any()) throw new ArgumentException("List must not be empty", nameof(a));
 
 			Dictionary<string, HashSet<JsonValueKind>> props = new();
 			foreach (object? o in a)
@@ -114,8 +121,30 @@ namespace Importer
 
 				if (p.Value.Count > 1)
 				{
+					// consolidate
+					if (p.Value.Count == 2 && p.Value.Contains(JsonValueKind.True) && p.Value.Contains(JsonValueKind.False))
+					{
+						p.Value.Remove(JsonValueKind.False);
+						continue;
+					}
+
+					if (p.Value.Count == 2 && p.Value.Contains(JsonValueKind.Null)
+						&& !p.Value.Contains(JsonValueKind.Number)
+						&& !p.Value.Contains(JsonValueKind.True)
+						&& !p.Value.Contains(JsonValueKind.False))
+					{
+						p.Value.Remove(JsonValueKind.Null);
+						continue;
+					}
+
+					if (p.Value.Count == 2 && p.Value.Contains(JsonValueKind.Null) && p.Value.Contains(JsonValueKind.Number))
+					{
+						p.Value.Clear();
+						p.Value.Add(JsonValueKind.Object);
+						continue;
+					}
+
 					throw new Exception($"Property {p.Key} has several types: {string.Join(", ", p.Value)}");
-					// Could try to consolidate
 				}
 			}
 

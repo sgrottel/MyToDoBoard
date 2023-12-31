@@ -24,7 +24,7 @@ namespace Importer.Trello
 		public object? prefs { get; set; }
 		public string? shortLink { get; set; }
 		public bool subscribed { get; set; }
-		public LabelNames? labelNames { get; set; }
+		// public LabelNames? labelNames { get; set; } // other view of 'labels'
 		public object?[]? powerUps { get; set; }
 		public DateTime? dateLastActivity { get; set; }
 		public DateTime? dateLastView { get; set; }
@@ -39,11 +39,11 @@ namespace Importer.Trello
 		public object?[]? premiumFeatures { get; set; }
 		public string? idMemberCreator { get; set; }
 		public object?[]? actions { get; set; }
-		public object?[]? cards { get; set; }
-		public Label?[]? labels { get; set; }
-		public object?[]? lists { get; set; }
+		public Card?[]? cards { get; set; }
+		public LabelName?[]? labels { get; set; }
+		public CardList?[]? lists { get; set; }
 		public object?[]? members { get; set; }
-		public object?[]? checklists { get; set; }
+		public CheckList[]? checklists { get; set; }
 		public object?[]? customFields { get; set; }
 		public object?[]? memberships { get; set; }
 		public object?[]? pluginData { get; set; }
