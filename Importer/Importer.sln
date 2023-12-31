@@ -5,6 +5,8 @@ VisualStudioVersion = 17.9.34407.89
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Importer", "Importer.csproj", "{5AC2EB69-68E1-42E8-BC10-9C328F72BA93}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrelloExportCompleter", "..\TrelloExportCompleter\TrelloExportCompleter.csproj", "{953B9727-A690-418B-A23D-B681272BF499}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{5AC2EB69-68E1-42E8-BC10-9C328F72BA93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5AC2EB69-68E1-42E8-BC10-9C328F72BA93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5AC2EB69-68E1-42E8-BC10-9C328F72BA93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{953B9727-A690-418B-A23D-B681272BF499}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{953B9727-A690-418B-A23D-B681272BF499}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{953B9727-A690-418B-A23D-B681272BF499}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{953B9727-A690-418B-A23D-B681272BF499}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
