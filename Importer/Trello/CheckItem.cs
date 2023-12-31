@@ -12,7 +12,7 @@ namespace Importer.Trello
 		public string? name { get; set; }
 		public object? nameData { get; set; }
 		public double pos { get; set; }
-		public string? state { get; set; }
+		public CheckItemStateValue state { get; set; }
 		public object? due { get; set; }
 		public object? dueReminder { get; set; }
 		public object? idMember { get; set; }

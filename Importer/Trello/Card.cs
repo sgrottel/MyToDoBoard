@@ -11,7 +11,7 @@ namespace Importer.Trello
 		public string? id { get; set; }
 		public object? address { get; set; }
 		public object? badges { get; set; }
-		public object?[]? checkItemStates { get; set; }
+		public CheckItemState[]? checkItemStates { get; set; }
 		public bool closed { get; set; }
 		public object? coordinates { get; set; }
 		public object? creationMethod { get; set; }
@@ -19,8 +19,8 @@ namespace Importer.Trello
 		public DateTime? dateLastActivity { get; set; }
 		public string? desc { get; set; }
 		public object? descData { get; set; }
-		public string? due { get; set; }
-		public object? dueReminder { get; set; }
+		public DateTime? due { get; set; }
+		public double? dueReminder { get; set; }
 		public string? email { get; set; }
 		// public string? idBoard { get; set; } always id of owning board
 		public string[]? idChecklists { get; set; }
@@ -41,14 +41,19 @@ namespace Importer.Trello
 		public string? shortLink { get; set; }
 		public string? shortUrl { get; set; }
 		public object? staticMapUrl { get; set; }
-		public string? start { get; set; }
+		public DateTime? start { get; set; }
 		public bool subscribed { get; set; }
 		public string? url { get; set; }
 		public object? cover { get; set; }
 		public bool isTemplate { get; set; }
 		public string? cardRole { get; set; }
-		public object?[]? attachments { get; set; }
+		public Attachment[]? attachments { get; set; }
 		public object?[]? pluginData { get; set; }
 		public object?[]? customFieldItems { get; set; }
+
+		public override string ToString()
+		{
+			return name ?? nameof(Card);
+		}
 	}
 }

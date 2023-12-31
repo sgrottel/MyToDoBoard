@@ -38,10 +38,10 @@ namespace Importer.Trello
 		public object? idBoardSource { get; set; }
 		public object?[]? premiumFeatures { get; set; }
 		public string? idMemberCreator { get; set; }
-		public object?[]? actions { get; set; }
-		public Card?[]? cards { get; set; }
-		public LabelName?[]? labels { get; set; }
-		public CardList?[]? lists { get; set; }
+		public CardAction[]? actions { get; set; }
+		public Card[]? cards { get; set; }
+		public LabelName[]? labels { get; set; }
+		public CardList[]? lists { get; set; }
 		public object?[]? members { get; set; }
 		public CheckList[]? checklists { get; set; }
 		public object?[]? customFields { get; set; }
