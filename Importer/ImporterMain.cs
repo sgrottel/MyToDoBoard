@@ -1,9 +1,13 @@
-﻿using Importer.Trello;
+﻿using Importer.DataModel;
+using Importer.Trello;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using YamlDotNet.Core;
+using YamlDotNet.Serialization;
 
 namespace Importer
 {
@@ -86,6 +90,8 @@ namespace Importer
 					 */
 				}
 
+				#region Analyse Trello Export Json
+
 				//IEnumerable<Attachment?> attachments = Array.Empty<Attachment?>();
 				//foreach (Card c in board.cards ?? Array.Empty<Card>())
 				//{
@@ -117,6 +123,17 @@ namespace Importer
 				//	}
 				//}
 
+				#endregion
+
+				ToDoDocument todoDoc = new();
+				if (string.IsNullOrEmpty(todoDoc.Comment))
+				{
+					todoDoc.Comment = $"Imported from Trello {Path.GetFileName(inFile)}\nBoard: {board.name}\nState: {board.dateLastActivity}";
+				}
+
+				BuildToDoDoc(todoDoc, board);
+
+				WriteMyToDoYaml(todoDoc, outFile);
 
 			}
 			catch (Exception ex)
@@ -225,5 +242,149 @@ namespace Importer
 			}
 			return "object?";
 		}
+
+		private static void BuildToDoDoc(ToDoDocument todoDoc, Board board)
+		{
+			Dictionary<string, string> labelId = new();
+			//todoDoc.Labels = new();
+			foreach (LabelName ln in board.labels ?? Array.Empty<LabelName>())
+			{
+				if (ln.uses <= 0) continue;
+
+				Label l = new Label()
+				{
+					Title = ln.name,
+					Color = ln.color
+				};
+
+				//l.GenerateId(todoDoc.Labels);
+
+				// todoDoc.Labels.Add(l);
+
+				if (ln.id != null)
+				{
+					labelId.Add(ln.id, l.Id ?? string.Empty);
+				}
+			}
+
+			Dictionary<string, Column> lists = new();
+			Dictionary<string, Column> secondLists = new();
+			todoDoc.Columns = new();
+			foreach (CardList cl in board.lists ?? Array.Empty<CardList>())
+			{
+				Column c = new() { Title = cl.name, Order = (long)cl.pos };
+				if (cl.closed)
+				{
+					c.View = ColumnView.hidden;
+					c.Order += 10000000L;
+				}
+
+				todoDoc.Columns.Add(c);
+				if (cl.id != null)
+				{
+					lists.Add(cl.id, c);
+
+					if (c.View == ColumnView.DefaultView)
+					{
+						c = new() { Title = cl.name, View = ColumnView.hidden, Order = (long)cl.pos + 10000000L };
+						secondLists.Add(cl.id, c);
+					}
+				}
+			}
+
+			Dictionary<string, DataModel.Card> cards = new();
+			foreach (Trello.Card tc in board.cards ?? Array.Empty<Trello.Card>())
+			{
+				if (tc.idList == null) continue;
+				DataModel.Card c = new() { Title = tc.name, Description = CleanDescription(tc.desc), ModifiedDate = CleanDate(tc.dateLastActivity) };
+
+				if (tc.attachments?.Any() ?? false)
+				{
+					foreach (Attachment at in tc.attachments)
+					{
+						string? l = at.url ?? at.fileName;
+						if (l != null)
+						{
+							c.Links ??= new();
+							c.Links.Add(l);
+						}
+					}
+				}
+
+				Column cc = lists[tc.idList];
+				if (cc.View == ColumnView.DefaultView && tc.closed)
+				{
+					cc = secondLists[tc.idList];
+				}
+
+				cc.Cards!.Add(c);
+
+				// TODO: Implement Labels
+
+			}
+
+			foreach (var ta in board.actions ?? Array.Empty<CardAction>())
+			{
+
+				// TODO: Implement Comments
+
+			}
+
+			todoDoc.Columns.RemoveAll((c) => !c.Cards?.Any() ?? true);
+			todoDoc.Columns.AddRange(secondLists.Where((p) => p.Value.Cards?.Any() ?? false).Select((p) => p.Value));
+			todoDoc.Columns.Sort((a, b) => (int)(a.Order - b.Order));
+		}
+
+		private static DateTime? CleanDate(DateTime? d)
+		{
+			if (d == null) return null;
+			return new DateTime(
+				d.Value.Year,
+				d.Value.Month,
+				d.Value.Day,
+				d.Value.Hour,
+				d.Value.Minute,
+				d.Value.Second);
+		}
+
+		private static string? CleanDescription(string? desc)
+		{
+			if (desc == null) return null;
+			return desc.Replace("\u200C", "").Replace("\r", "");
+		}
+
+		private class DateTimeTypeConverter : IYamlTypeConverter
+		{
+			public bool Accepts(Type type) => type == typeof(DateTime);
+
+			public object? ReadYaml(IParser parser, Type type)
+			{
+				throw new NotImplementedException();
+			}
+
+			public void WriteYaml(IEmitter emitter, object? value, Type type)
+			{
+				DateTime? d = value as DateTime?;
+				if (d == null)
+				{
+					emitter.Emit(new YamlDotNet.Core.Events.Scalar(""));
+				}
+				else
+				{
+					emitter.Emit(new YamlDotNet.Core.Events.Scalar(d.Value.ToString("yyyy-MM-dd HH:mm:ss")));
+				}
+			}
+		}
+
+		private static void WriteMyToDoYaml(ToDoDocument todoDoc, string outFile)
+		{
+			Console.WriteLine($"Writing YAML {outFile}");
+			using var writer = new StreamWriter(path: outFile, append: false, encoding: new UTF8Encoding(false));
+			var yaml = new SerializerBuilder()
+				.WithTypeConverter(new DateTimeTypeConverter())
+				.Build();
+			yaml.Serialize(writer, todoDoc);
+		}
+
 	}
 }
