@@ -246,7 +246,7 @@ namespace Importer
 		private static void BuildToDoDoc(ToDoDocument todoDoc, Board board)
 		{
 			Dictionary<string, string> labelId = new();
-			//todoDoc.Labels = new();
+			todoDoc.Labels = new();
 			foreach (LabelName ln in board.labels ?? Array.Empty<LabelName>())
 			{
 				if (ln.uses <= 0) continue;
@@ -257,9 +257,9 @@ namespace Importer
 					Color = ln.color
 				};
 
-				//l.GenerateId(todoDoc.Labels);
+				l.GenerateId(todoDoc.Labels);
 
-				// todoDoc.Labels.Add(l);
+				todoDoc.Labels.Add(l);
 
 				if (ln.id != null)
 				{
@@ -319,7 +319,12 @@ namespace Importer
 
 				cc.Cards!.Add(c);
 
-				// TODO: Implement Labels
+				if (tc.idLabels != null && tc.idLabels.Length > 0)
+				{
+					c.LabelIds = tc.idLabels.Select((l) => labelId[l]).ToList();
+				}
+
+				// TODO: Implement Checklists
 
 			}
 
@@ -330,7 +335,18 @@ namespace Importer
 
 			}
 
+			// final cleanup
 			todoDoc.Columns.RemoveAll((c) => !c.Cards?.Any() ?? true);
+			foreach (Column cc in todoDoc.Columns)
+			{
+				foreach (DataModel.Card c in cc.Cards!)
+				{
+					if (c.LabelIds != null && !c.LabelIds.Any())
+					{
+						c.LabelIds = null;
+					}
+				}
+			}
 			todoDoc.Columns.AddRange(secondLists.Where((p) => p.Value.Cards?.Any() ?? false).Select((p) => p.Value));
 			todoDoc.Columns.Sort((a, b) => (int)(a.Order - b.Order));
 		}
@@ -376,12 +392,40 @@ namespace Importer
 			}
 		}
 
+		internal class StringListAsJson : List<string>
+		{
+		}
+
+		private class StringListAsJsonTypeConverter : IYamlTypeConverter
+		{
+			public bool Accepts(Type type) => type == typeof(StringListAsJson);
+
+			public object? ReadYaml(IParser parser, Type type)
+			{
+				throw new NotImplementedException();
+			}
+
+			public void WriteYaml(IEmitter emitter, object? value, Type type)
+			{
+				List<string>? l = value as List<string>;
+				if (l == null) return;
+
+				emitter.Emit(new YamlDotNet.Core.Events.SequenceStart(null, null, false, YamlDotNet.Core.Events.SequenceStyle.Flow));
+				foreach (string s in l)
+				{
+					emitter.Emit(new YamlDotNet.Core.Events.Scalar(s));
+				}
+				emitter.Emit(new YamlDotNet.Core.Events.SequenceEnd());
+			}
+		}
+
 		private static void WriteMyToDoYaml(ToDoDocument todoDoc, string outFile)
 		{
 			Console.WriteLine($"Writing YAML {outFile}");
 			using var writer = new StreamWriter(path: outFile, append: false, encoding: new UTF8Encoding(false));
 			var yaml = new SerializerBuilder()
 				.WithTypeConverter(new DateTimeTypeConverter())
+				.WithTypeConverter(new StringListAsJsonTypeConverter())
 				.Build();
 			yaml.Serialize(writer, todoDoc);
 		}

@@ -17,8 +17,8 @@ namespace Importer.DataModel
 		[YamlMember(Alias = "comment", DefaultValuesHandling = DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitDefaults)]
 		public string? Comment { get; set; }
 
-		//[YamlMember(Alias = "labels", DefaultValuesHandling = DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitDefaults)]
-		//public List<Label>? Labels { get; set; }
+		[YamlMember(Alias = "labels", DefaultValuesHandling = DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitDefaults)]
+		public List<Label>? Labels { get; set; }
 
 		[YamlMember(Alias = "columns")]
 		public List<Column>? Columns { get; set; }

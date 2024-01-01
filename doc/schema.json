@@ -5,6 +5,36 @@
 	"description": "Schema for the yaml data files of MyToDoBoard™",
 	"type": "object",
 	"properties": {
+		"labels": {
+			"description": "Labels to mark and organize card types.",
+			"type": "array",
+			"uniqueItems": true,
+			"items": {
+				"description": "A card label",
+				"type": "object",
+				"properties": {
+					"id": {
+						"description": "A machine-readable short identifyer, used when referencing this label",
+						"type": "string",
+						"minLength": 1
+					},
+					"title": {
+						"description": "A human-readable title representing the meaning of this label",
+						"type": "string",
+						"minLength": 1
+					},
+					"desc": {
+						"description": "A human-readable description",
+						"type": "string"
+					},
+					"color": {
+						"description": "A machine-readable color code",
+						"type": "string"
+					}
+				},
+				"required": [ "id", "title" ]
+			}
+		},
 		"columns": {
 			"description": "Columns of cards organizing the tasks to do, doing, done, etc.",
 			"type": "array",
@@ -47,6 +77,12 @@
 					"description": "Human-readable title of the task",
 					"type": "string",
 					"minLength": 1
+				},
+				"labels": {
+					"description": "Sequence of label ids",
+					"type": "array",
+					"uniqueItems": true,
+					"items": { "type": "string" }
 				},
 				"desc": {
 					"description": "Human-readable detailed description of the task",

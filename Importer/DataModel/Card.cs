@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using YamlDotNet.Serialization;
+using static Importer.Program;
 
 namespace Importer.DataModel
 {
@@ -12,6 +13,13 @@ namespace Importer.DataModel
 	{
 		[YamlMember(Alias = "title")]
 		public string? Title { get; set; }
+
+		[YamlMember(
+			Alias = "labels",
+			DefaultValuesHandling = DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitDefaults,
+			SerializeAs = typeof(StringListAsJson)),
+			DefaultValue(null)]
+		public List<string>? LabelIds { get; set; }
 
 		[YamlMember(
 			Alias = "desc",
