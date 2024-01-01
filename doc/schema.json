@@ -96,6 +96,12 @@
 						"type": "string"
 					}
 				},
+				"checklist": {
+					"description": "Checklist of smaller task items to be checked",
+					"type": "array",
+					"uniqueItems": true,
+					"items": { "$ref": "#/$defs/checklistitem" }
+				},
 				"date": {
 					"description": "The creation date of the card",
 					"$ref": "#/$defs/datetime"
@@ -115,6 +121,31 @@
 		"datetime": {
 			"type": "string",
 			"pattern": "\\d{2,}-\\d{1,2}(?:-\\d{1,2}(?:(?:\\s|t|T)\\d{1,2}\\:\\d{2}(?:\\:\\d{2}(?:\\.\\d*)?)?(?:Z|(?:\\+\\d{2}\\:?\\d{2}))?)?)?"
+		},
+
+		"checklistitem": {
+			"type": "object",
+			"properties": {
+				"text": {
+					"description": "Human-readable text",
+					"type": "string",
+					"minLength": 1
+				},
+				"checked": {
+					"description": "The check-state of the item",
+					"type": "boolean"
+				},
+				"date": {
+					"description": "The date the item was last checked",
+					"$ref": "#/$defs/datetime"
+				},
+				"desc": {
+					"description": "A human-readable description",
+					"type": "string"
+				}
+			},
+			"required": [ "text" ]
 		}
+
 	}
 }

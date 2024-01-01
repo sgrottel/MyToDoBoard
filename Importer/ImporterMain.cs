@@ -324,7 +324,20 @@ namespace Importer
 					c.LabelIds = tc.idLabels.Select((l) => labelId[l]).ToList();
 				}
 
-				// TODO: Implement Checklists
+				if (tc.idChecklists != null && tc.idChecklists.Length > 0)
+				{
+					foreach (string tcclid in tc.idChecklists)
+					{
+						CheckList? cl = board.checklists?.First((cl) => cl.id == tcclid);
+						if (cl == null) continue;
+
+						c.Checklist ??= new();
+						c.Checklist.AddRange(
+							cl.checkItems?.Select((i) => new CheckListItem() { Text = i.name, Checked = i.state == CheckItemStateValue.complete })
+							?? Array.Empty<CheckListItem>()
+							);
+					}
+				}
 
 			}
 
@@ -344,6 +357,14 @@ namespace Importer
 					if (c.LabelIds != null && !c.LabelIds.Any())
 					{
 						c.LabelIds = null;
+					}
+					if (c.Links != null && !c.Links.Any())
+					{
+						c.Links = null;
+					}
+					if (c.Checklist != null && !c.Checklist.Any())
+					{
+						c.Checklist = null;
 					}
 				}
 			}
