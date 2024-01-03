@@ -12,7 +12,7 @@ TODO: Link to Instructions
 ```
 
 ## Application Features
-This application offers:
+The main MyToDoBoard™ application offers:
 ```
 TODO: Screenshot
 ```
@@ -30,19 +30,22 @@ TODO: Screenshot
   - Comments
 - ToDo Card creation with configurable templates
 - All data of a board and all it's cards is stored in a single file.
-  - You can find more info in the [file format documentation: mytodo_yaml.md](doc/mytodo_yaml.md)
+  - You can find more info in the [file format documentation: mytodo_yaml.md](doc/mytodo-yaml.md)
   - Easy to store, backup, synch, ...
   - No internet connection/communication required.
+
+```
+TODO: Building Instructions
+```
+
+## Companion Utilities
+There are companion utilities for specific tasks.
+They all operate on the same central [`.mytodo.yaml` data file](doc/mytodo-yaml.md) and are therefore fully compatible with each other.
 
 ## Alternatives
 If you look for a solution storing your data _online_, or _share_ between multiple people, or offer different views, or ..., or ..., or ..., then this might not be the app for you!
 There are plenty of cloud-hosted or self-hosted alternatives on the internet.
 Many offer free versions to try them out.
-
-## Building Instructions
-```
-TODO: Building Instructions
-```
 
 ## Contribution
 Contributions are welcome!
