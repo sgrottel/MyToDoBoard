@@ -7,20 +7,29 @@ using System.Threading.Tasks;
 
 namespace Importer.Trello
 {
-    [JsonConverter(typeof(EnumJsonConverter<CardActionType>))]
+	[JsonConverter(typeof(EnumJsonConverter<CardActionType>))]
 	internal enum CardActionType
 	{
-		updateCard,
-		createCard,
-		commentCard,
-		updateCheckItemStateOnCard,
-		deleteCard,
 		addAttachmentToCard,
-		updateBoard,
-		disablePlugin,
-		copyCard,
 		addChecklistToCard,
+		addMemberToCard,
+		addToOrganizationBoard,
+		commentCard,
+		convertToCardFromCheckItem,
+		copyCard,
+		createBoard,
+		createCard,
+		createList,
+		deleteAttachmentFromCard,
+		deleteCard,
+		disablePlugin,
+		enablePlugin,
 		moveCardToBoard,
-		deleteAttachmentFromCard
+		removeChecklistFromCard,
+		removeMemberFromCard,
+		updateBoard,
+		updateCard,
+		updateCheckItemStateOnCard,
+		updateList,
 	}
 }
