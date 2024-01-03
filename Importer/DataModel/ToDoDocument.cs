@@ -14,7 +14,10 @@ namespace Importer.DataModel
 		[YamlMember(Alias = "$schema")]
 		public string Schema { get; set; } = DefaultSchema;
 
-		[YamlMember(Alias = "comment", DefaultValuesHandling = DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitDefaults)]
+		[YamlMember(
+			Alias = "comment",
+			DefaultValuesHandling = DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitDefaults,
+			ScalarStyle = YamlDotNet.Core.ScalarStyle.Literal)]
 		public string? Comment { get; set; }
 
 		[YamlMember(Alias = "labels", DefaultValuesHandling = DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitDefaults)]

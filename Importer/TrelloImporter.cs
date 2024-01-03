@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Importer
@@ -60,6 +61,7 @@ namespace Importer
 			}
 
 			Dictionary<string, DataModel.Card> cards = new();
+			Dictionary<string, CheckListItem> checkListItems = new();
 			foreach (Trello.Card tc in board.cards ?? Array.Empty<Trello.Card>())
 			{
 				if (tc.idList == null) continue;
@@ -85,6 +87,10 @@ namespace Importer
 				}
 
 				cc.Cards!.Add(c);
+				if (tc.id != null)
+				{
+					cards.Add(tc.id, c);
+				}
 
 				if (tc.idLabels != null && tc.idLabels.Length > 0)
 				{
@@ -99,10 +105,15 @@ namespace Importer
 						if (cl == null) continue;
 
 						c.Checklist ??= new();
-						c.Checklist.AddRange(
-							cl.checkItems?.Select((i) => new CheckListItem() { Text = i.name, Checked = i.state == CheckItemStateValue.complete })
-							?? Array.Empty<CheckListItem>()
-							);
+						foreach (CheckItem ci in cl.checkItems ?? Array.Empty<CheckItem>())
+						{
+							CheckListItem cli = new() { Text = ci.name, Checked = ci.state == CheckItemStateValue.complete };
+							c.Checklist.Add(cli);
+							if (ci.id != null)
+							{
+								checkListItems.Add(ci.id, cli);
+							}
+						}
 					}
 				}
 
@@ -112,25 +123,84 @@ namespace Importer
 			{
 				switch (ta.ActionType)
 				{
-					case CardActionType.addAttachmentToCard:
+					case CardActionType.createCard:
+						{
+							string? cid = null;
+							JsonElement? c = (ta.data?.card as JsonElement?);
+							if (c != null && c.Value.ValueKind == JsonValueKind.Object)
+							{
+								JsonElement prop;
+								if (c.Value.TryGetProperty("id", out prop))
+								{
+									cid = prop.GetString();
+								}
+							}
+
+							if (cid != null && cards.ContainsKey(cid))
+							{
+								if (ta.date != null)
+								{
+									if (cards[cid].Date == null)
+									{
+										cards[cid].Date = ta.date;
+									}
+									else if (cards[cid].Date > ta.date)
+									{
+										cards[cid].Date = ta.date;
+									}
+								}
+							}
+						}
 						break;
+
+					case CardActionType.convertToCardFromCheckItem:
+						goto case CardActionType.createCard;
+					case CardActionType.copyCard:
+						goto case CardActionType.createCard;
+					case CardActionType.moveCardToBoard:
+						goto case CardActionType.createCard;
+
+					case CardActionType.updateCheckItemStateOnCard:
+						{
+							string? cid = null;
+							string? cs = null;
+							JsonElement? c = (ta.data?.checkItem as JsonElement?);
+							if (c != null && c.Value.ValueKind == JsonValueKind.Object)
+							{
+								JsonElement prop;
+								if (c.Value.TryGetProperty("id", out prop))
+								{
+									cid = prop.GetString();
+								}
+								if (c.Value.TryGetProperty("state", out prop))
+								{
+									cs = prop.GetString();
+								}
+							}
+							if (cid != null && cs != null && string.Equals(cs, CheckItemStateValue.complete.ToString()) && checkListItems.ContainsKey(cid))
+							{
+								if (ta.date != null)
+								{
+									CheckListItem cli = checkListItems[cid];
+									if (cli.Date == null)
+									{
+										cli.Date = ta.date;
+									}
+									else if (cli.Date < ta.date)
+									{
+										cli.Date = ta.date;
+									}
+								}
+							}
+						}
+						break;
+
 					case CardActionType.commentCard:
 						break;
-					case CardActionType.convertToCardFromCheckItem:
-						break;
-					case CardActionType.copyCard:
-						break;
-					case CardActionType.createCard:
-						break;
-					case CardActionType.moveCardToBoard:
-						break;
-					case CardActionType.updateCard:
-						break;
-					case CardActionType.updateCheckItemStateOnCard:
-						break;
+
 				}
 
-				// TODO: Implement Comments & Dates
+				// TODO: Implement Comments
 
 			}
 
