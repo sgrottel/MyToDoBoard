@@ -1,1 +1,6 @@
 ﻿desktop.ini
+**/.vs/
+**/obj/
+**/bin/
+**/Properties/launchSettings.json
+*.user
