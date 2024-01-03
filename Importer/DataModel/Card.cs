@@ -46,5 +46,10 @@ namespace Importer.DataModel
 			Alias = "checklist",
 			DefaultValuesHandling = DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitDefaults)]
 		public List<CheckListItem>? Checklist { get; set; }
+
+		[YamlMember(
+			Alias = "comments",
+			DefaultValuesHandling = DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitDefaults)]
+		public List<Comment>? Comments { get; set; }
 	}
 }

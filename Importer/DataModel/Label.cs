@@ -59,7 +59,7 @@ namespace Importer.DataModel
 			return string.Join("", matches.Where((m) => m.Success).Select((m) => m.Value));
 		}
 
-		private bool TestId(string id, List<Label> labels)
+		static internal bool TestId(string id, List<Label> labels)
 		{
 			if (string.IsNullOrEmpty(id)) return false;
 

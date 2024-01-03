@@ -113,6 +113,12 @@
 				"modDate": {
 					"description": "The date the card was last modified",
 					"$ref": "#/$defs/datetime"
+				},
+				"comments": {
+					"description": "List of comments",
+					"type": "array",
+					"uniqueItems": true,
+					"items": { "$ref": "#/$defs/comment" }
 				}
 			},
 			"required": [ "title" ]
@@ -142,6 +148,22 @@
 				"desc": {
 					"description": "A human-readable description",
 					"type": "string"
+				}
+			},
+			"required": [ "text" ]
+		},
+
+		"comment": {
+			"type": "object",
+			"properties": {
+				"text": {
+					"description": "Human-readable text",
+					"type": "string",
+					"minLength": 1
+				},
+				"date": {
+					"description": "The date the comment was last edited",
+					"$ref": "#/$defs/datetime"
 				}
 			},
 			"required": [ "text" ]

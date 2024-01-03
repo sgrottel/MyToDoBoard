@@ -3,6 +3,7 @@ using Importer.Trello;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -22,10 +23,18 @@ namespace Importer
 				Label l = new Label()
 				{
 					Title = ln.name,
-					Color = ln.color
+					Color = TrelloColor(ln.color)
 				};
 
-				l.GenerateId(todoDoc.Labels);
+				string? knownLabelId = GetKnownLabelId(ln.name);
+				if (knownLabelId != null && Label.TestId(knownLabelId, todoDoc.Labels))
+				{
+					l.Id = knownLabelId;
+				}
+				else
+				{
+					l.GenerateId(todoDoc.Labels);
+				}
 
 				todoDoc.Labels.Add(l);
 
@@ -196,11 +205,33 @@ namespace Importer
 						break;
 
 					case CardActionType.commentCard:
+						{
+							string? cid = null;
+							JsonElement? c = (ta.data?.card as JsonElement?);
+							if (c != null && c.Value.ValueKind == JsonValueKind.Object)
+							{
+								JsonElement prop;
+								if (c.Value.TryGetProperty("id", out prop))
+								{
+									cid = prop.GetString();
+								}
+							}
+
+							if (cid != null && cards.ContainsKey(cid))
+							{
+								Comment cm = new() {
+									Text = ta.data?.text ?? string.Empty,
+									Date = ta.date
+								};
+
+								cards[cid].Comments ??= new();
+								cards[cid].Comments!.Insert(0, cm);
+							}
+
+						}
 						break;
 
 				}
-
-				// TODO: Implement Comments
 
 			}
 
@@ -226,6 +257,38 @@ namespace Importer
 			}
 			todoDoc.Columns.AddRange(secondLists.Where((p) => p.Value.Cards?.Any() ?? false).Select((p) => p.Value));
 			todoDoc.Columns.Sort((a, b) => (int)(a.Order - b.Order));
+		}
+
+		private static string? TrelloColor(string? color)
+		{
+			switch (color?.ToLower())
+			{
+				case "sky_dark": return "LightSkyBlue";
+				case "blue_light": return "RoyalBlue";
+				case "red_dark": return "FireBrick";
+				case "orange": return "Peru";
+				case "purple_dark": return "Indigo";
+				case "pink": return "HotPink";
+				case "lime": return "MediumSeaGreen";
+				case "green": return "Green";
+			}
+			return null;
+		}
+
+		private static string? GetKnownLabelId(string? name)
+		{
+			switch (name?.ToLower())
+			{
+				case "software": return "SW";
+				case "software cloud": return "SWC";
+				case "prio": return "P+";
+				case "real life": return "RL";
+				case "makerly": return "Mk";
+				case "smut": return "Sx";
+				case "geld & stuff": return "€";
+				case "chihaya project": return "Chihaya";
+			}
+			return null;
 		}
 
 		private static DateTime? CleanDate(DateTime? d)
