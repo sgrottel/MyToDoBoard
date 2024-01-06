@@ -33,6 +33,11 @@ namespace MyToDo.StaticDataModel
 		public DateTime? ModifiedDate { get; set; }
 
 		[YamlMember(
+			Alias = "dueDate",
+			DefaultValuesHandling = DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitDefaults)]
+		public DateTime? DueDate { get; set; }
+
+		[YamlMember(
 			Alias = "links",
 			DefaultValuesHandling = DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitDefaults)]
 		public List<string>? Links { get; set; }

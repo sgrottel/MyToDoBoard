@@ -11,7 +11,7 @@ namespace MyToDo.StaticDataModel
 		[YamlMember(Alias = "title")]
 		public string? Title { get; set; }
 
-		[YamlMember(Alias = "description", DefaultValuesHandling = DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitDefaults)]
+		[YamlMember(Alias = "desc", DefaultValuesHandling = DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitDefaults)]
 		public string? Description { get; set; }
 
 		[YamlMember(Alias = "color", DefaultValuesHandling = DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitDefaults)]

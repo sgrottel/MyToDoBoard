@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace MyToDo.Report
 {
-	using YamlObject = Dictionary<object, object>;
-	using YamlList = List<object>;
 
 	internal class TextReport : IReport
 	{
 		public string InputPath { get; set; } = string.Empty;
 		public string OutputPath { get; set; } = string.Empty;
 
-		public void Report(YamlObject myToDoYaml)
+		public void Report(StaticDataModel.ToDoDocument todoDoc)
 		{
 			StringBuilder sb = new();
 			sb.AppendLine("MyToBoard™ Report");
@@ -23,7 +17,7 @@ namespace MyToDo.Report
 
 			try
 			{
-				buildReport(sb, myToDoYaml);
+				buildReport(sb, todoDoc);
 
 				sb.AppendLine();
 				sb.AppendLine("End.");
@@ -39,27 +33,21 @@ namespace MyToDo.Report
 			File.WriteAllText(OutputPath, sb.ToString());
 		}
 
-		private void buildReport(StringBuilder sb, YamlObject myToDoYaml)
+		private void buildReport(StringBuilder sb, StaticDataModel.ToDoDocument todoDoc)
 		{
-			YamlList columns = myToDoYaml.GetYamlProperty("columns")
-				.NotNull("Columns value is unexpectitly null")
-				.AsYamlList("Columns property of unexpeced type");
-			foreach (object columnObj in columns)
+			if (todoDoc.Columns == null) return;
+			foreach (var column in todoDoc.Columns)
 			{
-				YamlObject column = columnObj.AsYamlObject("Column of unexpected type");
-				object? title = column.GetYamlProperty("title");
-
 				sb.AppendLine();
-				sb.AppendLine($"Column: {title ?? "Unnamed"}");
+				sb.AppendLine($"Column: {column.Title ?? "Unnamed"}");
 
-				YamlList? cards = column.GetYamlProperty("cards").TryAsYamlList();
-				if (cards == null)
+				if (column.Cards == null)
 				{
 					sb.AppendLine(" No cards");
 					continue;
 				}
 
-				sb.AppendLine($"Number of cards: {cards.Count}");
+				sb.AppendLine($"Number of cards: {column.Cards.Count}");
 			}
 
 		}

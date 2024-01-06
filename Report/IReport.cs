@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyToDo.Report
+﻿namespace MyToDo.Report
 {
-	using YamlObject = Dictionary<object, object>;
 
 	internal interface IReport
 	{
@@ -14,7 +7,7 @@ namespace MyToDo.Report
 		string InputPath { get; set; }
 		string OutputPath { get; set; }
 
-		void Report(YamlObject myToDoYaml);
+		void Report(StaticDataModel.ToDoDocument todoDoc);
 
 	}
 

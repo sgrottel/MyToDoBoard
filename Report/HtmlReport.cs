@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using MyToDo.StaticDataModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,6 @@ using System.Xml.XPath;
 
 namespace MyToDo.Report
 {
-	using YamlObject = Dictionary<object, object>;
-	using YamlList = List<object>;
 
 	internal class HtmlReport : IReport
 	{
@@ -25,7 +24,7 @@ namespace MyToDo.Report
 			return HtmlDocument.HtmlEncode(o.ToString());
 		}
 
-		public void Report(YamlObject myToDoYaml)
+		public void Report(ToDoDocument todoDoc)
 		{
 			HtmlDocument doc = new();
 			Timestamp = DateTime.Now;
@@ -46,9 +45,14 @@ namespace MyToDo.Report
 				embedStyle = false;
 #endif
 				UpdateStyleTag(doc, embedStyle);
-				AddInfoToHead(doc, myToDoYaml);
-				AddInfoToSummary(doc, myToDoYaml);
-				BuildColumns(doc, myToDoYaml);
+				AddInfoToHead(doc, todoDoc);
+				AddInfoToSummary(doc, todoDoc);
+				BuildColumns(doc, todoDoc);
+
+				// TODO: Labels
+				// TODO: Card Checklists
+				// TODO: Card Comments
+
 			}
 			catch (Exception ex)
 			{
@@ -110,7 +114,7 @@ namespace MyToDo.Report
 
 		}
 
-		private void AddInfoToHead(HtmlDocument doc, YamlObject myToDoYaml)
+		private void AddInfoToHead(HtmlDocument doc, ToDoDocument todoDoc)
 		{
 			var headNode = doc.DocumentNode.SelectSingleNode("/html/head");
 			if (headNode == null) throw new Exception("head tag not found");
@@ -128,7 +132,7 @@ namespace MyToDo.Report
 			headNode.AppendHtml($"""<meta name="date" content="{HtmlEncode(Timestamp.ToString("yyyy-MM-dd HH:mm:ss"))}">""");
 		}
 
-		private void AddInfoToSummary(HtmlDocument doc, YamlObject _)
+		private void AddInfoToSummary(HtmlDocument doc, ToDoDocument _)
 		{
 			var summaryNode = doc.DocumentNode.SelectSingleNode("/html/body//div[@id=\"summary\"]");
 			if (summaryNode == null) throw new Exception("summary node not found");
@@ -146,29 +150,18 @@ namespace MyToDo.Report
 			public HtmlNode? InfoNode { get; set; } = null;
 		};
 
-		private void BuildColumns(HtmlDocument doc, YamlObject myToDoYaml)
+		private void BuildColumns(HtmlDocument doc, ToDoDocument todoDoc)
 		{
 			var columnsNode = doc.DocumentNode.SelectSingleNode("/html/body//div[@id=\"columns\"]");
 			if (columnsNode == null) throw new Exception("columns node not found");
 			columnsNode.RemoveAllChildren();
 
-			YamlList columns = myToDoYaml.TryGetYamlProperty("columns")
-				.NotNull("Columns value is unexpectitly null")
-				.AsYamlList("Columns property of unexpeced type");
-
 			Dictionary<string, ColumnInfo> columnsInfo = new();
 
-			foreach (object columnObj in columns)
+			foreach (Column column in todoDoc.Columns ?? new())
 			{
-				YamlObject column = columnObj.AsYamlObject("Column of unexpected type");
-				string? viewType = column.TryGetYamlProperty("view")?.ToString();
-				if (viewType != null)
-				{
-					viewType = "view-" + viewType.ToLower();
-				}
-				string columnTitle = (column.GetYamlProperty("title") as string) ?? "Noname";
-				var cards = column.TryGetYamlProperty("cards").TryAsYamlList();
-				int cardsCount = cards?.Count ?? 0;
+				string viewType = $"view-{column.View}";
+				string columnTitle = (column.Title) ?? "Noname";
 
 				if (!columnsInfo.ContainsKey(columnTitle))
 				{
@@ -178,85 +171,75 @@ namespace MyToDo.Report
 					columnHeader.AppendHtml($"<div class=\"title\">{HtmlEncode(columnTitle)}</div>");
 				}
 
-				if (cards != null)
+				if (column.Cards == null) continue;
+
+				foreach (Card card in column.Cards)
 				{
-					foreach (object cardObj in cards)
+					ColumnInfo info = columnsInfo[columnTitle] ?? throw new Exception();
+					if (viewType == "view-hidden")
 					{
-						ColumnInfo info = columnsInfo[columnTitle] ?? throw new Exception();
-						if (viewType == "view-hidden")
+						info.CountHidden++;
+					}
+					else
+					{
+						info.Count++;
+					}
+
+					var cardNode = (info.ColumnNode ?? throw new Exception()).AppendHtml("<div class=\"card\">");
+					if (viewType != null)
+					{
+						cardNode.Attributes["class"].Value += " " + viewType;
+					}
+
+					var cardHeader = cardNode.AppendHtml("<div class=\"header\">");
+
+					HtmlNode? cardDateNode = null;
+					if (card.Date != null)
+					{
+						cardDateNode = cardHeader.AppendHtml($"<div class=\"info\">📅 <span class=\"date\">{card.Date:dd.MM.yyyy}</span></div>");
+					}
+
+					if (card.ModifiedDate != null)
+					{
+						if (cardDateNode != null)
 						{
-							info.CountHidden++;
+							cardDateNode.AppendHtml("<br>");
+							cardDateNode.AppendHtml("✏️ ");
+							cardDateNode.AppendHtml($"<span class=\"date moddate\">{card.ModifiedDate:dd.MM.yyyy}</span>");
 						}
 						else
 						{
-							info.Count++;
+							cardHeader.AppendHtml($"<div class=\"info\">✏️ <span class=\"date moddate\">{card.ModifiedDate:dd.MM.yyyy}</span></div>");
 						}
+					}
 
-						YamlObject card = cardObj.AsYamlObject("Card of unexpected type");
-						string title = (card.GetYamlProperty("title") as string) ?? "Noname";
-
-						var cardNode = (info.ColumnNode ?? throw new Exception()).AppendHtml("<div class=\"card\">");
-						if (viewType != null)
+					if (card.DueDate != null)
+					{
+						if (cardDateNode != null)
 						{
-							cardNode.Attributes["class"].Value += " " + viewType;
+							cardDateNode.AppendHtml("<br>");
+							cardDateNode.AppendHtml("⏰ ");
+							cardDateNode.AppendHtml($"<span class=\"date duedate\">{card.DueDate:dd.MM.yyyy}</span>");
 						}
-
-						var cardHeader = cardNode.AppendHtml("<div class=\"header\">");
-
-						var cardDate = card.TryGetYamlProperty("date");
-						HtmlNode? cardDateNode = null;
-						if (cardDate != null)
+						else
 						{
-							cardDateNode = cardHeader.AppendHtml($"<div class=\"info\">📅 <span class=\"date\">{cardDate}</span></div>");
+							cardHeader.AppendHtml($"<div class=\"info\">⏰ <span class=\"date duedate\">{card.DueDate:dd.MM.yyyy}</span></div>");
 						}
+					}
 
-						cardDate = card.TryGetYamlProperty("modDate");
-						if (cardDate != null)
+					cardHeader.AppendHtml($"<div class=\"title\">{HtmlEncode(card.Title)}</div>");
+
+					if (card.Description != null)
+					{
+						cardNode.AppendHtml($"<div class=\"text\">{HtmlEncode(card.Description)}</div>");
+					}
+
+					if (card.Links != null && card.Links.Count > 0)
+					{
+						foreach (string link in card.Links)
 						{
-							if (cardDateNode != null)
-							{
-								cardDateNode.AppendHtml("<br>");
-								cardDateNode.AppendHtml("✏️ ");
-								cardDateNode.AppendHtml($"<span class=\"date moddate\">{cardDate}</span>");
-							}
-							else
-							{
-								cardHeader.AppendHtml($"<div class=\"info\">✏️ <span class=\"date moddate\">{cardDate}</span></div>");
-							}
-						}
-
-						cardDate = card.TryGetYamlProperty("dueDate");
-						if (cardDate != null)
-						{
-							if (cardDateNode != null)
-							{
-								cardDateNode.AppendHtml("<br>");
-								cardDateNode.AppendHtml("⏰ ");
-								cardDateNode.AppendHtml($"<span class=\"date duedate\">{cardDate}</span>");
-							}
-							else
-							{
-								cardHeader.AppendHtml($"<div class=\"info\">⏰ <span class=\"date duedate\">{cardDate}</span></div>");
-							}
-						}
-
-						cardHeader.AppendHtml($"<div class=\"title\">{HtmlEncode(title)}</div>");
-
-						var cardDesc = card.TryGetYamlProperty("desc");
-						if (cardDesc != null)
-						{
-							cardNode.AppendHtml($"<div class=\"text\">{HtmlEncode(cardDesc)}</div>");
-						}
-
-						var cardLinks = card.TryGetYamlProperty("links").TryAsYamlList();
-						if (cardLinks != null && cardLinks.Count > 0)
-						{
-							foreach (object linkObj in cardLinks)
-							{
-								string? link = linkObj?.ToString();
-								if (string.IsNullOrWhiteSpace(link)) continue;
-								cardNode.AppendHtml($"<div class=\"link\">{HtmlEncode(link)}</div>");
-							}
+							if (string.IsNullOrWhiteSpace(link)) continue;
+							cardNode.AppendHtml($"<div class=\"link\">{HtmlEncode(link)}</div>");
 						}
 					}
 				}
