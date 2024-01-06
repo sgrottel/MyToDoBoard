@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using YamlDotNet.Serialization;
 
-namespace Importer.DataModel
+namespace MyToDo.StaticDataModel
 {
-	internal class Card
+	public class Card
 	{
 		[YamlMember(Alias = "title")]
 		public string? Title { get; set; }
@@ -16,7 +11,7 @@ namespace Importer.DataModel
 		[YamlMember(
 			Alias = "labels",
 			DefaultValuesHandling = DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitDefaults,
-			SerializeAs = typeof(YamlWriter.StringListAsJson)),
+			SerializeAs = typeof(Utility.StringListAsJson)),
 			DefaultValue(null)]
 		public List<string>? LabelIds { get; set; }
 

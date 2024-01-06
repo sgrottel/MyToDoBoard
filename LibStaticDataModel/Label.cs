@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 using YamlDotNet.Serialization;
 
-namespace Importer.DataModel
+namespace MyToDo.StaticDataModel
 {
-	internal class Label
+	public class Label
 	{
 		[YamlMember(Alias = "id")]
 		public string? Id { get; set; }
@@ -22,7 +17,7 @@ namespace Importer.DataModel
 		[YamlMember(Alias = "color", DefaultValuesHandling = DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitDefaults)]
 		public string? Color { get; set; }
 
-		internal void GenerateId(List<Label> labels)
+		public void GenerateId(List<Label> labels)
 		{
 			string id = MakeTitleUpperChars();
 
@@ -59,7 +54,7 @@ namespace Importer.DataModel
 			return string.Join("", matches.Where((m) => m.Success).Select((m) => m.Value));
 		}
 
-		static internal bool TestId(string id, List<Label> labels)
+		static public bool TestId(string id, List<Label> labels)
 		{
 			if (string.IsNullOrEmpty(id)) return false;
 

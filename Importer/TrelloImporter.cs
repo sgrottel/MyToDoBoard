@@ -1,5 +1,5 @@
-﻿using Importer.DataModel;
-using Importer.Trello;
+﻿using Importer.Trello;
+using MyToDo.StaticDataModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,12 +69,12 @@ namespace Importer
 				}
 			}
 
-			Dictionary<string, DataModel.Card> cards = new();
+			Dictionary<string, MyToDo.StaticDataModel.Card> cards = new();
 			Dictionary<string, CheckListItem> checkListItems = new();
 			foreach (Trello.Card tc in board.cards ?? Array.Empty<Trello.Card>())
 			{
 				if (tc.idList == null) continue;
-				DataModel.Card c = new() { Title = tc.name, Description = CleanDescription(tc.desc), ModifiedDate = CleanDate(tc.dateLastActivity) };
+				MyToDo.StaticDataModel.Card c = new() { Title = tc.name, Description = CleanDescription(tc.desc), ModifiedDate = CleanDate(tc.dateLastActivity) };
 
 				if (tc.attachments?.Any() ?? false)
 				{
@@ -239,7 +239,7 @@ namespace Importer
 			todoDoc.Columns.RemoveAll((c) => !c.Cards?.Any() ?? true);
 			foreach (Column cc in todoDoc.Columns)
 			{
-				foreach (DataModel.Card c in cc.Cards!)
+				foreach (MyToDo.StaticDataModel.Card c in cc.Cards!)
 				{
 					if (c.LabelIds != null && !c.LabelIds.Any())
 					{

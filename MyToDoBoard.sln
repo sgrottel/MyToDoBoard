@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Report", "Report\Report.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Importer", "Importer\Importer.csproj", "{05F1D6E2-0253-4E49-A890-77FC8385327B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibStaticDataModel", "LibStaticDataModel\LibStaticDataModel.csproj", "{D98ACD84-B038-48D7-A263-E943EC738657}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{05F1D6E2-0253-4E49-A890-77FC8385327B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05F1D6E2-0253-4E49-A890-77FC8385327B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05F1D6E2-0253-4E49-A890-77FC8385327B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D98ACD84-B038-48D7-A263-E943EC738657}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D98ACD84-B038-48D7-A263-E943EC738657}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D98ACD84-B038-48D7-A263-E943EC738657}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D98ACD84-B038-48D7-A263-E943EC738657}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
