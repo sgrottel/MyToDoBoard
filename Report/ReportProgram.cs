@@ -120,6 +120,10 @@ namespace MyToDo.Report
 
 				Console.WriteLine("Done.");
 			}
+			catch (YamlDotNet.Core.YamlException yex)
+			{
+				PrintError($"YAML Exception: {yex.Message}\n\t{yex.Start}\n\t{yex.InnerException}");
+			}
 			catch (Exception ex)
 			{
 				PrintError($"Unexpected Error: {ex}");
