@@ -50,8 +50,6 @@ namespace MyToDo.Report
 				BuildColumns(doc, todoDoc);
 
 				// TODO: Labels
-				// TODO: Card Checklists
-				// TODO: Card Comments
 
 			}
 			catch (Exception ex)
@@ -209,7 +207,7 @@ namespace MyToDo.Report
 						}
 						else
 						{
-							cardHeader.AppendHtml($"<div class=\"info\">✏️ <span class=\"date moddate\">{card.ModifiedDate:dd.MM.yyyy}</span></div>");
+							cardDateNode = cardHeader.AppendHtml($"<div class=\"info\">✏️ <span class=\"date moddate\">{card.ModifiedDate:dd.MM.yyyy}</span></div>");
 						}
 					}
 
@@ -229,9 +227,40 @@ namespace MyToDo.Report
 
 					cardHeader.AppendHtml($"<div class=\"title\">{HtmlEncode(card.Title)}</div>");
 
+					HtmlNode cardContentNode = cardNode.AppendHtml("<div class=\"text\">"); 
 					if (card.Description != null)
 					{
-						cardNode.AppendHtml($"<div class=\"text\">{HtmlEncode(card.Description)}</div>");
+						cardContentNode.AppendHtml($"<div>{HtmlEncode(card.Description)}</div>");
+					}
+
+					if (card.Checklist != null)
+					{
+						cardContentNode.AppendHtml("<h3>Checklist</h3>");
+						HtmlNode checklistNode = cardContentNode.AppendHtml("<ul>");
+
+						foreach (CheckListItem cli in card.Checklist)
+						{
+							HtmlNode cliNode = checklistNode.AppendHtml("<li>");
+
+							if (cli.Checked ?? false && cli.Date != null)
+							{
+								cardContentNode.AppendHtml($"<div class=\"info date\">{cli.Date:dd.MM.yyyy}</div>");
+							}
+							cardContentNode.AppendHtml($"<div>{((cli.Checked ?? false) ? '☑' : '☐')}&nbsp;&nbsp;{HtmlEncode(cli.Text)}</div>");
+						}
+					}
+
+					if (card.Comments != null)
+					{
+						cardContentNode.AppendHtml("<h3>Comments</h3>");
+						foreach (Comment c in card.Comments)
+						{
+							if (c.Date != null)
+							{
+								cardContentNode.AppendHtml($"<div class=\"info date\">{c.Date:dd.MM.yyyy}</div>");
+							}
+							cardContentNode.AppendHtml($"<div>{HtmlEncode(c.Text)}</div>");
+						}
 					}
 
 					if (card.Links != null && card.Links.Count > 0)
@@ -242,6 +271,9 @@ namespace MyToDo.Report
 							cardNode.AppendHtml($"<div class=\"link\">{HtmlEncode(link)}</div>");
 						}
 					}
+
+					// TODO: Labels
+
 				}
 			}
 
