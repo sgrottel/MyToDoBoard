@@ -76,6 +76,11 @@ namespace Importer
 				if (tc.idList == null) continue;
 				MyToDo.StaticDataModel.Card c = new() { Title = tc.name, Description = CleanDescription(tc.desc), ModifiedDate = CleanDate(tc.dateLastActivity) };
 
+				if (tc.due != null)
+				{
+					c.DueDate = tc.due;
+				}
+
 				if (tc.attachments?.Any() ?? false)
 				{
 					foreach (Attachment at in tc.attachments)
