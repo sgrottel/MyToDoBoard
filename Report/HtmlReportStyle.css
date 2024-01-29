@@ -117,7 +117,7 @@ body.withOverlay #content {
 	float: right;
 	font-size: small;
 	margin-left: 1em;
-	white-space: nowrap;
+	white-space: nowrap !important;
 }
 
 .card, #detailedCard {
@@ -163,8 +163,15 @@ body.withOverlay #content {
 	padding: 0;
 }
 
-.card .text *, #detailedCard .text * {
+.card .text div:first-child, #detailedCard .text div:first-child {
 	white-space: pre-wrap;
+}
+
+.card li, #detailedCard li {
+	display: flow-root;
+}
+
+.card .text *, #detailedCard .text * {
 	margin: 0;
 	padding: 0;
 }

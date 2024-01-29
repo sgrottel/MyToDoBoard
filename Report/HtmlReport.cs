@@ -244,9 +244,9 @@ namespace MyToDo.Report
 
 							if (cli.Checked ?? false && cli.Date != null)
 							{
-								cardContentNode.AppendHtml($"<div class=\"info date\">{cli.Date:dd.MM.yyyy}</div>");
+								cliNode.AppendHtml($"<div class=\"info date\">{cli.Date:dd.MM.yyyy}</div>");
 							}
-							cardContentNode.AppendHtml($"<div>{((cli.Checked ?? false) ? '☑' : '☐')}&nbsp;&nbsp;{HtmlEncode(cli.Text)}</div>");
+							cliNode.AppendHtml($"<div>{((cli.Checked ?? false) ? '☑' : '☐')}&nbsp;&nbsp;{HtmlEncode(cli.Text)}</div>");
 						}
 					}
 
