@@ -219,3 +219,8 @@ body.withOverlay #content {
 	visibility: collapse;
 	display: none;
 }
+
+.card .text .info.date {
+	visibility: collapse;
+	display: none;
+}
