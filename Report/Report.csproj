@@ -7,8 +7,10 @@
     <Nullable>enable</Nullable>
     <AssemblyName>MyToDo$(MSBuildProjectName)</AssemblyName>
     <RootNamespace>MyToDo.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <EnableSourceControlManagerQueries>false</EnableSourceControlManagerQueries>
     <Title>Report Utility of MyToDoBoard</Title>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
     <Authors>SGrottel</Authors>
     <Product>MyToDoBoard</Product>
     <Copyright>Copyright, SGrottel</Copyright>
@@ -25,9 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.59" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.61" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
-    <PackageReference Include="YamlDotNet" Version="15.1.2" />
+    <PackageReference Include="YamlDotNet" Version="16.0.0" />
   </ItemGroup>
 
   <ItemGroup>

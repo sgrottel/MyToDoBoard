@@ -1,12 +1,9 @@
 ﻿using HtmlAgilityPack;
 using MyToDo.StaticDataModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Drawing;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
-using System.Xml.XPath;
+using System.Text.RegularExpressions;
 
 namespace MyToDo.Report
 {
@@ -44,13 +41,10 @@ namespace MyToDo.Report
 #if DEBUG
 				embedStyle = false;
 #endif
-				UpdateStyleTag(doc, embedStyle);
+				UpdateStyleTag(doc, todoDoc, embedStyle);
 				AddInfoToHead(doc, todoDoc);
 				AddInfoToSummary(doc, todoDoc);
 				BuildColumns(doc, todoDoc);
-
-				// TODO: Labels
-
 			}
 			catch (Exception ex)
 			{
@@ -70,12 +64,70 @@ namespace MyToDo.Report
 			doc.Save(OutputPath, new UTF8Encoding(false));
 		}
 
-		private void UpdateStyleTag(HtmlDocument doc, bool embedStyle)
+		private void UpdateStyleTag(HtmlDocument doc, ToDoDocument todoDoc, bool embedStyle)
 		{
 			var headNode = doc.DocumentNode.SelectSingleNode("/html/head");
 			if (headNode == null) throw new Exception("head tag not found");
 
-			var styleNode = headNode.SelectSingleNode("link[@rel=\"stylesheet\"]");
+			var styleNode = headNode.SelectSingleNode("style[@id=\"labelColors\"]");
+			if (styleNode != null)
+			{
+				if ((todoDoc.Labels?.Count ?? 0) > 0)
+				{
+					StringBuilder css = new();
+					HashSet<string> labels = new();
+
+					css.Append("\n");
+					foreach (var l in todoDoc.Labels!)
+					{
+						string n = Regex.Replace(l.Id ?? string.Empty, "[^a-zA-Z0-9]", "");
+						if (string.IsNullOrEmpty(n)) continue;
+						if (labels.Contains(n)) continue;
+
+						string textColor = "black";
+						try
+						{
+							Color c = Color.FromName(l.Color ?? Color.Transparent.Name);
+							if (c.A < 200) continue;
+
+							// https://www.w3.org/WAI/GL/wiki/Relative_luminance#:~:text=in%20WCAG%202.-,x,%2B0.055)%2F1.055)%20%5E%202.4
+							float RsRGB = c.R / 255.0f;
+							float GsRGB = c.G / 255.0f;
+							float BsRGB = c.B / 255.0f;
+
+							float R = (RsRGB <= 0.03928) ? (RsRGB / 12.92f) : (float)Math.Pow((RsRGB + 0.055) / 1.055, 2.4);
+							float G = (GsRGB <= 0.03928) ? (GsRGB / 12.92f) : (float)Math.Pow((GsRGB + 0.055) / 1.055, 2.4);
+							float B = (BsRGB <= 0.03928) ? (BsRGB / 12.92f) : (float)Math.Pow((BsRGB + 0.055) / 1.055, 2.4);
+
+							float lum = 0.2126f * R + 0.7152f * G + 0.0722f * B;
+
+							double linLum = Math.Pow(lum, 1.0 / 2.4);
+
+							if (linLum <= 0.61) textColor = "white";
+						}
+						catch
+						{
+							continue;
+						}
+
+						labels.Add(n);
+						css.AppendLine($".label{n}Colors {{");
+						css.AppendLine($"\tbackground-color: {l.Color};");
+						css.AppendLine($"\tcolor: {textColor};");
+						css.AppendLine("}");
+					}
+					css.Append("\t");
+
+					styleNode.RemoveAllChildren();
+					styleNode.AppendChild(doc.CreateTextNode(css.ToString()));
+				}
+				else
+				{
+					headNode.RemoveChild(styleNode);
+				}
+			}
+
+			styleNode = headNode.SelectSingleNode("link[@rel=\"stylesheet\"]");
 			if (styleNode == null)
 			{
 				styleNode = headNode.AppendHtml("<link rel=\"stylesheet\" href=\"./HtmlReportStyle.css\">");
@@ -194,7 +246,7 @@ namespace MyToDo.Report
 					HtmlNode? cardDateNode = null;
 					if (card.Date != null)
 					{
-						cardDateNode = cardHeader.AppendHtml($"<div class=\"info\">📅 <span class=\"date\">{card.Date:dd.MM.yyyy}</span></div>");
+						cardDateNode = cardHeader.AppendHtml($"<div class=\"info\"><span class=\"date\">{card.Date:dd.MM.yyyy}</span></div>");
 					}
 
 					if (card.ModifiedDate != null)
@@ -202,12 +254,11 @@ namespace MyToDo.Report
 						if (cardDateNode != null)
 						{
 							cardDateNode.AppendHtml("<br>");
-							cardDateNode.AppendHtml("✏️ ");
 							cardDateNode.AppendHtml($"<span class=\"date moddate\">{card.ModifiedDate:dd.MM.yyyy}</span>");
 						}
 						else
 						{
-							cardDateNode = cardHeader.AppendHtml($"<div class=\"info\">✏️ <span class=\"date moddate\">{card.ModifiedDate:dd.MM.yyyy}</span></div>");
+							cardDateNode = cardHeader.AppendHtml($"<div class=\"info\"><span class=\"date moddate\">{card.ModifiedDate:dd.MM.yyyy}</span></div>");
 						}
 					}
 
@@ -216,16 +267,37 @@ namespace MyToDo.Report
 						if (cardDateNode != null)
 						{
 							cardDateNode.AppendHtml("<br>");
-							cardDateNode.AppendHtml("⏰ ");
 							cardDateNode.AppendHtml($"<span class=\"date duedate\">{card.DueDate:dd.MM.yyyy}</span>");
 						}
 						else
 						{
-							cardHeader.AppendHtml($"<div class=\"info\">⏰ <span class=\"date duedate\">{card.DueDate:dd.MM.yyyy}</span></div>");
+							cardHeader.AppendHtml($"<div class=\"info\"><span class=\"date duedate\">{card.DueDate:dd.MM.yyyy}</span></div>");
 						}
 					}
 
 					cardHeader.AppendHtml($"<div class=\"title\">{HtmlEncode(card.Title)}</div>");
+
+					if (card.LabelIds != null && card.LabelIds.Count > 0 && todoDoc.Labels != null && todoDoc.Labels.Count > 0)
+					{
+						HtmlNode cardLabels = cardNode.AppendHtml("<ul class=\"labelflags\">");
+						foreach (string lid in card.LabelIds)
+						{
+							Label? l = null;
+							foreach (Label? rl in todoDoc.Labels)
+							{
+								if (rl.Id != null && rl.Id.Equals(lid, StringComparison.InvariantCultureIgnoreCase))
+								{
+									l = rl;
+									break;
+								}
+							}
+							if (l == null) continue;
+							string n = Regex.Replace(l.Id ?? string.Empty, "[^a-zA-Z0-9]", "");
+							if (string.IsNullOrEmpty(n)) continue;
+
+							HtmlNode label = cardLabels.AppendHtml($"<li class=\"label{n}Colors\" title=\"{l.Title}\">{l.Title}</li>");
+						}
+					}
 
 					HtmlNode cardContentNode = cardNode.AppendHtml("<div class=\"text\">"); 
 					if (card.Description != null)

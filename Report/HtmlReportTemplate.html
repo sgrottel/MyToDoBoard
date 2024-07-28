@@ -6,6 +6,13 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>mytodo Report</title>
 	<link rel="stylesheet" href="./HtmlReportStyle.css">
+	<style id="labelColors">
+.labelSafeNameColors {
+	background-color: navy;
+	color: white;
+	content: "SafeName";
+}
+	</style>
 	<link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,
 AAABAAYAAAAAAAEAIADSDQAAZgAAAEBAAAABACAAKEIAADgOAAAwMAAAAQAgAKglAABgUAAAICAA
 AAEAIACoEAAACHYAABgYAAABACAAiAkAALCGAAAQEAAAAQAgAGgEAAA4kAAAiVBORw0KGgoAAAAN
@@ -674,10 +681,9 @@ iOvw74B6s+v9erPs/3qz7P96suv919zbhWLOrP1iz6z/Ys+s/2LOq/3X3NuF7ZeJ/e6Xif/ul4n/
 7ZeJ/dfc24Xr8O9S6/DvgOvw74Dr8O+A6/DvgOvw74Dr8O+A6/DvgOvw74Dr8O+A6/DvgOvw74Dr
 8O+A6/DvgOvw74Dr8O9SAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP//AAA="/>
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP//AAA=" />
 	<script>
-function cardClick(event)
-{
+function cardClick(event) {
 	const card = event.currentTarget;
 	const body = document.body;
 	body.classList.add("withOverlay");
@@ -686,8 +692,7 @@ function cardClick(event)
 	var toDelete = [];
 
 	for (const child of detailedCard.children) {
- 		if (!child.classList.contains("header"))
-		{
+		if (!child.classList.contains("header")) {
 			toDelete.push(child);
 		}
 	}
@@ -696,29 +701,23 @@ function cardClick(event)
 	}
 
 	for (const child of card.children) {
- 		if (child.classList.contains("header"))
-		{
+		if (child.classList.contains("header")) {
 			const titleNodes = child.getElementsByClassName("title");
-			if (titleNodes.length > 0)
-			{
+			if (titleNodes.length > 0) {
 				detailedCard.getElementsByClassName("title")[0].innerHTML = titleNodes[0].innerHTML;
 			}
-			else
-			{
+			else {
 				detailedCard.getElementsByClassName("title")[0].innerHTML = "No Title";
 			}
 			const infoNodes = child.getElementsByClassName("info");
-			if (infoNodes.length > 0)
-			{
+			if (infoNodes.length > 0) {
 				detailedCard.getElementsByClassName("info")[0].innerHTML = infoNodes[0].innerHTML;
 			}
-			else
-			{
+			else {
 				detailedCard.getElementsByClassName("info")[0].innerHTML = "";
 			}
 		}
-		else if (child.classList.contains("link"))
-		{
+		else if (child.classList.contains("link")) {
 			const div = document.createElement("div");
 			div.classList.add("link");
 			detailedCard.append(div);
@@ -728,21 +727,17 @@ function cardClick(event)
 			a.setAttribute("target", "about:blank");
 			a.append(child.innerHTML);
 		}
-		else
-		{
+		else {
 			detailedCard.append(child.cloneNode(true));
 		}
 	}
 }
-function overlayClick()
-{
+function overlayClick() {
 	const body = document.body;
 	body.classList.remove("withOverlay");
 }
-function makeCardsExpandable()
-{
-	for (const card of document.getElementsByClassName("card"))
-	{
+function makeCardsExpandable() {
+	for (const card of document.getElementsByClassName("card")) {
 		card.addEventListener("click", cardClick);
 	}
 }
@@ -765,40 +760,71 @@ function makeCardsExpandable()
 		<div id="columns">
 			<div class="column">
 				<div class="header">
-					<div class="title">Tests</div>
-					<div class="info">1 Card</div>
+					<div class="info">2 Cards</div>
+					<div class="title">🧪 Tests</div>
 				</div>
-				<div class="card" onclick="cardClick(event)">
+				<div class="card">
 					<div class="header">
-						<div class="title">Test Card</div>
+						<div class="title">🕶️ Test Card</div>
 						<div class="info">
-							📅
 							<span class="date">2023-01-31</span>
 							<br>
-							✏️
 							<span class="date moddate">2023-02-14</span>
 							<br>
-							⏰
 							<span class="date duedate">2023-03-05</span>
 						</div>
 					</div>
+					<ul class="labelflags">
+						<li title="Demo 1" class="labelSafeNameColors">Demo 1</li>
+						<li title="Demo 2" style="background-color: brown; color: white;">Demo 2</li>
+						<li title="Demo 1" style="background-color: brown; color: white;">Demo 3</li>
+						<li title="Demo 2" style="background-color: brown; color: white;">Demo 4</li>
+						<li title="Demo 1" style="background-color: brown; color: white;">Demo 5</li>
+						<li title="Demo 2" style="background-color: brown; color: white;">Demo 6</li>
+						<li title="Demo 1" style="background-color: brown; color: white;">Demo 7</li>
+						<li title="Demo 2" style="background-color: brown; color: white;">Demo 8</li>
+						<li title="Demo 1" style="background-color: brown; color: white;">Demo 1</li>
+						<li title="Demo 2" style="background-color: brown; color: white;">Demo 2</li>
+						<li title="Demo 1" style="background-color: brown; color: white;">Demo 3</li>
+						<li title="Demo 2" style="background-color: brown; color: white;">Demo 4</li>
+						<li title="Demo 1" style="background-color: brown; color: white;">Demo 5</li>
+						<li title="Demo 2" style="background-color: brown; color: white;">Demo 6</li>
+						<li title="Demo 1" style="background-color: brown; color: white;">Demo 7</li>
+						<li title="Demo 2" style="background-color: brown; color: white;">Demo 8</li>
+					</ul>
 					<div class="text">With some text</div>
 					<div class="link">https://github.com/sgrottel/MyToDoBoard</div>
 				</div>
 				<div class="card">
 					<div class="header">
 						<div class="title">
-							Lorem ipsum dolor sit amet consectetur, adipisicing elit. Optio dolor, amet saepe nemo itaque, ipsa molestiae eos praesentium ut in sit? Ea iste porro et architecto autem expedita inventore fugit!
-							Lorem ipsum dolor sit amet consectetur, adipisicing elit. Optio dolor, amet saepe nemo itaque, ipsa molestiae eos praesentium ut in sit? Ea iste porro et architecto autem expedita inventore fugit!
-							Lorem ipsum dolor sit amet consectetur, adipisicing elit. Optio dolor, amet saepe nemo itaque, ipsa molestiae eos praesentium ut in sit? Ea iste porro et architecto autem expedita inventore fugit!
-							Lorem ipsum dolor sit amet consectetur, adipisicing elit. Optio dolor, amet saepe nemo itaque, ipsa molestiae eos praesentium ut in sit? Ea iste porro et architecto autem expedita inventore fugit!
-							Lorem ipsum dolor sit amet consectetur, adipisicing elit. Optio dolor, amet saepe nemo itaque, ipsa molestiae eos praesentium ut in sit? Ea iste porro et architecto autem expedita inventore fugit!
+							Lorem ipsum dolor sit amet consectetur, adipisicing elit. Optio dolor, amet saepe nemo
+							itaque, ipsa molestiae eos praesentium ut in sit? Ea iste porro et architecto autem expedita
+							inventore fugit!
+							Lorem ipsum dolor sit amet consectetur, adipisicing elit. Optio dolor, amet saepe nemo
+							itaque, ipsa molestiae eos praesentium ut in sit? Ea iste porro et architecto autem expedita
+							inventore fugit!
+							Lorem ipsum dolor sit amet consectetur, adipisicing elit. Optio dolor, amet saepe nemo
+							itaque, ipsa molestiae eos praesentium ut in sit? Ea iste porro et architecto autem expedita
+							inventore fugit!
+							Lorem ipsum dolor sit amet consectetur, adipisicing elit. Optio dolor, amet saepe nemo
+							itaque, ipsa molestiae eos praesentium ut in sit? Ea iste porro et architecto autem expedita
+							inventore fugit!
+							Lorem ipsum dolor sit amet consectetur, adipisicing elit. Optio dolor, amet saepe nemo
+							itaque, ipsa molestiae eos praesentium ut in sit? Ea iste porro et architecto autem expedita
+							inventore fugit!
 						</div>
 					</div>
 					<div>
-						Lorem ipsum dolor sit amet consectetur, adipisicing elit. Optio dolor, amet saepe nemo itaque, ipsa molestiae eos praesentium ut in sit? Ea iste porro et architecto autem expedita inventore fugit!
-						Lorem ipsum dolor sit amet consectetur, adipisicing elit. Optio dolor, amet saepe nemo itaque, ipsa molestiae eos praesentium ut in sit? Ea iste porro et architecto autem expedita inventore fugit!
-						Lorem ipsum dolor sit amet consectetur, adipisicing elit. Optio dolor, amet saepe nemo itaque, ipsa molestiae eos praesentium ut in sit? Ea iste porro et architecto autem expedita inventore fugit!
+						Lorem ipsum dolor sit amet consectetur, adipisicing elit. Optio dolor, amet saepe nemo itaque,
+						ipsa molestiae eos praesentium ut in sit? Ea iste porro et architecto autem expedita inventore
+						fugit!
+						Lorem ipsum dolor sit amet consectetur, adipisicing elit. Optio dolor, amet saepe nemo itaque,
+						ipsa molestiae eos praesentium ut in sit? Ea iste porro et architecto autem expedita inventore
+						fugit!
+						Lorem ipsum dolor sit amet consectetur, adipisicing elit. Optio dolor, amet saepe nemo itaque,
+						ipsa molestiae eos praesentium ut in sit? Ea iste porro et architecto autem expedita inventore
+						fugit!
 					</div>
 				</div>
 			</div>

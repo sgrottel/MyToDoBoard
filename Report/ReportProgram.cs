@@ -1,6 +1,8 @@
 ﻿using System.CommandLine;
 using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.Serialization;
+using System.CommandLine.Builder;
+using System.CommandLine.Parsing;
 
 namespace MyToDo.Report
 {
@@ -38,7 +40,13 @@ namespace MyToDo.Report
 
 			var rootCommand = new RootCommand("MyToDoBoard™ Report Application") { inputFileArg, outputFileOpt, forceWriteOpt, outputFormatTypeOpt };
 			rootCommand.SetHandler(CreateReport, inputFileArg, outputFileOpt, forceWriteOpt, outputFormatTypeOpt);
-			return rootCommand.Invoke(args);
+
+			var parser = new CommandLineBuilder(rootCommand)
+				.UseDefaults()
+				.EnablePosixBundling(false)
+				.Build();
+
+			return parser.Invoke(args);
 		}
 
 		private static void CreateReport(FileInfo inputFile, FileInfo? outputFile, bool forceWrite, string outputFormatType)

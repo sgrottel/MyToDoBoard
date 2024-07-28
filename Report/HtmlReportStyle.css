@@ -151,6 +151,51 @@ body.withOverlay #content {
 	cursor: pointer;
 }
 
+.card {
+	position: relative;
+}
+
+.card .labelflags {
+	position: absolute;
+	top: 0.5em;
+	left: -0.3em;
+	width: 0.7em;
+	min-width: 0.7em;
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	white-space: nowrap;
+	overflow: hidden;
+	max-height: calc(100% - 1em);
+}
+
+.card .labelflags>li {
+	min-height: 1.0em;
+	max-height: 1.0em;
+	height: 1.0em;
+	margin-bottom: 0.25em;
+	border-radius: 0.25em;
+	text-indent: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+#detailedCard .labelflags {
+	padding: 0.25em 0;
+	margin: 0.25em 0;
+	overflow: hidden;
+	max-height: inherit;
+}
+
+#detailedCard .labelflags>li {
+	border-radius: 0.5em;	
+	padding: 0.25em 0.75em;
+	font-size: 0.7em;
+	display: inline;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
 .card:hover {
 	transform: scale(1.03) translateY(-0.25em);
 }
@@ -218,6 +263,18 @@ body.withOverlay #content {
 .view-hidden {
 	visibility: collapse;
 	display: none;
+}
+
+.card .info .date::before {
+	content: "📅\00a0";
+}
+
+.card .info .moddate::before {
+	content: "✏️\00a0";
+}
+
+.card .info .duedate::before {
+	content: "⏰\00a0";
 }
 
 .card .text .info.date {
