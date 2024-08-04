@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using YamlDotNet.Serialization;
 
-namespace Importer.DataModel
+namespace MyToDo.StaticDataModel
 {
-	internal class CheckListItem
+	public class CheckListItem
 	{
 		[YamlMember(Alias = "text")]
 		public string? Text { get; set; }

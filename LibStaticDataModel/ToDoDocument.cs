@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YamlDotNet.Serialization;
+﻿using YamlDotNet.Serialization;
 
-namespace Importer.DataModel
+namespace MyToDo.StaticDataModel
 {
-	internal class ToDoDocument
+	public class ToDoDocument
 	{
 		public const string DefaultSchema = "https://go.grottel.net/mytodoboard/schema.yaml";
 

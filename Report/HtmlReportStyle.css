@@ -1,0 +1,283 @@
+body,
+html {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	min-height: 100%;
+	min-height: 100%;
+}
+
+html {
+	background: #f9f8ff;
+	background: linear-gradient(90deg, #eedfe5 0%, #f9f8ff 50%, #d1c1e0 100%);
+}
+
+body {
+	background: #f9f8ff;
+	background: linear-gradient(180deg, #f9f8ff 0%, rgba(249, 248, 255, 0.8) 30%, rgba(249, 248, 255, 0.6) 60%, rgba(249, 248, 255, 0) 100%);
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	overflow: hidden;
+}
+
+#content {
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}
+
+body.withOverlay #content {
+	overflow: hidden;
+}
+
+#summary,
+#columns {
+	padding: 1em 1em 0em 1em;
+	display: flow-root;
+}
+
+#overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgb(0, 0, 0, 0.75);
+	background: linear-gradient(180deg, rgb(0, 0, 0, 0.8) 0%, rgba(24, 21, 30, 0.7) 100%);
+	visibility: collapse;
+}
+
+.withOverlay #overlay {
+	visibility: visible;
+	z-index: 10;
+	overflow: auto;
+}
+
+#summary .header {
+	display: flow-root;
+}
+
+#summary .title {
+	font-weight: bold;
+	float: left;
+}
+
+#summary .title .filename::before {
+	content: "» ";
+}
+
+#summary .title .filename::after {
+	content: " «";
+}
+
+#summary .generated {
+	float: right;
+	font-size: small;
+}
+
+.exception {
+	font-family: Consolas, monospace;
+	background-color: whitesmoke;
+	padding: 0.5em;
+	color: firebrick;
+	border: 1px solid firebrick;
+	white-space: pre-wrap;
+}
+
+.column {
+	padding: 0.5em 1em;
+	float: left;
+	border-radius: 1em;
+	min-width: 12em;
+	max-width: 20em;
+	min-height: 4em;
+	box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.2) inset;
+	margin-right: 1em;
+	margin-bottom: 1em;
+	background: rgb(239, 237, 244, 0.8);
+	background: linear-gradient(135deg, rgba(239, 237, 244, 0.8) 0%, rgba(226, 217, 238, 0.8) 100%);
+}
+
+.column .header, #detailedCard .header {
+	display: flow-root;
+}
+
+.column>.header {
+	padding: 0.25em 0.5em;
+	margin: 0em -0.5em;
+	box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.2);
+	border-radius: 0.5em;
+	border: 1px solid whitesmoke;
+}
+
+#columns .title, #detailedCard .title {
+	font-weight: 600;
+}
+
+#columns .info, #detailedCard .info {
+	float: right;
+	font-size: small;
+	margin-left: 1em;
+	white-space: nowrap !important;
+}
+
+.card, #detailedCard {
+	min-height: 2em;
+	border-radius: 0.5em;
+	margin: 0.5em -0.5em 0em -0.5em;
+	padding: 0.25em 0.5em;
+	box-shadow: 3px 3px 6px 0px rgba(0, 0, 0, 0.2);
+	background: rgba(255, 255, 255);
+	background: linear-gradient(180deg, rgba(255, 255, 255) 0%, rgba(248, 238, 243) 100%);
+	cursor: pointer;
+	border: 1px solid whitesmoke;
+}
+
+#detailedCard {
+	cursor: inherit !important;
+	margin: 2em auto !important;
+	width: fit-content;
+	max-width: 80%;
+	padding: 0.5em 1.5em !important;
+}
+
+#detailedCard .closeButton {
+	float: right;
+	background: firebrick;
+	color: white;
+	margin: -0.56em -1.57em 0.25em 1em;
+	white-space: nowrap;
+	padding: 0.2em 0.75em 0.2em 0.75em;
+	border-top-right-radius: 0.5rem;
+	cursor: pointer;
+}
+
+.card {
+	position: relative;
+}
+
+.card .labelflags {
+	position: absolute;
+	top: 0.5em;
+	left: -0.3em;
+	width: 0.7em;
+	min-width: 0.7em;
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	white-space: nowrap;
+	overflow: hidden;
+	max-height: calc(100% - 1em);
+}
+
+.card .labelflags>li {
+	min-height: 1.0em;
+	max-height: 1.0em;
+	height: 1.0em;
+	margin-bottom: 0.25em;
+	border-radius: 0.25em;
+	text-indent: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+#detailedCard .labelflags {
+	padding: 0.25em 0;
+	margin: 0.25em 0;
+	overflow: hidden;
+	max-height: inherit;
+}
+
+#detailedCard .labelflags>li {
+	border-radius: 0.5em;	
+	padding: 0.25em 0.75em;
+	font-size: 0.7em;
+	display: inline;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.card:hover {
+	transform: scale(1.03) translateY(-0.25em);
+}
+
+.card .text {
+	margin: 0.25em 0;
+	font-size: small;
+	max-height: 7em;
+	overflow: clip;
+	padding: 0;
+}
+
+.card .text div:first-child, #detailedCard .text div:first-child {
+	white-space: pre-wrap;
+}
+
+.card li, #detailedCard li {
+	display: flow-root;
+}
+
+.card .text *, #detailedCard .text * {
+	margin: 0;
+	padding: 0;
+}
+
+.card .text h3, #detailedCard h3 {
+	margin: 0.5em 0 0.25em 0 !important;
+	font-weight: 500;
+}
+
+.card .text ul, #detailedCard ul {
+	white-space: normal !important;
+	list-style-type: none;
+}
+
+.card .text h3 {
+	font-size: small;
+}
+
+#detailedCard .text {
+	margin: 0.25em 0;
+}
+
+.card .link, #detailedCard .link {
+	margin: 0.25em 0;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: clip;
+	color: #5E4C6F;
+}
+
+.card .link {
+	font-size: x-small;
+}
+
+.card.view-minimal .link, .card.view-minimal .text {
+	visibility: collapse;
+	display: none;
+}
+
+#detailedCard .link {
+	font-size: small;
+}
+
+.view-hidden {
+	visibility: collapse;
+	display: none;
+}
+
+.card .info .date::before {
+	content: "📅\00a0";
+}
+
+.card .info .moddate::before {
+	content: "✏️\00a0";
+}
+
+.card .info .duedate::before {
+	content: "⏰\00a0";
+}
+
+.card .text .info.date {
+	visibility: collapse;
+	display: none;
+}

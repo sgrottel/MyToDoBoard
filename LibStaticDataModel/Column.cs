@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using YamlDotNet.Serialization;
 
-namespace Importer.DataModel
+namespace MyToDo.StaticDataModel
 {
-	internal class Column
+	public class Column
 	{
 		[YamlMember(Alias = "title")]
 		public string? Title { get; set; }

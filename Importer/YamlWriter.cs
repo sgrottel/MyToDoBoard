@@ -1,4 +1,4 @@
-﻿using Importer.DataModel;
+﻿using MyToDo.StaticDataModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,13 +47,9 @@ namespace Importer
 			}
 		}
 
-		internal class StringListAsJson : List<string>
-		{
-		}
-
 		private class StringListAsJsonTypeConverter : IYamlTypeConverter
 		{
-			public bool Accepts(Type type) => type == typeof(StringListAsJson);
+			public bool Accepts(Type type) => type == typeof(MyToDo.StaticDataModel.Utility.StringListAsJson);
 
 			public object? ReadYaml(IParser parser, Type type)
 			{

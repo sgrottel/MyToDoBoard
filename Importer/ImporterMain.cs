@@ -1,5 +1,5 @@
-﻿using Importer.DataModel;
-using Importer.Trello;
+﻿using Importer.Trello;
+using MyToDo.StaticDataModel;
 using System;
 using System.Collections.Generic;
 using System.IO;

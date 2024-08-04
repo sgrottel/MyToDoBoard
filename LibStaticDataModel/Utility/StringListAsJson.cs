@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Importer.DataModel
+namespace MyToDo.StaticDataModel.Utility
 {
-	internal enum ColumnView
+	public class StringListAsJson : List<string>
 	{
-		DefaultView,
-		minimal,
-		hidden,
 	}
 }
