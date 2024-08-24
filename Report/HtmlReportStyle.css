@@ -19,6 +19,11 @@ body {
 	overflow: hidden;
 }
 
+.hiddenInvoker {
+	visibility: collapse;
+	display: none;
+}
+
 #content {
 	width: 100%;
 	height: 100%;
@@ -280,4 +285,8 @@ body.withOverlay #content {
 .card .text .info.date {
 	visibility: collapse;
 	display: none;
+}
+
+.lHtmlIopSymbol a {
+	text-decoration: none;
 }

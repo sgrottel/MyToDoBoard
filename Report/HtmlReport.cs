@@ -1,9 +1,12 @@
 ﻿using HtmlAgilityPack;
 using MyToDo.StaticDataModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web;
+using System.Xml.Linq;
 
 namespace MyToDo.Report
 {
@@ -44,6 +47,7 @@ namespace MyToDo.Report
 				UpdateStyleTag(doc, todoDoc, embedStyle);
 				AddInfoToHead(doc, todoDoc);
 				AddInfoToSummary(doc, todoDoc);
+				AddLocalHtmlInterop(doc, InputPath, OutputPath);
 				BuildColumns(doc, todoDoc);
 			}
 			catch (Exception ex)
@@ -62,6 +66,103 @@ namespace MyToDo.Report
 			doc.RemoveAllWhitespace();
 			doc.MakePrettyPrinted();
 			doc.Save(OutputPath, new UTF8Encoding(false));
+		}
+
+		private void AddLocalHtmlInterop(HtmlDocument doc, string mytodoFile, string reportFile)
+		{
+			string? lHtmlIopExe = FindExecutable.FindExecutable.FullPath("LocalHtmlInterop.exe");
+			if (string.IsNullOrWhiteSpace(lHtmlIopExe)
+				|| !File.Exists(lHtmlIopExe)
+				|| !FindExecutable.FindExecutable.IsExecutable(lHtmlIopExe))
+			{
+				return;
+			}
+
+			int lHtmlIopPort;
+			string lHtmlIopJS;
+			{
+				Process lHtmlIop = new();
+				lHtmlIop.StartInfo = new()
+				{
+					FileName = lHtmlIopExe,
+					CreateNoWindow = true,
+					UseShellExecute = false,
+					RedirectStandardOutput = true,
+				};
+				lHtmlIop.StartInfo.ArgumentList.Add("getport");
+				lHtmlIop.StartInfo.ArgumentList.Add("--nologo");
+				lHtmlIop.Start();
+				lHtmlIop.WaitForExit();
+				string stdout = lHtmlIop.StandardOutput.ReadToEnd();
+				if (!int.TryParse(stdout.Trim([' ', '\t', '\n', '\r']), out lHtmlIopPort))
+				{
+					throw new InvalidOperationException("Failed to read port of LocalHtmlInterop");
+				}
+
+				lHtmlIop = new();
+				lHtmlIop.StartInfo = new()
+				{
+					FileName = lHtmlIopExe,
+					CreateNoWindow = true,
+					UseShellExecute = false,
+					RedirectStandardOutput = true,
+				};
+				lHtmlIop.StartInfo.ArgumentList.Add("getjscode");
+				lHtmlIop.StartInfo.ArgumentList.Add("--nologo");
+				lHtmlIop.StartInfo.ArgumentList.Add("--mini");
+				lHtmlIop.Start();
+				lHtmlIop.WaitForExit();
+				stdout = lHtmlIop.StandardOutput.ReadToEnd();
+				lHtmlIopJS = stdout.Trim([' ', '\t', '\n', '\r']);
+				if (string.IsNullOrWhiteSpace(lHtmlIopJS))
+				{
+					throw new InvalidOperationException("Failed to read client js code of LocalHtmlInterop");
+				}
+			}
+
+			var headNode = doc.DocumentNode.SelectSingleNode("/html/head");
+			if (headNode == null) throw new Exception("head tag not found");
+
+			headNode.AppendChild(doc.CreateElement("script")).InnerHtml = $"const localHtmlInteropPort = {lHtmlIopPort};";
+			headNode.AppendChild(doc.CreateElement("script")).InnerHtml = lHtmlIopJS;
+
+			var bodyNode = doc.DocumentNode.SelectSingleNode("/html/body");
+			if (bodyNode == null) throw new Exception("body tag not found");
+			var invokerNode = bodyNode.PrependChild(doc.CreateElement("iframe"));
+			invokerNode.Id = "invoker";
+			invokerNode.Name = "invoker";
+			invokerNode.Attributes.Add("title", "interop invoker");
+			invokerNode.Attributes.Add("src", "about:blank");
+			invokerNode.AddClass("hiddenInvoker");
+
+			var sumTitleNode = doc.DocumentNode.SelectSingleNode("/html/body//div[@id=\"summary\"]//div[contains(@class,\"title\")]");
+
+			var sym = sumTitleNode.AppendChild(doc.CreateElement("span")); // up-to-date indicator
+			sym.Id = "lHtmlIopState";
+			sym.AddClass("lHtmlIopSymbol");
+			sym.InnerHtml = "❔";
+
+			sym = sumTitleNode.AppendChild(doc.CreateElement("span")); // re-generate report
+			sym.Id = "lHtmlIopUpdate";
+			sym.AddClass("lHtmlIopSymbol");
+			sym.InnerHtml = "🔁";
+
+			sym = sumTitleNode.AppendChild(doc.CreateElement("span")); // edit mytodofile
+			sym.Id = "lHtmlIopEdit";
+			sym.AddClass("lHtmlIopSymbol");
+			sym = sym.AppendChild(doc.CreateElement("a"));
+			sym.InnerHtml = "📝";
+			sym.Attributes.Add("title", $"Edit {InputPath}");
+			sym.Attributes.Add("target", "invoker");
+			sym.Attributes.Add("href", $"sgrlhiop::mytodo/edit?f={HttpUtility.UrlEncode(InputPath)}");
+
+			sym = sumTitleNode.AppendChild(doc.CreateElement("span")); // open file's folder
+			sym.Id = "lHtmlIopExplore";
+			sym.AddClass("lHtmlIopSymbol");
+			sym = sym.AppendChild(doc.CreateElement("a"));
+			sym.InnerHtml = "📂";
+			sym.Attributes.Add("title", $"Show {InputPath} in File Explorer");
+
 		}
 
 		private void UpdateStyleTag(HtmlDocument doc, ToDoDocument todoDoc, bool embedStyle)
@@ -343,9 +444,6 @@ namespace MyToDo.Report
 							cardNode.AppendHtml($"<div class=\"link\">{HtmlEncode(link)}</div>");
 						}
 					}
-
-					// TODO: Labels
-
 				}
 			}
 
