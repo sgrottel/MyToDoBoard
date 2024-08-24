@@ -16,7 +16,10 @@ namespace MyToDo.Report
 			Console.ForegroundColor = ConsoleColor.Red;
 			Console.Error.WriteLine(msg);
 			Console.ResetColor();
+			exitCode = 1;
 		}
+
+		private static int exitCode = 0;
 
 		static int Main(string[] args)
 		{
@@ -38,7 +41,91 @@ namespace MyToDo.Report
 				.FromAmong(ReportFormatUtil.GetStrings());
 			outputFormatTypeOpt.AddAlias("-t");
 
-			var rootCommand = new RootCommand("MyToDoBoard™ Report Application") { inputFileArg, outputFileOpt, forceWriteOpt, outputFormatTypeOpt };
+			var apiEpCommand = new Command("apiep", description: "LocalHtmlInterop API End Point");
+			apiEpCommand.IsHidden = true;
+			{
+				var fArg = new Argument<string>("f", description: "file path");
+				var tArg = new Argument<string>("t", description: "target file path");
+				var apiEpCheckCommand = new Command("check", description: "Open file for editing")
+				{
+					fArg,
+					tArg
+				};
+				apiEpCheckCommand.SetHandler(
+					(f, t) =>
+					{
+						try
+						{
+							LocalHtmlInteropHandler.Check(f, t);
+						}
+						catch (Exception ex)
+						{
+							PrintError($"Unknown exception: {ex}");
+						}
+					}, fArg, tArg);
+				apiEpCommand.Add(apiEpCheckCommand);
+				var apiEpUpdateReportCommand = new Command("update", description: "Open file for editing")
+				{
+					fArg,
+					tArg
+				};
+				apiEpUpdateReportCommand.SetHandler(
+					(f, t) =>
+					{
+						try
+						{
+							LocalHtmlInteropHandler.UpdateReport(f, t);
+						}
+						catch (Exception ex)
+						{
+							PrintError($"Unknown exception: {ex}");
+						}
+					}, fArg, tArg);
+				apiEpCommand.Add(apiEpUpdateReportCommand);
+				var apiEpEditCommand = new Command("edit", description: "Open file for editing")
+				{
+					fArg
+				};
+				apiEpEditCommand.SetHandler(
+					(f) =>
+					{
+						try
+						{
+							LocalHtmlInteropHandler.Edit(f);
+						}
+						catch (Exception ex)
+						{
+							PrintError($"Unknown exception: {ex}");
+						}
+					}, fArg);
+				apiEpCommand.Add(apiEpEditCommand);
+				var apiEpBrowseCommand = new Command("browse", description: "Open file for editing")
+				{
+					fArg
+				};
+				apiEpBrowseCommand.SetHandler(
+					(f) =>
+					{
+						try
+						{
+							LocalHtmlInteropHandler.Browse(f);
+						}
+						catch (Exception ex)
+						{
+							PrintError($"Unknown exception: {ex}");
+						}
+					}, fArg);
+				apiEpCommand.Add(apiEpBrowseCommand);
+			}
+
+			var rootCommand = new RootCommand("MyToDoBoard™ Report Application")
+			{
+				inputFileArg,
+				outputFileOpt,
+				forceWriteOpt,
+				outputFormatTypeOpt,
+				apiEpCommand
+			};
 			rootCommand.SetHandler(CreateReport, inputFileArg, outputFileOpt, forceWriteOpt, outputFormatTypeOpt);
 
 			var parser = new CommandLineBuilder(rootCommand)
@@ -46,10 +133,11 @@ namespace MyToDo.Report
 				.EnablePosixBundling(false)
 				.Build();
 
-			return parser.Invoke(args);
+			parser.Invoke(args);
+			return exitCode;
 		}
 
-		private static void CreateReport(FileInfo inputFile, FileInfo? outputFile, bool forceWrite, string outputFormatType)
+		internal static void CreateReport(FileInfo inputFile, FileInfo? outputFile, bool forceWrite, string outputFormatType)
 		{
 			Console.Write("MyToDoBoard™ Report ... ");
 

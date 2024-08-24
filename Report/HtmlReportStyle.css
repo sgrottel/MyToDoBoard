@@ -287,6 +287,29 @@ body.withOverlay #content {
 	display: none;
 }
 
+.lHtmlIopSymbol {
+	border: 4px solid transparent;
+	border-radius: 100%;
+    margin: -0.25rem -0.125rem;
+    padding: 0.25rem;
+}
+
 .lHtmlIopSymbol a {
+	display: inline-block;
 	text-decoration: none;
+	cursor: pointer;
+}
+.lHtmlIopSymbol a:hover {
+	border-color: black;
+	transform: scale(1.2);
+}
+.lHtmlIopSymbol.evaluating {
+	border-color: CornflowerBlue;
+	animation: evaluatingBorderAnim 3s infinite;
+}
+@keyframes evaluatingBorderAnim {
+	50% { border-color: DarkSeaGreen; }
+}
+.lHtmlIopSymbol.error {
+	border-color: firebrick;
 }

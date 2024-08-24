@@ -19,11 +19,13 @@
   <ItemGroup>
     <None Remove="HtmlReportStyle.css" />
     <None Remove="HtmlReportTemplate.html" />
+    <None Remove="lHtmlIopApp.js" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="HtmlReportStyle.css" />
     <EmbeddedResource Include="HtmlReportTemplate.html" />
+    <EmbeddedResource Include="lHtmlIopApp.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +37,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LibStaticDataModel\LibStaticDataModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="lHtmlIopCmds.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
