@@ -180,7 +180,7 @@ const localHtmlInteropT = '{reportFile.Replace("\\", "\\\\")}';
 			if (embedScript)
 			{
 				var assembly = Assembly.GetExecutingAssembly();
-				string resourceName = assembly.GetManifestResourceNames().Single(str => str.EndsWith("HtmlReportStyle.css"));
+				string resourceName = assembly.GetManifestResourceNames().Single(str => str.EndsWith("lHtmlIopApp.js"));
 				using (Stream? stream = assembly.GetManifestResourceStream(resourceName))
 				{
 					if (stream == null) throw new Exception($"Embedded resource stream \"{resourceName}\" missing");
