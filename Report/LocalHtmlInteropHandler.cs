@@ -29,7 +29,7 @@ namespace MyToDo.Report
 			if (!File.Exists(f)) throw new FileNotFoundException(f);
 			if (!File.Exists(t)) throw new FileNotFoundException(t);
 
-			Program.CreateReport(new(f), new(t), true, null, "html");
+			Program.CreateReport(new(f), new(t), true, null, null, "html");
 		}
 		public static void Edit(string f)
 		{

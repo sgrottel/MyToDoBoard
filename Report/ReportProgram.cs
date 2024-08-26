@@ -38,6 +38,9 @@ namespace MyToDo.Report
 			var darkModeOpt = new Option<bool?>("--darkmode", description: "When exporting a html report, switches to dark mode");
 			darkModeOpt.AddAlias("--dark");
 
+			var noColumnWrapOpt = new Option<bool?>("--nocolumnwrap", description: "When exporting a html report, switches to no-column-wrap mode");
+			noColumnWrapOpt.AddAlias("--nowrap");
+
 			var outputFormatTypeOpt = new Option<string>("--type",
 					description: "Specify the output format type",
 					getDefaultValue: () => ReportFormatUtil.ToString(ReportFormat.Html))
@@ -127,10 +130,11 @@ namespace MyToDo.Report
 				outputFileOpt,
 				forceWriteOpt,
 				darkModeOpt,
+				noColumnWrapOpt,
 				outputFormatTypeOpt,
 				apiEpCommand
 			};
-			rootCommand.SetHandler(CreateReport, inputFileArg, outputFileOpt, forceWriteOpt, darkModeOpt, outputFormatTypeOpt);
+			rootCommand.SetHandler(CreateReport, inputFileArg, outputFileOpt, forceWriteOpt, darkModeOpt, noColumnWrapOpt, outputFormatTypeOpt);
 
 			var parser = new CommandLineBuilder(rootCommand)
 				.UseDefaults()
@@ -141,7 +145,7 @@ namespace MyToDo.Report
 			return exitCode;
 		}
 
-		internal static void CreateReport(FileInfo inputFile, FileInfo? outputFile, bool forceWrite, bool? darkMode, string outputFormatType)
+		internal static void CreateReport(FileInfo inputFile, FileInfo? outputFile, bool forceWrite, bool? darkMode, bool? noColumnWrap, string outputFormatType)
 		{
 			Console.Write("MyToDoBoard™ Report ... ");
 
@@ -219,6 +223,7 @@ namespace MyToDo.Report
 				if (report is HtmlReport html)
 				{
 					html.DarkMode = darkMode;
+					html.NoColumnWrapMode = noColumnWrap;
 				}
 
 				report.Report(todoDoc);
