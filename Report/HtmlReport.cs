@@ -1,9 +1,14 @@
 ﻿using HtmlAgilityPack;
 using MyToDo.StaticDataModel;
+using System.Buffers.Text;
+using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web;
+using System.Xml.Linq;
 
 namespace MyToDo.Report
 {
@@ -37,6 +42,16 @@ namespace MyToDo.Report
 
 			try
 			{
+				{
+					var inputFileHash = SHA256.Create();
+					inputFileHash.ComputeHash(File.Open(InputPath, FileMode.Open, FileAccess.Read, FileShare.Read));
+					doc.DocumentNode
+						.SelectSingleNode("/html/head")
+						.PrependChild(doc.CreateComment(
+							"INPUTFILEHASH: " + Convert.ToBase64String(inputFileHash.Hash ?? Array.Empty<byte>()
+							)));
+				}
+
 				bool embedStyle = true;
 #if DEBUG
 				embedStyle = false;
@@ -44,6 +59,7 @@ namespace MyToDo.Report
 				UpdateStyleTag(doc, todoDoc, embedStyle);
 				AddInfoToHead(doc, todoDoc);
 				AddInfoToSummary(doc, todoDoc);
+				AddLocalHtmlInterop(doc, InputPath, OutputPath, embedStyle);
 				BuildColumns(doc, todoDoc);
 			}
 			catch (Exception ex)
@@ -62,6 +78,137 @@ namespace MyToDo.Report
 			doc.RemoveAllWhitespace();
 			doc.MakePrettyPrinted();
 			doc.Save(OutputPath, new UTF8Encoding(false));
+		}
+
+		private bool AddLocalHtmlInterop(HtmlDocument doc, string mytodoFile, string reportFile, bool embedScript)
+		{
+			string? lHtmlIopExe = FindExecutable.FindExecutable.FullPath("LocalHtmlInterop.exe");
+			if (string.IsNullOrWhiteSpace(lHtmlIopExe)
+				|| !File.Exists(lHtmlIopExe)
+				|| !FindExecutable.FindExecutable.IsExecutable(lHtmlIopExe))
+			{
+				return false;
+			}
+
+			int lHtmlIopPort;
+			string lHtmlIopJS;
+			{
+				Process lHtmlIop = new();
+				lHtmlIop.StartInfo = new()
+				{
+					FileName = lHtmlIopExe,
+					CreateNoWindow = true,
+					UseShellExecute = false,
+					RedirectStandardOutput = true,
+				};
+				lHtmlIop.StartInfo.ArgumentList.Add("getport");
+				lHtmlIop.StartInfo.ArgumentList.Add("--nologo");
+				lHtmlIop.Start();
+				lHtmlIop.WaitForExit();
+				string stdout = lHtmlIop.StandardOutput.ReadToEnd();
+				if (!int.TryParse(stdout.Trim([' ', '\t', '\n', '\r']), out lHtmlIopPort))
+				{
+					throw new InvalidOperationException("Failed to read port of LocalHtmlInterop");
+				}
+
+				lHtmlIop = new();
+				lHtmlIop.StartInfo = new()
+				{
+					FileName = lHtmlIopExe,
+					CreateNoWindow = true,
+					UseShellExecute = false,
+					RedirectStandardOutput = true,
+				};
+				lHtmlIop.StartInfo.ArgumentList.Add("getjscode");
+				lHtmlIop.StartInfo.ArgumentList.Add("--nologo");
+				// lHtmlIop.StartInfo.ArgumentList.Add("--mini");
+				lHtmlIop.Start();
+				lHtmlIop.WaitForExit();
+				stdout = lHtmlIop.StandardOutput.ReadToEnd();
+				lHtmlIopJS = stdout.Trim([' ', '\t', '\n', '\r']);
+				if (string.IsNullOrWhiteSpace(lHtmlIopJS))
+				{
+					throw new InvalidOperationException("Failed to read client js code of LocalHtmlInterop");
+				}
+			}
+
+			var headNode = doc.DocumentNode.SelectSingleNode("/html/head");
+			if (headNode == null) throw new Exception("head tag not found");
+
+			headNode.AppendChild(doc.CreateElement("script")).AppendChild(doc.CreateTextNode(@$"
+const localHtmlInteropPort = {lHtmlIopPort};
+const localHtmlInteropF = '{mytodoFile.Replace("\\", "\\\\")}';
+const localHtmlInteropT = '{reportFile.Replace("\\", "\\\\")}';
+"));
+			headNode.AppendChild(doc.CreateElement("script")).AppendChild(doc.CreateTextNode(lHtmlIopJS));
+
+			var bodyNode = doc.DocumentNode.SelectSingleNode("/html/body");
+			if (bodyNode == null) throw new Exception("body tag not found");
+			var invokerNode = bodyNode.PrependChild(doc.CreateElement("iframe"));
+			invokerNode.Id = "invoker";
+			invokerNode.Attributes.Add("name", "invoker");
+			invokerNode.Attributes.Add("title", "interop invoker");
+			invokerNode.Attributes.Add("src", "about:blank");
+			invokerNode.AddClass("hiddenInvoker");
+
+			var sumTitleNode = doc.DocumentNode.SelectSingleNode("/html/body//div[@id=\"summary\"]//div[contains(@class,\"title\")]");
+
+			var sym = sumTitleNode.AppendChild(doc.CreateElement("span")); // up-to-date indicator
+			sym.Id = "lHtmlIopState";
+			sym.AddClass("lHtmlIopSymbol");
+			sym = sym.AppendChild(doc.CreateElement("a"));
+			sym.InnerHtml = "❔";
+
+			sym = sumTitleNode.AppendChild(doc.CreateElement("span")); // re-generate report
+			sym.Id = "lHtmlIopUpdate";
+			sym.AddClass("lHtmlIopSymbol");
+			sym.InnerHtml = "🔁";
+
+			sym = sumTitleNode.AppendChild(doc.CreateElement("span")); // edit mytodofile
+			sym.Id = "lHtmlIopEdit";
+			sym.AddClass("lHtmlIopSymbol");
+			sym.Attributes.Add("title", $"Edit {InputPath}");
+			sym.InnerHtml = "📝";
+			sym.Attributes.Add("click", "startEdit");
+
+			sym = sumTitleNode.AppendChild(doc.CreateElement("span")); // open file's folder
+			sym.Id = "lHtmlIopExplore";
+			sym.AddClass("lHtmlIopSymbol");
+			sym.Attributes.Add("title", $"Show {InputPath} in File Explorer");
+			sym.InnerHtml = "📂";
+
+			if (embedScript)
+			{
+				var assembly = Assembly.GetExecutingAssembly();
+				string resourceName = assembly.GetManifestResourceNames().Single(str => str.EndsWith("lHtmlIopApp.js"));
+				using (Stream? stream = assembly.GetManifestResourceStream(resourceName))
+				{
+					if (stream == null) throw new Exception($"Embedded resource stream \"{resourceName}\" missing");
+					using (StreamReader reader = new StreamReader(stream))
+					{
+						string js = reader.ReadToEnd();
+						headNode.AppendChild(doc.CreateElement("script")).AppendChild(doc.CreateTextNode(js));
+					}
+				}
+			}
+			else
+			{
+				string? p = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+				while (p != null)
+				{
+					string sf = Path.Combine(p, "lHtmlIopApp.js");
+					if (File.Exists(sf))
+					{
+						headNode.AppendChild(doc.CreateElement("script")).Attributes.Add("src", sf);
+						break;
+					}
+					p = Path.GetDirectoryName(p);
+				}
+			}
+
+			bodyNode.AppendChild(doc.CreateElement("script")).AppendChild(doc.CreateTextNode("startCheck();"));
+
+			return true;
 		}
 
 		private void UpdateStyleTag(HtmlDocument doc, ToDoDocument todoDoc, bool embedStyle)
@@ -343,9 +490,6 @@ namespace MyToDo.Report
 							cardNode.AppendHtml($"<div class=\"link\">{HtmlEncode(link)}</div>");
 						}
 					}
-
-					// TODO: Labels
-
 				}
 			}
 

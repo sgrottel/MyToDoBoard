@@ -1,0 +1,43 @@
+commands:
+- name: mytodo/check
+  exec: MyToDoReport.exe
+  workdir: .
+  args:
+    - apiep
+    - check
+    - value: "{{f}}"
+      param: f
+      required: true
+    - value: "{{t}}"
+      param: t
+      required: true
+- name: mytodo/update
+  exec: MyToDoReport.exe
+  workdir: .
+  args:
+    - apiep
+    - update
+    - value: "{{f}}"
+      param: f
+      required: true
+    - value: "{{t}}"
+      param: t
+      required: true
+- name: mytodo/edit
+  exec: MyToDoReport.exe
+  workdir: .
+  args:
+    - apiep
+    - edit
+    - value: "{{f}}"
+      param: f
+      required: true
+- name: mytodo/browse
+  exec: MyToDoReport.exe
+  workdir: .
+  args:
+    - apiep
+    - browse
+    - value: "{{f}}"
+      param: f
+      required: true

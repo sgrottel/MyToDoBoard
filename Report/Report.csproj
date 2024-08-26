@@ -10,7 +10,7 @@
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <EnableSourceControlManagerQueries>false</EnableSourceControlManagerQueries>
     <Title>Report Utility of MyToDoBoard</Title>
-    <Version>0.2.0</Version>
+    <Version>0.3.0</Version>
     <Authors>SGrottel</Authors>
     <Product>MyToDoBoard</Product>
     <Copyright>Copyright, SGrottel</Copyright>
@@ -19,21 +19,30 @@
   <ItemGroup>
     <None Remove="HtmlReportStyle.css" />
     <None Remove="HtmlReportTemplate.html" />
+    <None Remove="lHtmlIopApp.js" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="HtmlReportStyle.css" />
     <EmbeddedResource Include="HtmlReportTemplate.html" />
+    <EmbeddedResource Include="lHtmlIopApp.js" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.61" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.64" />
+    <PackageReference Include="SGrottel.FindExecutable" Version="0.4.0.5" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
     <PackageReference Include="YamlDotNet" Version="16.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\LibStaticDataModel\LibStaticDataModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="lHtmlIopCmds.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
