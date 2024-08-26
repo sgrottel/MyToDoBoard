@@ -49,6 +49,10 @@ body.withOverlay #content {
 	display: flow-root;
 }
 
+.noColumnWrap #columns {
+	white-space: nowrap;
+}
+
 #overlay {
 	position: absolute;
 	top: 0;
@@ -114,6 +118,12 @@ body.withOverlay #content {
 .dark .column {
 	background: #222d;
 	background: linear-gradient(135deg, #242028dd 0%, #202020dd 100%);
+}
+.noColumnWrap .column {
+	float: none !important;
+	display: inline-block;
+	white-space: wrap;
+	vertical-align: top;
 }
 
 .column .header, #detailedCard .header {

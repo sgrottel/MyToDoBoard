@@ -15,6 +15,7 @@ namespace MyToDo.Report
 		public string InputPath { get; set; } = string.Empty;
 		public string OutputPath { get; set; } = string.Empty;
 		public bool? DarkMode { get; set; }
+		public bool? NoColumnWrapMode { get; set; }
 
 		private DateTime Timestamp = DateTime.MinValue;
 
@@ -44,7 +45,7 @@ namespace MyToDo.Report
 #if DEBUG
 				embedStyle = false;
 #endif
-				InsertDarkModeClass(doc);
+				InsertModeClasses(doc);
 				InsertInputFileHash(doc);
 				UpdateStyleTag(doc, todoDoc, embedStyle);
 				AddInfoToHead(doc, todoDoc);
@@ -70,10 +71,11 @@ namespace MyToDo.Report
 			doc.Save(OutputPath, new UTF8Encoding(false));
 		}
 
-		private void InsertDarkModeClass(HtmlDocument doc)
+		private void InsertModeClasses(HtmlDocument doc)
 		{
-			bool darkMode = false;
-			if (!DarkMode.HasValue)
+			bool darkMode = DarkMode.GetValueOrDefault(false);
+			bool noColumnWrapMode = NoColumnWrapMode.GetValueOrDefault(false);
+			if (!DarkMode.HasValue || !NoColumnWrapMode.HasValue)
 			{
 				if (File.Exists(OutputPath))
 				{
@@ -82,19 +84,29 @@ namespace MyToDo.Report
 					var htmlNode = prevDoc.DocumentNode.SelectSingleNode("/html");
 					if (htmlNode != null)
 					{
-						darkMode = htmlNode.HasClass("dark");
+						if (!DarkMode.HasValue)
+						{
+							darkMode = htmlNode.HasClass("dark");
+						}
+						if (!NoColumnWrapMode.HasValue)
+						{
+							noColumnWrapMode = htmlNode.HasClass("noColumnWrap");
+						}
 					}
 				}
 			}
-			else
-			{
-				darkMode = DarkMode.Value;
-			}
 
-			if (darkMode)
+			if (darkMode || noColumnWrapMode)
 			{
 				var htmlNode = doc.DocumentNode.SelectSingleNode("/html") ?? throw new Exception("html root node not found");
-				htmlNode.AddClass("dark");
+				if (darkMode)
+				{
+					htmlNode.AddClass("dark");
+				}
+				if (noColumnWrapMode)
+				{
+					htmlNode.AddClass("noColumnWrap");
+				}
 			}
 		}
 
