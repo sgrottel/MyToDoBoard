@@ -1,14 +1,11 @@
 ﻿using HtmlAgilityPack;
 using MyToDo.StaticDataModel;
-using System.Buffers.Text;
 using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Web;
-using System.Xml.Linq;
 
 namespace MyToDo.Report
 {
@@ -17,6 +14,7 @@ namespace MyToDo.Report
 	{
 		public string InputPath { get; set; } = string.Empty;
 		public string OutputPath { get; set; } = string.Empty;
+		public bool? DarkMode { get; set; }
 
 		private DateTime Timestamp = DateTime.MinValue;
 
@@ -42,20 +40,12 @@ namespace MyToDo.Report
 
 			try
 			{
-				{
-					var inputFileHash = SHA256.Create();
-					inputFileHash.ComputeHash(File.Open(InputPath, FileMode.Open, FileAccess.Read, FileShare.Read));
-					doc.DocumentNode
-						.SelectSingleNode("/html/head")
-						.PrependChild(doc.CreateComment(
-							"INPUTFILEHASH: " + Convert.ToBase64String(inputFileHash.Hash ?? Array.Empty<byte>()
-							)));
-				}
-
 				bool embedStyle = true;
 #if DEBUG
 				embedStyle = false;
 #endif
+				InsertDarkModeClass(doc);
+				InsertInputFileHash(doc);
 				UpdateStyleTag(doc, todoDoc, embedStyle);
 				AddInfoToHead(doc, todoDoc);
 				AddInfoToSummary(doc, todoDoc);
@@ -78,6 +68,45 @@ namespace MyToDo.Report
 			doc.RemoveAllWhitespace();
 			doc.MakePrettyPrinted();
 			doc.Save(OutputPath, new UTF8Encoding(false));
+		}
+
+		private void InsertDarkModeClass(HtmlDocument doc)
+		{
+			bool darkMode = false;
+			if (!DarkMode.HasValue)
+			{
+				if (File.Exists(OutputPath))
+				{
+					HtmlDocument prevDoc = new();
+					prevDoc.Load(OutputPath);
+					var htmlNode = prevDoc.DocumentNode.SelectSingleNode("/html");
+					if (htmlNode != null)
+					{
+						darkMode = htmlNode.HasClass("dark");
+					}
+				}
+			}
+			else
+			{
+				darkMode = DarkMode.Value;
+			}
+
+			if (darkMode)
+			{
+				var htmlNode = doc.DocumentNode.SelectSingleNode("/html") ?? throw new Exception("html root node not found");
+				htmlNode.AddClass("dark");
+			}
+		}
+
+		private void InsertInputFileHash(HtmlDocument doc)
+		{
+			var inputFileHash = SHA256.Create();
+			inputFileHash.ComputeHash(File.Open(InputPath, FileMode.Open, FileAccess.Read, FileShare.Read));
+			doc.DocumentNode
+				.SelectSingleNode("/html/head")
+				.PrependChild(doc.CreateComment(
+					"INPUTFILEHASH: " + Convert.ToBase64String(inputFileHash.Hash ?? Array.Empty<byte>()
+					)));
 		}
 
 		private bool AddLocalHtmlInterop(HtmlDocument doc, string mytodoFile, string reportFile, bool embedScript)

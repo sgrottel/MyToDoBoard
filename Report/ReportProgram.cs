@@ -35,6 +35,9 @@ namespace MyToDo.Report
 			var forceWriteOpt = new Option<bool>("--force", description: "If set, will overwrite existing output files");
 			forceWriteOpt.AddAlias("-f");
 
+			var darkModeOpt = new Option<bool?>("--darkmode", description: "When exporting a html report, switches to dark mode");
+			darkModeOpt.AddAlias("--dark");
+
 			var outputFormatTypeOpt = new Option<string>("--type",
 					description: "Specify the output format type",
 					getDefaultValue: () => ReportFormatUtil.ToString(ReportFormat.Html))
@@ -123,10 +126,11 @@ namespace MyToDo.Report
 				inputFileArg,
 				outputFileOpt,
 				forceWriteOpt,
+				darkModeOpt,
 				outputFormatTypeOpt,
 				apiEpCommand
 			};
-			rootCommand.SetHandler(CreateReport, inputFileArg, outputFileOpt, forceWriteOpt, outputFormatTypeOpt);
+			rootCommand.SetHandler(CreateReport, inputFileArg, outputFileOpt, forceWriteOpt, darkModeOpt, outputFormatTypeOpt);
 
 			var parser = new CommandLineBuilder(rootCommand)
 				.UseDefaults()
@@ -137,7 +141,7 @@ namespace MyToDo.Report
 			return exitCode;
 		}
 
-		internal static void CreateReport(FileInfo inputFile, FileInfo? outputFile, bool forceWrite, string outputFormatType)
+		internal static void CreateReport(FileInfo inputFile, FileInfo? outputFile, bool forceWrite, bool? darkMode, string outputFormatType)
 		{
 			Console.Write("MyToDoBoard™ Report ... ");
 
@@ -211,6 +215,11 @@ namespace MyToDo.Report
 
 				report.InputPath = inputFile.FullName;
 				report.OutputPath = outputFile.FullName;
+
+				if (report is HtmlReport html)
+				{
+					html.DarkMode = darkMode;
+				}
 
 				report.Report(todoDoc);
 

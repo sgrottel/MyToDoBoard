@@ -11,12 +11,21 @@ html {
 	background: #f9f8ff;
 	background: linear-gradient(90deg, #eedfe5 0%, #f9f8ff 50%, #d1c1e0 100%);
 }
+html.dark {
+	background: #333;
+	background: linear-gradient(90deg, #382238 0%, #333 50%, #222238 100%);
+}
 
 body {
 	background: #f9f8ff;
 	background: linear-gradient(180deg, #f9f8ff 0%, rgba(249, 248, 255, 0.8) 30%, rgba(249, 248, 255, 0.6) 60%, rgba(249, 248, 255, 0) 100%);
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 	overflow: hidden;
+}
+.dark body {
+	background: #333;
+	background: linear-gradient(180deg, #333 0%, #333a 30%, #3336, #3330 100%);
+	color: #eed;
 }
 
 .hiddenInvoker {
@@ -102,6 +111,10 @@ body.withOverlay #content {
 	background: rgb(239, 237, 244, 0.8);
 	background: linear-gradient(135deg, rgba(239, 237, 244, 0.8) 0%, rgba(226, 217, 238, 0.8) 100%);
 }
+.dark .column {
+	background: #222d;
+	background: linear-gradient(135deg, #242028dd 0%, #202020dd 100%);
+}
 
 .column .header, #detailedCard .header {
 	display: flow-root;
@@ -113,6 +126,9 @@ body.withOverlay #content {
 	box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.2);
 	border-radius: 0.5em;
 	border: 1px solid whitesmoke;
+}
+.dark .column>.header {
+	border-color: #0008;
 }
 
 #columns .title, #detailedCard .title {
@@ -136,6 +152,11 @@ body.withOverlay #content {
 	background: linear-gradient(180deg, rgba(255, 255, 255) 0%, rgba(248, 238, 243) 100%);
 	cursor: pointer;
 	border: 1px solid whitesmoke;
+}
+.dark .card, #detailedCard {
+	background: #333;
+	background: linear-gradient(180deg, #333 0%, #363033 100%);
+	border-color: #0008;
 }
 
 #detailedCard {
