@@ -234,7 +234,7 @@ const localHtmlInteropT = '{reportFile.Replace("\\", "\\\\")}';
 			}
 			else
 			{
-				string? p = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+				string? p = AppContext.BaseDirectory;
 				while (p != null)
 				{
 					string sf = Path.Combine(p, "lHtmlIopApp.js");
@@ -323,7 +323,7 @@ const localHtmlInteropT = '{reportFile.Replace("\\", "\\\\")}';
 
 			if (!embedStyle)
 			{
-				string? p = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+				string? p = AppContext.BaseDirectory;
 				while (p != null)
 				{
 					string sf = Path.Combine(p, "HtmlReportStyle.css");
