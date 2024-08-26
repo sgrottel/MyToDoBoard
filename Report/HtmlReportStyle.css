@@ -163,7 +163,7 @@ body.withOverlay #content {
 	cursor: pointer;
 	border: 1px solid whitesmoke;
 }
-.dark .card, #detailedCard {
+.dark .card, .dark #detailedCard {
 	background: #333;
 	background: linear-gradient(180deg, #333 0%, #363033 100%);
 	border-color: #0008;

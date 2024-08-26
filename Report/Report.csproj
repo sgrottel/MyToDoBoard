@@ -10,7 +10,7 @@
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <EnableSourceControlManagerQueries>false</EnableSourceControlManagerQueries>
     <Title>Report Utility of MyToDoBoard</Title>
-    <Version>0.5.0</Version>
+    <Version>0.5.1</Version>
     <Authors>SGrottel</Authors>
     <Product>MyToDoBoard</Product>
     <Copyright>Copyright, SGrottel</Copyright>
