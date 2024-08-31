@@ -2,7 +2,7 @@ name: Report Tool Build Action
 
 on:
   push:
-    branches: [ "main", "ci" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
