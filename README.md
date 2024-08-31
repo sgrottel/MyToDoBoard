@@ -3,7 +3,9 @@
 # MyToDoBoard™
 This is a _local_, _offline_ Desktop App for a personal, _non-shared_ ToDo Board.
 
-![GitHub](https://img.shields.io/github/license/sgrottel/MyToDoBoard)
+[![GitHub](https://img.shields.io/github/license/sgrottel/MyToDoBoard)]([.](https://github.com/sgrottel/MyToDoBoard)/LICENSE)
+[![GitHub Release](https://img.shields.io/github/v/release/sgrottel/MyToDoBoard)](https://github.com/sgrottel/MyToDoBoard/releases)
+[![Report Tool Build Action](https://github.com/sgrottel/MyToDoBoard/actions/workflows/Report.yaml/badge.svg)](https://github.com/sgrottel/MyToDoBoard/actions/workflows/Report.yaml)
 
 ```
 TODO: Project Status
@@ -43,7 +45,7 @@ There are companion utilities for specific tasks.
 They all operate on the same central [`.mytodo` data file](doc/mytodo-yaml.md) and are therefore fully compatible with each other.
 
 ### MyToDoReport
-[MyToDoReport](./doc/mytodo-report.md) is a command line utility to read the `.mytodo` data file and to produce a report of it's content.
+[MyToDoReport](./Report/README.md) is a command line utility to read the `.mytodo` data file and to produce a report of it's content.
 
 ## Alternatives
 If you look for a solution storing your data _online_, or _share_ between multiple people, or offer different views, or ..., or ..., or ..., then this might not be the app for you!
