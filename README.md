@@ -62,7 +62,9 @@ Please, stick to the existing code to make your contribution in the same style.
 In doubt, feel free to contact me and ask.
 
 ## License
-> Copyright 2022-2023 SGrottel
+This project is freely available under the terms of the Apache License v.2.0
+
+> Copyright 2022-2024 SGrottel
 > 
 > Licensed under the Apache License, Version 2.0 (the "License");
 > you may not use this file except in compliance with the License.
