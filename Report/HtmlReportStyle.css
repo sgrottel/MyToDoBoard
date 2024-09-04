@@ -298,8 +298,8 @@ body.withOverlay #content {
 }
 
 .view-hidden {
-	visibility: collapse;
-	display: none;
+	visibility: collapse !important;
+	display: none !important;
 }
 
 .card .info .date::before {
