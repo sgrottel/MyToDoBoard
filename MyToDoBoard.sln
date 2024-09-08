@@ -7,7 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Report", "Report\Report.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Importer", "Importer\Importer.csproj", "{05F1D6E2-0253-4E49-A890-77FC8385327B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibStaticDataModel", "LibStaticDataModel\LibStaticDataModel.csproj", "{D98ACD84-B038-48D7-A263-E943EC738657}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibStaticDataModel", "LibStaticDataModel\LibStaticDataModel.csproj", "{D98ACD84-B038-48D7-A263-E943EC738657}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2D782E30-20D6-41BB-991F-47496FF900A8}"
+	ProjectSection(SolutionItems) = preProject
+		Version.proj = Version.proj
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

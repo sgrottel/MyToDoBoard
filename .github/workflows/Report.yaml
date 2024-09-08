@@ -31,14 +31,14 @@ jobs:
     - name: Inject build number
       shell: pwsh
       run: |
-        $csproj = New-Object System.XML.XMLDocument
-        $csprojPath = Resolve-Path "./Report/Report.csproj"
-        $csproj.Load($csprojPath)
+        $versionProj = New-Object System.XML.XMLDocument
+        $versionProjPath = Resolve-Path "./Version.proj"
+        $versionProj.Load($versionProjPath)
         $version = New-Object System.Version $csproj.Project.PropertyGroup.Version
         $version = New-Object System.Version @( $version.Major, $version.Minor, ([System.Math]::Max(0, $version.Build)), $env:GITHUB_RUN_NUMBER )
         Write-Host "Version number: $version"
-        $csproj.Project.PropertyGroup.Version = $version.ToString()
-        $csproj.Save($csprojPath)
+        $versionProj.Project.PropertyGroup.Version = $version.ToString()
+        $versionProj.Save($versionProjPath)
         Write-Output "FULL_VERSION_NUMBER=$version" >> $env:GITHUB_ENV
         $readme = [string[]](Get-Content .\Report\README.md)
         $readme = $readme | ForEach-Object { $_ -replace "Version ...", "Version $version" }
@@ -50,6 +50,10 @@ jobs:
     - name: Publish Report Tool
       if: ${{ matrix.configuration == 'Release' }}
       run: dotnet publish --configuration Release -p:PublishProfile=FolderProfile -p:DebugType=None -p:DebugSymbols=false --no-build --no-restore ./Report/Report.csproj
+
+    - name: Build Importer Tool
+      # Building the importer is only a smoke test, e.g. when dependencies are updated
+      run: dotnet build --configuration ${{ matrix.configuration }} --arch x64 --no-restore ./Importer/Importer.csproj
 
     - name: Copy Extra Files
       if: ${{ matrix.configuration == 'Release' }}
