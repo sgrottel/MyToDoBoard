@@ -34,7 +34,7 @@ jobs:
         $versionProj = New-Object System.XML.XMLDocument
         $versionProjPath = Resolve-Path "./Version.proj"
         $versionProj.Load($versionProjPath)
-        $version = New-Object System.Version $csproj.Project.PropertyGroup.Version
+        $version = New-Object System.Version $versionProj.Project.PropertyGroup.Version
         $version = New-Object System.Version @( $version.Major, $version.Minor, ([System.Math]::Max(0, $version.Build)), $env:GITHUB_RUN_NUMBER )
         Write-Host "Version number: $version"
         $versionProj.Project.PropertyGroup.Version = $version.ToString()
