@@ -1,4 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\Version.proj" />
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -7,13 +8,8 @@
     <Nullable>enable</Nullable>
     <AssemblyName>MyToDo$(MSBuildProjectName)</AssemblyName>
     <RootNamespace>MyToDo.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
-    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <EnableSourceControlManagerQueries>false</EnableSourceControlManagerQueries>
     <Title>Report Utility of MyToDoBoard</Title>
-    <Version>0.5.2</Version>
-    <Authors>SGrottel</Authors>
-    <Product>MyToDoBoard</Product>
-    <Copyright>Copyright, SGrottel</Copyright>
   </PropertyGroup>
 
   <ItemGroup>

@@ -28,12 +28,12 @@ namespace Importer
 		{
 			public bool Accepts(Type type) => type == typeof(DateTime);
 
-			public object? ReadYaml(IParser parser, Type type)
+			public object? ReadYaml(IParser parser, Type type, ObjectDeserializer rootDeserializer)
 			{
 				throw new NotImplementedException();
 			}
 
-			public void WriteYaml(IEmitter emitter, object? value, Type type)
+			public void WriteYaml(IEmitter emitter, object? value, Type type, ObjectSerializer serializer)
 			{
 				DateTime? d = value as DateTime?;
 				if (d == null)
@@ -51,12 +51,12 @@ namespace Importer
 		{
 			public bool Accepts(Type type) => type == typeof(MyToDo.StaticDataModel.Utility.StringListAsJson);
 
-			public object? ReadYaml(IParser parser, Type type)
+			public object? ReadYaml(IParser parser, Type type, ObjectDeserializer rootDeserializer)
 			{
 				throw new NotImplementedException();
 			}
 
-			public void WriteYaml(IEmitter emitter, object? value, Type type)
+			public void WriteYaml(IEmitter emitter, object? value, Type type, ObjectSerializer serializer)
 			{
 				List<string>? l = value as List<string>;
 				if (l == null) return;

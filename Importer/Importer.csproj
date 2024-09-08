@@ -1,4 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\Version.proj" />
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,6 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <EnableSourceControlManagerQueries>false</EnableSourceControlManagerQueries>
+    <Title>MyToDoBoard Data Import Utility</Title>
   </PropertyGroup>
 
   <ItemGroup>
