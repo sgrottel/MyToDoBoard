@@ -1,8 +1,6 @@
 ﻿using System.CommandLine;
 using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.Serialization;
-using System.CommandLine.Builder;
-using System.CommandLine.Parsing;
 
 namespace MyToDo.Report
 {
@@ -26,101 +24,129 @@ namespace MyToDo.Report
 			Console.OutputEncoding = System.Text.Encoding.UTF8;
 			Console.InputEncoding = System.Text.Encoding.UTF8;
 
-			var inputFileArg = new Argument<FileInfo>("Input YamlFile", description: "The input .mytodo file")
-				.ExistingOnly();
-
-			var outputFileOpt = new Option<FileInfo?>("--output", description: "The output file to be written");
-			outputFileOpt.AddAlias("-o");
-
-			var forceWriteOpt = new Option<bool>("--force", description: "If set, will overwrite existing output files");
-			forceWriteOpt.AddAlias("-f");
-
-			var darkModeOpt = new Option<bool?>("--darkmode", description: "When exporting a html report, switches to dark mode");
-			darkModeOpt.AddAlias("--dark");
-
-			var noColumnWrapOpt = new Option<bool?>("--nocolumnwrap", description: "When exporting a html report, switches to no-column-wrap mode");
-			noColumnWrapOpt.AddAlias("--nowrap");
-
-			var outputFormatTypeOpt = new Option<string>("--type",
-					description: "Specify the output format type",
-					getDefaultValue: () => ReportFormatUtil.ToString(ReportFormat.Html))
-				.FromAmong(ReportFormatUtil.GetStrings());
-			outputFormatTypeOpt.AddAlias("-t");
-
-			var apiEpCommand = new Command("apiep", description: "LocalHtmlInterop API End Point");
-			apiEpCommand.IsHidden = true;
+			var inputFileArg = new Argument<FileInfo>("Input YamlFile")
 			{
-				var fArg = new Argument<string>("f", description: "file path");
-				var tArg = new Argument<string>("t", description: "target file path");
+				Description = "The input .mytodo file"
+			}.AcceptExistingOnly();
+
+			var outputFileOpt = new Option<FileInfo?>("--output")
+			{
+				Description = "The output file to be written",
+				Aliases = { "-o" }
+			};
+
+			var forceWriteOpt = new Option<bool>("--force")
+			{
+				Description = "If set, will overwrite existing output files",
+				Aliases = { "-f" }
+			};
+
+			var darkModeOpt = new Option<bool?>("--darkmode")
+			{
+				Description = "When exporting a html report, switches to dark mode",
+				Aliases = { "--dark" }
+			};
+
+			var noColumnWrapOpt = new Option<bool?>("--nocolumnwrap")
+			{
+				Description = "When exporting a html report, switches to no-column-wrap mode",
+				Aliases = { "--nowrap" }
+			};
+
+			var outputFormatTypeOpt = new Option<string>("--type")
+			{
+				Description = "Specify the output format type",
+				DefaultValueFactory = (_) => ReportFormatUtil.ToString(ReportFormat.Html),
+				Aliases = { "-t" }
+			}.AcceptOnlyFromAmong(ReportFormatUtil.GetStrings());
+
+			var apiEpCommand = new Command("apiep")
+			{
+				Description = "LocalHtmlInterop API End Point",
+				Hidden = true
+			};
+			{
+				var fArg = new Argument<string>("f") { Description = "file path" };
+				var tArg = new Argument<string>("t") { Description = "target file path" };
 				var apiEpCheckCommand = new Command("check", description: "Open file for editing")
 				{
 					fArg,
 					tArg
 				};
-				apiEpCheckCommand.SetHandler(
-					(f, t) =>
+				apiEpCheckCommand.SetAction(
+					(ParseResult pr) =>
 					{
 						try
 						{
-							LocalHtmlInteropHandler.Check(f, t);
+							LocalHtmlInteropHandler.Check(
+								pr.GetRequiredValue(fArg),
+								pr.GetRequiredValue(tArg)
+								);
 						}
 						catch (Exception ex)
 						{
 							PrintError($"Unknown exception: {ex}");
 						}
-					}, fArg, tArg);
+					});
 				apiEpCommand.Add(apiEpCheckCommand);
 				var apiEpUpdateReportCommand = new Command("update", description: "Open file for editing")
 				{
 					fArg,
 					tArg
 				};
-				apiEpUpdateReportCommand.SetHandler(
-					(f, t) =>
+				apiEpUpdateReportCommand.SetAction(
+					(ParseResult pr) =>
 					{
 						try
 						{
-							LocalHtmlInteropHandler.UpdateReport(f, t);
+							LocalHtmlInteropHandler.UpdateReport(
+								pr.GetRequiredValue(fArg),
+								pr.GetRequiredValue(tArg)
+								);
 						}
 						catch (Exception ex)
 						{
 							PrintError($"Unknown exception: {ex}");
 						}
-					}, fArg, tArg);
+					});
 				apiEpCommand.Add(apiEpUpdateReportCommand);
 				var apiEpEditCommand = new Command("edit", description: "Open file for editing")
 				{
 					fArg
 				};
-				apiEpEditCommand.SetHandler(
-					(f) =>
+				apiEpEditCommand.SetAction(
+					(ParseResult pr) =>
 					{
 						try
 						{
-							LocalHtmlInteropHandler.Edit(f);
+							LocalHtmlInteropHandler.Edit(
+								pr.GetRequiredValue(fArg)
+								);
 						}
 						catch (Exception ex)
 						{
 							PrintError($"Unknown exception: {ex}");
 						}
-					}, fArg);
+					});
 				apiEpCommand.Add(apiEpEditCommand);
 				var apiEpBrowseCommand = new Command("browse", description: "Open file for editing")
 				{
 					fArg
 				};
-				apiEpBrowseCommand.SetHandler(
-					(f) =>
+				apiEpBrowseCommand.SetAction(
+					(ParseResult pr) =>
 					{
 						try
 						{
-							LocalHtmlInteropHandler.Browse(f);
+							LocalHtmlInteropHandler.Browse(
+								pr.GetRequiredValue(fArg)
+								);
 						}
 						catch (Exception ex)
 						{
 							PrintError($"Unknown exception: {ex}");
 						}
-					}, fArg);
+					});
 				apiEpCommand.Add(apiEpBrowseCommand);
 			}
 
@@ -134,14 +160,28 @@ namespace MyToDo.Report
 				outputFormatTypeOpt,
 				apiEpCommand
 			};
-			rootCommand.SetHandler(CreateReport, inputFileArg, outputFileOpt, forceWriteOpt, darkModeOpt, noColumnWrapOpt, outputFormatTypeOpt);
+			rootCommand.SetAction(
+				(ParseResult pr) =>
+				{
+					try
+					{
+						CreateReport(
+							pr.GetRequiredValue(inputFileArg),
+							pr.GetValue(outputFileOpt),
+							pr.GetValue(forceWriteOpt),
+							pr.GetValue(darkModeOpt),
+							pr.GetValue(noColumnWrapOpt),
+							pr.GetRequiredValue(outputFormatTypeOpt)
+							);
+					}
+					catch (Exception ex)
+					{
+						PrintError($"Error: {ex}");
+					}
+				});
 
-			var parser = new CommandLineBuilder(rootCommand)
-				.UseDefaults()
-				.EnablePosixBundling(false)
-				.Build();
-
-			parser.Invoke(args);
+			CommandLineConfiguration clc = new(rootCommand) { EnablePosixBundling = false };
+			exitCode = rootCommand.Parse(args, clc).Invoke();
 			return exitCode;
 		}
 
